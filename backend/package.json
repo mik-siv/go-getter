@@ -1,0 +1,14 @@
+{
+  "name": "go-getter_backend",
+  "version": "1.0.0",
+  "description": "the backend for a go-getter portal",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "backend"
+  ],
+  "author": "mikhail.sivinskikh@gmail.com",
+  "license": "ISC"
+}
