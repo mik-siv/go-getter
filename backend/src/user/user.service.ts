@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import bcrypt from 'bcrypt';
+import { saltRounds } from 'src/common/constants';
 
 @Injectable()
 export class UserService {
