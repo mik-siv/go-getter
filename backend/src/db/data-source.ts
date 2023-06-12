@@ -5,10 +5,12 @@ const getDBConfig = (env: string): DataSourceOptions => {
     case 'development':
       return {
         type: 'postgres',
-        host: process.env.DATABASE_HOST,
-        url: process.env.DATABASE_URL,
+        host: process.env.PGHOST,
+        username: process.env.PGUSER,
+        password: process.env.PGPASSWORD,
+        port: Number(process.env.PGPORT),
+        database: process.env.PGDATABASE,
         entities: [__dirname + '/../**/*.entity.{js,ts}'],
-        migrations: ['dist/db/migrations/*.js'],
         migrationsRun: true,
         logging: ['query', 'info'],
       };
