@@ -1,13 +1,34 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import bcrypt from 'bcrypt';
 import { saltRounds } from 'src/common/constants';
+import { Repository } from 'typeorm';
+import { User } from './entities/user.entity';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
+
+  async create(createUserDto: CreateUserDto) {
+    try {
+      const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+      const id = uuidv4();
+      const userData = {
+        id,
+        username: createUserDto.username,
+        email: createUserDto.email,
+        password: hashedPassword,
+      };
+      await this.userRepository.save(userData);
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 
   findAll() {

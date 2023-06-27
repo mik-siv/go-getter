@@ -1,10 +1,9 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, CreateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'users' })
 export class User {
-  @ApiProperty()
-  @Column('uuid')
+  @Column({ type: 'uuid' })
   id: string;
 
   @Column()
@@ -15,7 +14,13 @@ export class User {
   @ApiProperty()
   password: string;
 
-  @Column('json')
+  @Column({ unique: true, nullable: true })
   @ApiProperty()
-  roles: JSON;
+  email: string;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdDate: Date;
+
+  @Column({ type: 'json', default: [] })
+  roles: any[];
 }
