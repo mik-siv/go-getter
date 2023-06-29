@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import bcrypt from 'bcrypt';
-import { saltRounds } from 'src/common/constants';
+import * as bcrypt from 'bcrypt';
+import { saltRounds } from '../common/constants';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
@@ -17,7 +17,10 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
     try {
-      const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+      const hashedPassword = await bcrypt.hash(
+        createUserDto.password,
+        saltRounds,
+      );
       const id = uuidv4();
       const userData = {
         id,
@@ -25,7 +28,8 @@ export class UserService {
         email: createUserDto.email,
         password: hashedPassword,
       };
-      await this.userRepository.save(userData);
+      const user = await this.userRepository.save(userData);
+      return user;
     } catch (error) {
       throw new Error(error.message);
     }
