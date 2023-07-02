@@ -28,8 +28,9 @@ export class UserService {
         email: createUserDto.email,
         password: hashedPassword,
       };
-      const user = await this.userRepository.save(userData);
-      return user;
+      const user = await this.userRepository.create(userData);
+      const result = await this.userRepository.save(user);
+      return result;
     } catch (error) {
       throw new Error(error.message);
     }

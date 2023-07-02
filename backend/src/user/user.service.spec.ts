@@ -1,19 +1,30 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
-import { userRepositoryFake } from '../mocks/user.repository.fake';
+import { UserRepositoryFake } from '../mocks/user.repository.fake';
+import { CreateUserDto } from './dto/create-user.dto';
 
 describe('UserService', () => {
   let service: UserService;
+  let repository: UserRepositoryFake;
+  let repoCreate, repoSave, userData;
 
   beforeEach(async () => {
+    repository = new UserRepositoryFake();
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
-        { provide: 'UserRepository', useClass: userRepositoryFake },
+        { provide: 'UserRepository', useValue: repository },
       ],
     }).compile();
 
     service = module.get<UserService>(UserService);
+    repoCreate = jest.spyOn(repository, 'create');
+    repoSave = jest.spyOn(repository, 'save');
+    userData = {
+      username: 'Test',
+      password: 'somepassword',
+      email: 'test@test.com',
+    };
   });
 
   it('should be defined', () => {
@@ -21,12 +32,16 @@ describe('UserService', () => {
   });
 
   it('should register user', async () => {
-    const userData = {
-      username: 'Test',
-      password: 'somepassword',
-      email: 'test@test.com',
-    };
     const user = await service.create(userData);
-    console.log(user);
+    const repoCallSchema: { [key: string]: any } = {
+      email: userData.email,
+      id: expect.any(String),
+      password: expect.any(String),
+      username: userData.username,
+    };
+    expect(user.id).toEqual(expect.any(String));
+    expect(user.password).not.toEqual(userData.password);
+    expect(repoCreate).toHaveBeenCalledWith(repoCallSchema);
+    expect(repoSave).toHaveBeenCalledWith(repoCallSchema);
   });
 });
