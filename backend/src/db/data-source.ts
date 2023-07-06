@@ -12,6 +12,9 @@ const getDBConfig = (env: string): DataSourceOptions => {
         database: process.env.PGDATABASE,
         entities: [__dirname + '/../**/*.entity.{js,ts}'],
         migrationsRun: true,
+        ssl: {
+          rejectUnauthorized: false,
+        },
         logging: ['query', 'info'],
       };
     case 'test':

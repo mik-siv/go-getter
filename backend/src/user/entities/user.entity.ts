@@ -1,9 +1,9 @@
-import { Entity, Column, CreateDateColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, PrimaryColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'users' })
 export class User {
-  @Column({ type: 'uuid' })
+  @PrimaryColumn({ type: 'uuid' })
   id: string;
 
   @Column()
@@ -19,7 +19,7 @@ export class User {
   email: string;
 
   @CreateDateColumn({ type: 'timestamp' })
-  createdDate: Date;
+  created_date: Date;
 
   @Column({ type: 'json', default: [] })
   roles: any[];

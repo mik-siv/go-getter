@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 import { UserRepositoryFake } from '../mocks/user.repository.fake';
-import { CreateUserDto } from './dto/create-user.dto';
 
 describe('UserService', () => {
   let service: UserService;
@@ -39,9 +38,17 @@ describe('UserService', () => {
       password: expect.any(String),
       username: userData.username,
     };
+    console.log(user);
     expect(user.id).toEqual(expect.any(String));
     expect(user.password).not.toEqual(userData.password);
     expect(repoCreate).toHaveBeenCalledWith(repoCallSchema);
     expect(repoSave).toHaveBeenCalledWith(repoCallSchema);
+  });
+
+  it('should throw an error on user with a duplicate email', async () => {
+    const user = await service.create(userData);
+    await expect(service.create(userData)).rejects.toThrowError(
+      'User with this email already exists',
+    );
   });
 });

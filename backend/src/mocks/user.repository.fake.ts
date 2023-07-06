@@ -16,4 +16,13 @@ export class UserRepositoryFake {
     this.users.push(user);
     return Promise.resolve(user);
   }
+
+  async findOne(conditions: any): Promise<User | undefined> {
+    const user = this.users.find((user) => {
+      return Object.entries(conditions.where).every(
+        ([key, value]) => user[key] === value,
+      );
+    });
+    return Promise.resolve(user);
+  }
 }

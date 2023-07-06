@@ -4,27 +4,13 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { GoalsModule } from './goals/goals.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm/dist';
+import { dataSourceOptions } from './db/data-source';
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('PGHOST'),
-        database: configService.get('PGDATABASE'),
-        username: configService.get('PGUSER'),
-        password: configService.get('PGPASSWORD'),
-        port: configService.get('PGPORT'),
-        ssl: {
-          rejectUnauthorized: false,
-        },
-        synchronize: false,
-      }),
-      inject: [ConfigService],
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
     UserModule,
     GoalsModule,
     AuthModule,
