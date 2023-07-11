@@ -18,7 +18,7 @@ export class User {
   @ApiProperty()
   email: string;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'timestamp', default: new Date() })
   created_date: Date;
 
   @Column({ type: 'json', default: [] })

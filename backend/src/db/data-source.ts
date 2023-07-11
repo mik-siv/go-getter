@@ -11,6 +11,7 @@ const getDBConfig = (env: string): DataSourceOptions => {
         port: Number(process.env.PGPORT),
         database: process.env.PGDATABASE,
         entities: [__dirname + '/../**/*.entity.{js,ts}'],
+        migrations: ['dist/db/migrations/*.{ts,js}'],
         migrationsRun: true,
         ssl: {
           rejectUnauthorized: false,
