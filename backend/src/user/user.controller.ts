@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ConflictException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -21,7 +22,9 @@ export class UserController {
       const user = await this.userService.create(createUserDto);
       return user;
     } catch (err) {
-      throw new Error(err.message);
+      if (err instanceof ConflictException) {
+        return err.getResponse();
+      }
     }
   }
 
