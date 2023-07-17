@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -24,6 +25,8 @@ export class UserController {
     } catch (err) {
       if (err instanceof ConflictException) {
         return err.getResponse();
+      } else {
+        return new BadRequestException().getResponse();
       }
     }
   }
