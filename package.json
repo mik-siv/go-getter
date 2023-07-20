@@ -1,0 +1,22 @@
+{
+  "name": "go-getter",
+  "version": "1.0.0",
+  "description": "go-getter portal source code",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mik-siv/go-getter.git"
+  },
+  "keywords": [
+    "development"
+  ],
+  "author": "mikhail.sivinskikh@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mik-siv/go-getter/issues"
+  },
+  "homepage": "https://github.com/mik-siv/go-getter#readme"
+}
