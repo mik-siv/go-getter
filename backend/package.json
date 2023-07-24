@@ -22,7 +22,7 @@
     "typeorm": "cross-env NODE_ENV=development npm run build && npx typeorm -d dist/db/data-source.js",
     "migration:generate": "cross-env NODE_ENV=development dotenv -e development.env npm run typeorm -- migration:generate ./src/db/migrations/new",
     "migration:run": "cross-env NODE_ENV=development dotenv -e development.env npm run typeorm -- migration:run",
-    "migration:revert": "cross-env NODE_ENV=production dotenv -e production.env npm run typeorm -- migration:revert"
+    "migration:revert": "cross-env NODE_ENV=development dotenv -e development.env npm run typeorm -- migration:revert"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",

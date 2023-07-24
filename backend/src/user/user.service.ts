@@ -19,7 +19,6 @@ export class UserService {
     const { username, password, email } = createUserDto;
     try {
       const existingUser: any = await this.userRepository.findBy({ email });
-      console.log(existingUser);
       if (existingUser.length > 0) {
         throw new ConflictException('User with this email already exists');
       }
@@ -41,12 +40,16 @@ export class UserService {
     }
   }
 
-  findAll() {
+  async findAll() {
     return this.userRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findByEmail(email: string) {
+    return await this.userRepository.findBy({ email });
+  }
+
+  async findById(id: string) {
+    return await this.userRepository.findBy({ id });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
