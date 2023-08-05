@@ -10,16 +10,16 @@ import { dataSourceOptions } from './db/data-source';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(dataSourceOptions),
-    UserModule,
-    GoalsModule,
-    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `${process.env.NODE_ENV}.env`,
     }),
+    TypeOrmModule.forRoot(dataSourceOptions),
+    UserModule,
+    GoalsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
