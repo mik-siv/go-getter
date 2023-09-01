@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -13,7 +13,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async create(createUserDto: CreateUserDto) {
     const { username, password, email } = createUserDto;
@@ -27,8 +27,8 @@ export class UserService {
       const id = uuidv4();
       const userData = {
         id,
-        username: username,
-        email: email,
+        username,
+        email,
         password: hashedPassword,
       };
 
@@ -36,7 +36,11 @@ export class UserService {
       const result = await this.userRepository.save(user);
       return result;
     } catch (error) {
-      throw error;
+      if (error instanceof ConflictException) {
+        throw error;
+      } else {
+        throw new InternalServerErrorException()
+      }
     }
   }
 
