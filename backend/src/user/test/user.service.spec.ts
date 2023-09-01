@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from './user.service';
-import { UserRepositoryFake } from '../mocks/user.repository.fake';
+import { UserService } from '../user.service';
+import { UserRepositoryFake } from '../../mocks/user.repository.fake';
 
 describe('UserService', () => {
   let service: UserService;
@@ -38,7 +38,6 @@ describe('UserService', () => {
       password: expect.any(String),
       username: userData.username,
     };
-    console.log(user);
     expect(user.id).toEqual(expect.any(String));
     expect(user.password).not.toEqual(userData.password);
     expect(repoCreate).toHaveBeenCalledWith(repoCallSchema);
