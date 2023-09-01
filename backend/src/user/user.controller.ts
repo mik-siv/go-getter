@@ -6,7 +6,7 @@ import {
   Patch,
   Param,
   Delete,
-  BadRequestException,
+  InternalServerErrorException,
   HttpException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -26,7 +26,7 @@ export class UserController {
       if (err instanceof HttpException) {
         return err.getResponse();
       } else {
-        return new BadRequestException().getResponse();
+        return new InternalServerErrorException().getResponse();
       }
     }
   }
