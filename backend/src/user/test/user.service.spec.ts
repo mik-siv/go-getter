@@ -1,3 +1,4 @@
+import { ConflictException } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from '../user.service';
 import { UserRepositoryFake } from '../../mocks/user.repository.fake';
@@ -45,9 +46,17 @@ describe('UserService', () => {
   });
 
   it('should throw an error on user with a duplicate email', async () => {
-    const user = await service.create(userData);
-    await expect(service.create(userData)).rejects.toThrowError(
-      'User with this email already exists',
+    await service.create(userData);
+    await expect(service.create(userData)).rejects.toThrowError(ConflictException);
+    await expect(service.create(userData)).rejects.toThrow(
+      'User with this email already exists'
     );
   });
+
+  it('should throw an error on invalid input data', async () => {
+    repoSave.mockImplementation(() => {
+      throw new Error('Error Saving User');
+    });
+    await expect(service.create(userData)).rejects.toThrowError('Error Saving User');
+  })
 });
