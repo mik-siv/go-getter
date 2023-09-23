@@ -6,8 +6,8 @@ import {
   Patch,
   Param,
   Delete,
-  ConflictException,
-  BadRequestException,
+  InternalServerErrorException,
+  HttpException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,7 +15,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
@@ -23,10 +23,10 @@ export class UserController {
       const user = await this.userService.create(createUserDto);
       return user;
     } catch (err) {
-      if (err instanceof ConflictException) {
+      if (err instanceof HttpException) {
         return err.getResponse();
       } else {
-        return new BadRequestException().getResponse();
+        return new InternalServerErrorException().getResponse();
       }
     }
   }
@@ -38,7 +38,7 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return this.userService.findById(id);
   }
 
   @Patch(':id')

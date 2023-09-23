@@ -22,12 +22,13 @@
     "typeorm": "cross-env NODE_ENV=development npm run build && npx typeorm -d dist/db/data-source.js",
     "migration:generate": "cross-env NODE_ENV=development dotenv -e development.env npm run typeorm -- migration:generate ./src/db/migrations/new",
     "migration:run": "cross-env NODE_ENV=development dotenv -e development.env npm run typeorm -- migration:run",
-    "migration:revert": "cross-env NODE_ENV=production dotenv -e production.env npm run typeorm -- migration:revert"
+    "migration:revert": "cross-env NODE_ENV=development dotenv -e development.env npm run typeorm -- migration:revert"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.3",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/jwt": "^10.1.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/passport": "^9.0.3",
     "@nestjs/platform-express": "^9.0.0",
@@ -38,7 +39,9 @@
     "class-validator": "^0.14.0",
     "dotenv": "^16.1.4",
     "dotenv-cli": "^7.2.1",
+    "joi": "^17.10.0",
     "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pg": "^8.11.0",
     "reflect-metadata": "^0.1.13",
@@ -54,6 +57,7 @@
     "@types/express": "^4.17.13",
     "@types/jest": "28.1.8",
     "@types/node": "^16.0.0",
+    "@types/passport-jwt": "^3.0.9",
     "@types/passport-local": "^1.0.35",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
