@@ -7,9 +7,10 @@ import { saltRounds } from '../common/constants';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
+import { UserServiceInterface } from './interfaces/user-service.interface';
 
 @Injectable()
-export class UserService {
+export class UserService implements UserServiceInterface {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
