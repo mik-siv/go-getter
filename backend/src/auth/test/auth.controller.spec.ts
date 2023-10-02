@@ -6,7 +6,7 @@ describe('AuthController', () => {
   let controller: AuthController;
   let fakeAuthService = {
     login: jest.fn()
-  }
+  };
   let fakeRequest = {
     body: {
       user: {
@@ -14,7 +14,7 @@ describe('AuthController', () => {
         password: 'test'
       }
     }
-  }
+  };
 
 
   beforeEach(async () => {
@@ -35,7 +35,16 @@ describe('AuthController', () => {
     fakeAuthService.login.mockReturnValue(fakeAuthTokenData);
     const result = await controller.login(fakeRequest.body);
     expect(result).toEqual(fakeAuthTokenData);
-    expect(fakeAuthService.login).toHaveBeenCalledWith(fakeRequest.body.user); // No need to access body.user here
+    expect(fakeAuthService.login).toHaveBeenCalledWith(fakeRequest.body.user);
     expect(fakeAuthService.login).toHaveBeenCalledTimes(1);
-  })
+  });
+
+  it('should return an error if login fails', async () => {
+    fakeAuthService.login.mockRejectedValue(new Error('test error'));
+    try {
+      await controller.login(fakeRequest.body);
+    } catch (err) {
+      expect(err).toEqual(new Error('test error'));
+    }
+  });
 });
