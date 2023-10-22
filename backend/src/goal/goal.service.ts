@@ -3,13 +3,13 @@ import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
 
 @Injectable()
-export class GoalsService {
+export class GoalService {
   create(createGoalDto: CreateGoalDto) {
     return 'This action adds a new goal';
   }
 
   findAll() {
-    return `This action returns all goals`;
+    return `This action returns all goal`;
   }
 
   findOne(id: number) {

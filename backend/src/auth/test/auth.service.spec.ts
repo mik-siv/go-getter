@@ -22,7 +22,7 @@ describe('AuthService', () => {
     service = module.get<AuthService>(AuthService);
     userService = module.get<UserService>(UserService);
     jwtService = module.get<JwtService>(JwtService)
-    findUser = jest.spyOn(userService, 'findByEmail')
+    findUser = jest.spyOn(userService, 'findBy')
   });
 
   it('should be defined', () => {
@@ -30,7 +30,7 @@ describe('AuthService', () => {
   });
 
   it('should throw UnauthorizedException if user not found', async () => {
-    userService.findByEmail = jest.fn().mockResolvedValue([]);
+    userService.findBy = jest.fn().mockResolvedValue([]);
     const email = 'nonexistent@example.com';
     const password = 'password';
 
@@ -41,7 +41,7 @@ describe('AuthService', () => {
 
   it('should throw UnauthorizedException if password is invalid', async () => {
     const foundUser = { id: '1', email: 'user@example.com', password: 'hashedpassword' };
-    userService.findByEmail = jest.fn().mockResolvedValue([foundUser]);
+    userService.findBy = jest.fn().mockResolvedValue([foundUser]);
     bcrypt.compare = jest.fn().mockResolvedValue(false);
     const email = 'user@example.com';
     const password = 'invalidpassword';
@@ -53,7 +53,7 @@ describe('AuthService', () => {
 
   it('should return found user if email and password are valid', async () => {
     const foundUser = { id: '1', email: 'user@example.com', password: 'hashedpassword' };
-    userService.findByEmail = jest.fn().mockResolvedValue([foundUser]);
+    userService.findBy = jest.fn().mockResolvedValue([foundUser]);
     bcrypt.compare = jest.fn().mockResolvedValue(true);
     const email = 'user@example.com';
     const password = 'password';
