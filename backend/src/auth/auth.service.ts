@@ -10,7 +10,7 @@ export class AuthService implements AuthServiceInterface {
   constructor(private readonly userService: UserService, private readonly jwtService: JwtService) { }
 
   async validate(email: string, password: string): Promise<User> {
-    const [foundUser]: User[] = await this.userService.findByEmail(email);
+    const [foundUser]: User[] = await this.userService.findBy({ email });
     if (!foundUser) {
       throw new UnauthorizedException();
     }

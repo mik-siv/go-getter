@@ -3,10 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { GoalsModule } from './goals/goals.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm/dist';
 import { dataSourceOptions } from './db/data-source';
+import { GoalModule } from './goal/goal.module';
 import * as Joi from 'joi'
 
 @Module({
@@ -25,8 +25,8 @@ import * as Joi from 'joi'
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
     UserModule,
-    GoalsModule,
     AuthModule,
+    GoalModule,
   ],
   controllers: [AppController],
   providers: [AppService],
