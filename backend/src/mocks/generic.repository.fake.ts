@@ -1,5 +1,5 @@
 export class GenericRepositoryFake<T> {
-    private items: T[] = [];
+    items: T[] = [];
 
     async create(itemData: Partial<T>): Promise<T> {
         const item = Object.assign(new Object() as T, itemData);
@@ -27,5 +27,14 @@ export class GenericRepositoryFake<T> {
             );
         })
         return Promise.resolve(foundItems);
+    }
+
+    async remove(item: T): Promise<T> {
+        const itemIndex = this.items.findIndex((item) => {
+            return Object.entries(item).every(
+                ([key, value]) => item[key] === value,
+            );
+        });
+        return Promise.resolve(item);
     }
 }
