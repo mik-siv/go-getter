@@ -8,6 +8,10 @@ Content-Type: application/json
     "username": "tester"
 }
 
+### Get a user
+GET http://localhost:3000/user/54e8a827-8f1b-42e6-9c87-67a3304d160a HTTP/1.1
+
+
 ### Get all users
 GET http://localhost:3000/user HTTP/1.1
 Content-Type: application/json
@@ -17,3 +21,6 @@ Content-Type: application/json
     "password": "QQww!!22",
     "username": "tester"
 }
+
+### Delete a user
+DELETE http://localhost:3000/user/54e8a827-8f1b-42e6-9c87-67a3304d160a HTTP/1.1
