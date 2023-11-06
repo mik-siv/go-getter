@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from '../user.controller';
 import { UserService } from '../user.service';
-import { UserRepositoryFake } from '../../mocks/user.repository.fake';
+import { UserRepositoryFake } from '../../common/mocks/user.repository.fake';
 import { ConflictException } from '@nestjs/common';
 
 describe('UserController', () => {

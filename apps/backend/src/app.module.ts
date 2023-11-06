@@ -5,7 +5,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm/dist';
-import { dataSourceOptions } from './db/data-source';
+import { dataSourceOptions } from './common/db/data-source';
 import { GoalModule } from './goal/goal.module';
 import * as Joi from 'joi'
 

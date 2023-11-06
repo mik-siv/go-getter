@@ -18,5 +18,11 @@
   "bugs": {
     "url": "https://github.com/mik-siv/go-getter/issues"
   },
-  "homepage": "https://github.com/mik-siv/go-getter#readme"
+  "homepage": "https://github.com/mik-siv/go-getter#readme",
+  "devDependencies": {
+    "turbo": "^1.10.16"
+  },
+  "workspaces": [
+    "apps/*"
+  ]
 }
