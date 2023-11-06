@@ -4,7 +4,8 @@
   "description": "go-getter portal source code",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start:dev": "turbo run start:dev"
   },
   "repository": {
     "type": "git",
