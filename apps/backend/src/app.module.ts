@@ -7,21 +7,14 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm/dist';
 import { dataSourceOptions } from './common/db/data-source';
 import { GoalModule } from './goal/goal.module';
-import * as Joi from 'joi'
+import { validationSchema } from './utils/validation/environment-validation.schema';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `${process.env.NODE_ENV}.env`,
-      validationSchema: Joi.object({
-        PGHOST: Joi.string().required(),
-        PGDATABASE: Joi.string().required(),
-        PGUSER: Joi.string().required(),
-        PGPASSWORD: Joi.string().required(),
-        PGPORT: Joi.string().required(),
-        JWTSECRET: Joi.string().required()
-      }).required()
+      validationSchema: validationSchema
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
     UserModule,
