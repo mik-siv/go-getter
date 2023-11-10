@@ -65,7 +65,7 @@ describe('AuthService', () => {
     const user = { id: '1', username: 'user1' };
     const payload = { username: user.username, sub: user.id };
     jwtService.sign = jest.fn().mockReturnValue('access_token');
-    const result = await service.login(user);
+    const result = await service.login(user as any);
     expect(result).toEqual({ access_token: 'access_token' });
     expect(jwtService.sign).toHaveBeenCalledWith(payload);
   });

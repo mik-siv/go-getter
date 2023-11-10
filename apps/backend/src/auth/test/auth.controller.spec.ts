@@ -33,7 +33,7 @@ describe('AuthController', () => {
   it('should login a user', async () => {
     let fakeAuthTokenData = { access_token: 'fake-access-token' }
     fakeAuthService.login.mockReturnValue(fakeAuthTokenData);
-    const result = await controller.login(fakeRequest.body);
+    const result = await controller.login(fakeRequest.body as any);
     expect(result).toEqual(fakeAuthTokenData);
     expect(fakeAuthService.login).toHaveBeenCalledWith(fakeRequest.body.user);
     expect(fakeAuthService.login).toHaveBeenCalledTimes(1);
@@ -42,7 +42,7 @@ describe('AuthController', () => {
   it('should return an error if login fails', async () => {
     fakeAuthService.login.mockRejectedValue(new Error('test error'));
     try {
-      await controller.login(fakeRequest.body);
+      await controller.login(fakeRequest.body as any);
     } catch (err) {
       expect(err).toEqual(new Error('test error'));
     }
