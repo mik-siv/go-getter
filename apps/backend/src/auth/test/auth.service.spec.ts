@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from '../auth.service';
-import { UserRepositoryFake } from '../../mocks/user.repository.fake';
+import { UserRepositoryFake } from '../../common/mocks/user.repository.fake';
 import { UserService } from '../../user/user.service';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';

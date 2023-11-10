@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LocalAuthGuard } from './local-auth.guard';
 import { Reflector } from '@nestjs/core';
-import { DTO_KEY } from '../../decorators/set-dto.decorator';
+import { DTO_KEY } from '../../common/decorators/set-dto.decorator';
 import * as validateDtoModule from '../../utils/validation/dto-validation.util';
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';

@@ -1,7 +1,7 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from '../user.service';
-import { UserRepositoryFake } from '../../mocks/user.repository.fake';
+import { UserRepositoryFake } from '../../common/mocks/user.repository.fake';
 
 describe('UserService', () => {
   let service: UserService;

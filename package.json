@@ -4,7 +4,16 @@
   "description": "go-getter portal source code",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "turbo run test",
+    "start:dev": "turbo run start:dev",
+    "prepare": "husky install",
+    "lint-staged": "turbo run lint-staged"
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "eslint",
+      "prettier --write"
+    ]
   },
   "repository": {
     "type": "git",
@@ -18,5 +27,12 @@
   "bugs": {
     "url": "https://github.com/mik-siv/go-getter/issues"
   },
-  "homepage": "https://github.com/mik-siv/go-getter#readme"
+  "homepage": "https://github.com/mik-siv/go-getter#readme",
+  "devDependencies": {
+    "husky": "^8.0.0",
+    "turbo": "^1.10.16"
+  },
+  "workspaces": [
+    "apps/*"
+  ]
 }
