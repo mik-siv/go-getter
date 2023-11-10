@@ -7,7 +7,7 @@ This is a personal portfolio project built using the Nest.js framework. It focus
 ## Features
 
 - **100% Test Coverage:** Comprehensive suite of tests covering services, controllers, guards, interceptors, and modules.
-- **Guards and Custom Decorators:** Utilizes guards for authentication and provides custom decorators for simplified functionality.
+- **Custom Guards and Middlewares:** Utilizes guards for authentication and provides custom middlewares for increased flexibility.
 - **TypeORM + Migrations:** Database management using TypeORM with migration support for schema evolution.
 - **JWT and Local Authentication:** Implements JWT and local authentication via Passport.js for user identification and authorization.
 - **Validation Pipes:** Ensures accurate and consistent request data with validation pipes.

@@ -8,8 +8,12 @@ describe('UserController', () => {
   let controller: UserController;
   let repository: UserRepositoryFake;
   let service: UserService;
-  let serviceCreate;
-  let userData;
+  let serviceCreate: jest.SpyInstance;
+  const userData = {
+    username: 'Test',
+    password: 'somepassword',
+    email: 'test@test.com',
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -20,11 +24,6 @@ describe('UserController', () => {
     controller = module.get<UserController>(UserController);
     service = module.get<UserService>(UserService);
     serviceCreate = jest.spyOn(service, 'create');
-    userData = {
-      username: 'Test',
-      password: 'somepassword',
-      email: 'test@test.com',
-    };
   });
 
   it('should be defined', () => {

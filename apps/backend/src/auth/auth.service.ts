@@ -7,7 +7,8 @@ import { AuthServiceInterface } from './interfaces/auth-service.interface';
 
 @Injectable()
 export class AuthService implements AuthServiceInterface {
-  constructor(private readonly userService: UserService, private readonly jwtService: JwtService) { }
+  constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {
+  }
 
   async validate(email: string, password: string): Promise<User> {
     const [foundUser]: User[] = await this.userService.findBy({ email });
@@ -23,7 +24,7 @@ export class AuthService implements AuthServiceInterface {
     return foundUser;
   }
 
-  async login(user: any) {
+  async login(user: User): Promise<{ access_token: string }> {
     const payload = { username: user.username, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),

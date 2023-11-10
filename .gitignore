@@ -133,3 +133,6 @@ dist
 
 # env configs
 **.env
+
+# turbo temp files
+/.turbo/**
