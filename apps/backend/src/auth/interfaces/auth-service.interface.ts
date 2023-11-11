@@ -1,4 +1,6 @@
+import { User } from '../../user/entities/user.entity';
+
 export interface AuthServiceInterface {
-    validate(email: string, password: string): Promise<any>;
-    login(user: any): Promise<any>;
+    validate(email: string, password: string): Promise<User>;
+    login(user: User): Promise<{ access_token: string }>;
 }
