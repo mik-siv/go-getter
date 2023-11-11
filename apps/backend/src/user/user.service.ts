@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -8,19 +8,20 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { UserServiceInterface } from './interfaces/user-service.interface';
-import * as merge from 'lodash.merge'
+import * as merge from 'lodash.merge';
 
 @Injectable()
 export class UserService implements UserServiceInterface {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) { }
+  ) {
+  }
 
   async create(createUserDto: CreateUserDto) {
     const { username, password, email } = createUserDto;
     try {
-      const existingUser: any = await this.findBy({ email });
+      const existingUser: User[] = await this.findBy({ email });
       if (existingUser.length > 0) {
         throw new ConflictException('User with this email already exists');
       }
@@ -34,19 +35,18 @@ export class UserService implements UserServiceInterface {
         password: hashedPassword,
       };
 
-      const user = await this.userRepository.create(userData);
-      const result = await this.userRepository.save(user);
-      return result;
+      const user: User = await this.userRepository.create(userData);
+      return await this.userRepository.save(user);
     } catch (error) {
       throw error;
     }
   }
 
-  async findAll() {
+  async findAll(): Promise<User[]> {
     return this.userRepository.find();
   }
 
-  async findById(id: string) {
+  async findById(id: string): Promise<User> {
     const user: User = await this.userRepository.findOne({ where: { id } });
     if (!user) throw new NotFoundException(`User with id ${id} not found`);
     return user;

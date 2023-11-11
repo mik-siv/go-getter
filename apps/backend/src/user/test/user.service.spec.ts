@@ -2,6 +2,7 @@ import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from '../user.service';
 import { UserRepositoryFake } from '../../common/mocks/user.repository.fake';
+import { User } from '../entities/user.entity';
 
 describe('UserService', () => {
   let service: UserService;
@@ -46,8 +47,8 @@ describe('UserService', () => {
   });
 
   it('should register user', async () => {
-    const user = await service.create(userData);
-    const repoCallSchema: { [key: string]: any } = {
+    const user: User = await service.create(userData);
+    const repoCallSchema = {
       email: userData.email,
       id: expect.any(String),
       password: expect.any(String),

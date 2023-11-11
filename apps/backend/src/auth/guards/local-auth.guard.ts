@@ -11,7 +11,7 @@ export class LocalAuthGuard extends AuthGuard('local') {
         super()
     }
     async canActivate(context: ExecutionContext) {
-        const request = context.switchToHttp().getRequest<Request>();
+        const request: Request = context.switchToHttp().getRequest<Request>();
         const dto = this.reflector.get<ClassConstructor<object>>(DTO_KEY, context.getHandler());
         await validateDto(request.body, dto)
         return super.canActivate(context) as boolean | Promise<boolean>;
