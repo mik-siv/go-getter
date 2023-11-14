@@ -1,9 +1,12 @@
+### Get user documentation
+GET {{host}}/user/document HTTP/1.1
+
 ### Create a new user
 POST {{host}}/user HTTP/1.1
 Content-Type: application/json
 
 {
-    "email": "te1stt@test.com",
+    "email": "test@test.com",
     "password": "QQww!!22",
     "username": "tester"
 }
@@ -14,13 +17,7 @@ Authorization: Bearer {{auth_token}}
 
 ### Get all users
 GET {{host}}/user HTTP/1.1
-Content-Type: application/json
-
-{
-    "email": "te1stt@test.com",
-    "password": "QQww!!22",
-    "username": "tester"
-}
+Authorization: Bearer {{auth_token}}
 
 ### Delete a user
 DELETE {{host}}/user/54e8a827-8f1b-42e6-9c87-67a3304d160a HTTP/1.1
