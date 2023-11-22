@@ -10,7 +10,6 @@ import {
   Patch,
   Post,
   Request,
-  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -40,14 +39,13 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
+  findAll(): Promise<User[]> {
     return this.userService.findAll();
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string, @Request() req: authenticatedUser): Promise<User> {
-    if (id !== req.user.userId) throw new UnauthorizedException();
     return this.userService.findById(id);
   }
 

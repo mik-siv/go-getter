@@ -18,6 +18,14 @@ export class UserService implements UserServiceInterface {
   ) {
   }
 
+  async hashPassword(password: string): Promise<string> {
+    return await bcrypt.hash(password, saltRounds);
+  }
+
+  generateUuid(): string {
+    return uuidv4();
+  }
+
   async create(createUserDto: CreateUserDto) {
     const { username, password, email } = createUserDto;
     try {
@@ -26,8 +34,8 @@ export class UserService implements UserServiceInterface {
         throw new ConflictException('User with this email already exists');
       }
 
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
-      const id = uuidv4();
+      const hashedPassword = await this.hashPassword(password);
+      const id = this.generateUuid();
       const userData = {
         id,
         username,
@@ -59,8 +67,13 @@ export class UserService implements UserServiceInterface {
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     try {
       const foundUser: User = await this.findById(id);
-      merge(foundUser, updateUserDto);
-      return await this.userRepository.save(foundUser);
+      const { password } = updateUserDto;
+      if (password) {
+        updateUserDto.password = await this.hashPassword(password);
+      }
+      const updatedData = merge(foundUser, updateUserDto);
+      await this.userRepository.update(id, updatedData);
+      return updatedData;
     } catch (err) {
       throw err;
     }
