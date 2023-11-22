@@ -12,7 +12,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(3)
-  @MaxLength(10)
+  @MaxLength(20)
   username: string;
 
   @ApiProperty({description: 'password'})
