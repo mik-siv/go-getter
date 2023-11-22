@@ -7,4 +7,7 @@ export const e2eTestData = {
       password: 'QQww!!22',
     },
   },
+  auth: {
+    endpoint: '/auth',
+  },
 };
