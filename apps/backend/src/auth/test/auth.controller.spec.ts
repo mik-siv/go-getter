@@ -4,10 +4,10 @@ import { AuthService } from '../auth.service';
 
 describe('AuthController', () => {
   let controller: AuthController;
-  let fakeAuthService = {
+  const fakeAuthService = {
     login: jest.fn()
   };
-  let fakeRequest = {
+  const fakeRequest = {
     body: {
       user: {
         email: 'test@test.com',
@@ -31,7 +31,7 @@ describe('AuthController', () => {
   });
 
   it('should login a user', async () => {
-    let fakeAuthTokenData = { access_token: 'fake-access-token' }
+    const fakeAuthTokenData = { access_token: 'fake-access-token' }
     fakeAuthService.login.mockReturnValue(fakeAuthTokenData);
     const result = await controller.login(fakeRequest.body as any);
     expect(result).toEqual(fakeAuthTokenData);

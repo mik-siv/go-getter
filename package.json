@@ -7,7 +7,9 @@
     "test": "turbo run test",
     "start:dev": "turbo run start:dev",
     "prepare": "husky install",
-    "lint-staged": "turbo run lint-staged"
+    "lint-staged": "turbo run lint-staged",
+    "lint": "turbo run lint",
+    "format": "turbo run format"
   },
   "lint-staged": {
     "**/*.js": [
