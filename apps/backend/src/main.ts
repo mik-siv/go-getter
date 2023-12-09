@@ -1,24 +1,31 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { SwaggerModule } from '@nestjs/swagger';
 import { UserModule } from './user/user.module';
-import { ValidationPipe } from '@nestjs/common';
+import { userSwaggerConfig } from './config/swagger/user.swagger-config';
+import { authSwaggerConfig } from './config/swagger/auth.swagger-config';
+import { AuthModule } from './auth/auth.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const options = new DocumentBuilder()
-    .setTitle('User example')
-    .setDescription('The User API description')
-    .setVersion('1.0')
-    .addTag('user')
-    .build();
 
-  const userDocument = SwaggerModule.createDocument(app, options, {
+  /*
+   * Swagger setup
+   */
+  const userDocument = SwaggerModule.createDocument(app, userSwaggerConfig, {
     include: [UserModule],
   });
-  SwaggerModule.setup('api/user', app, userDocument);
-  app.useGlobalPipes(new ValidationPipe());
-  app.setGlobalPrefix('api')
+  const authDocument = SwaggerModule.createDocument(app, authSwaggerConfig, {
+    include: [AuthModule],
+  });
+  SwaggerModule.setup('api/user/document', app, userDocument);
+  SwaggerModule.setup('api/auth/document', app, authDocument);
+
+  /*
+   * Setting route prefix and port
+   */
+  app.setGlobalPrefix('api');
   await app.listen(3000);
 }
+
 bootstrap();
