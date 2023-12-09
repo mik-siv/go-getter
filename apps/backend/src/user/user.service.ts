@@ -72,7 +72,7 @@ export class UserService implements UserServiceInterface {
         updateUserDto.password = await this.hashPassword(password);
       }
       const updatedData = merge(foundUser, updateUserDto);
-      await this.userRepository.update(id, updatedData);
+      await this.userRepository.save(updatedData);
       return updatedData;
     } catch (err) {
       throw err;
