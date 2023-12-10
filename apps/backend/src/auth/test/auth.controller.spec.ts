@@ -4,23 +4,23 @@ import { AuthService } from '../auth.service';
 
 describe('AuthController', () => {
   let controller: AuthController;
-  let fakeAuthService = {
-    login: jest.fn()
+  const fakeAuthService = {
+    login: jest.fn(),
   };
-  let fakeRequest = {
+  const fakeRequest = {
     body: {
       user: {
         email: 'test@test.com',
-        password: 'test'
-      }
-    }
+        password: 'test',
+      },
+    },
   };
 
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [{ provide: AuthService, useValue: fakeAuthService },]
+      providers: [{ provide: AuthService, useValue: fakeAuthService }],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
@@ -31,9 +31,9 @@ describe('AuthController', () => {
   });
 
   it('should login a user', async () => {
-    let fakeAuthTokenData = { access_token: 'fake-access-token' }
+    const fakeAuthTokenData = { access_token: 'fake-access-token' };
     fakeAuthService.login.mockReturnValue(fakeAuthTokenData);
-    const result = await controller.login(fakeRequest.body as any);
+    const result = await controller.login({} as any, fakeRequest.body as any);
     expect(result).toEqual(fakeAuthTokenData);
     expect(fakeAuthService.login).toHaveBeenCalledWith(fakeRequest.body.user);
     expect(fakeAuthService.login).toHaveBeenCalledTimes(1);
@@ -42,7 +42,7 @@ describe('AuthController', () => {
   it('should return an error if login fails', async () => {
     fakeAuthService.login.mockRejectedValue(new Error('test error'));
     try {
-      await controller.login(fakeRequest.body as any);
+      await controller.login({} as any, fakeRequest.body as any);
     } catch (err) {
       expect(err).toEqual(new Error('test error'));
     }
