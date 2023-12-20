@@ -44,8 +44,8 @@ jobs:
         id: increment-git-tag
         uses: anothrNick/github-tag-action@1.64.0
         env:
-            WITH_V: true
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            WITH_V: true
 
       - name: Build Tag and Push the Image to Amazon ECR
         id: build-image
