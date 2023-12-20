@@ -13,6 +13,9 @@
     "test:e2e":{},
     "start:dev": {
       "cache": false
+    },
+    "start:prod": {
+      "cache": false
     }
   }
 }
