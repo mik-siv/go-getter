@@ -1,16 +1,12 @@
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
-    types: [ closed ]
 
 jobs:
   lint-and-format:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
@@ -33,7 +29,6 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
     needs: lint-and-format
     steps:
       - uses: actions/checkout@v4
@@ -52,22 +47,3 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm run test
-
-  build-and-push:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
-    needs: [lint-and-format, test]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Automatic Tagging of Releases
-        id: increment-git-tag
-        uses: anothrNick/github-tag-action@1.64.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish to Docker Hub
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: miksiv/go-getter
-          tags: latest, ${{ steps.increment-git-tag.outputs.new_tag }}
