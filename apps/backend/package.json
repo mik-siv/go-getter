@@ -19,10 +19,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "cross-env NODE_ENV=development jest --config test/jest-e2e.json",
-    "typeorm": "cross-env NODE_ENV=development npm run build && npx typeorm -d dist/db/data-source.js",
-    "migration:generate": "cross-env NODE_ENV=development dotenv -e development.env npm run typeorm -- migration:generate src/common/db/migrations/new",
-    "migration:run": "cross-env NODE_ENV=development dotenv -e development.env npm run typeorm -- migration:run",
-    "migration:revert": "cross-env NODE_ENV=development dotenv -e development.env npm run typeorm -- migration:revert"
+    "typeorm": "cross-env NODE_ENV=production npm run build && npx typeorm -d dist/common/db/data-source.js",
+    "migration:generate": "cross-env NODE_ENV=production npm run typeorm -- migration:generate src/common/db/migrations/new",
+    "migration:run": "cross-env NODE_ENV=production npm run typeorm -- migration:run",
+    "migration:revert": "cross-env NODE_ENV=production npm run typeorm -- migration:revert"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",

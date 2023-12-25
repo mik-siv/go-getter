@@ -12,7 +12,8 @@
     "prepare": "husky install",
     "lint-staged": "turbo run lint-staged",
     "lint": "turbo run lint",
-    "format": "turbo run format"
+    "format": "turbo run format",
+    "migration:run": "turbo run migration:run --filter=backend"
   },
   "lint-staged": {
     "**/*.js": [

@@ -6,9 +6,10 @@
         "dist/**"
       ]
     },
+    "format": {},
     "lint-staged": {},
     "lint": {},
-    "format": {},
+    "migration:run": {},
     "test": {},
     "test:e2e":{},
     "start:dev": {
