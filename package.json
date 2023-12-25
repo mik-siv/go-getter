@@ -8,6 +8,7 @@
     "test": "turbo run test",
     "test:e2e": "turbo run test:e2e",
     "start:dev": "turbo run start:dev",
+    "start:prod": "turbo run start:prod",
     "prepare": "husky install",
     "lint-staged": "turbo run lint-staged",
     "lint": "turbo run lint",

@@ -14,7 +14,6 @@ import { APP_PIPE } from '@nestjs/core';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `${process.env.NODE_ENV}.env`,
       validationSchema: validationSchema,
     }),
     TypeOrmModule.forRoot(dataSourceOptions),

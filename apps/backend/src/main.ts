@@ -8,7 +8,10 @@ import { AuthModule } from './auth/auth.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  /*
+   * Setting route prefix and port
+   */
+  app.setGlobalPrefix('api');
   /*
    * Swagger setup
    */
@@ -21,10 +24,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/user/document', app, userDocument);
   SwaggerModule.setup('api/auth/document', app, authDocument);
 
-  /*
-   * Setting route prefix and port
-   */
-  app.setGlobalPrefix('api');
+
   await app.listen(3000);
 }
 
