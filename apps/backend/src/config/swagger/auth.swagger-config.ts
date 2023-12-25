@@ -4,4 +4,5 @@ export const authSwaggerConfig = new DocumentBuilder()
   .setTitle('Auth service api docs')
   .setDescription('The Auth API description')
   .setVersion('1.0')
+  .setBasePath('api')
   .build();
