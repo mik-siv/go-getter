@@ -1,4 +1,4 @@
-name: Build and Push the Image to Docker Hub
+name: CI/CD Pipeline
 
 on:
   push:
@@ -7,35 +7,62 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-push:
+  lint-and-format:
     runs-on: ubuntu-latest
-
+    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - name: Install dependencies
         run: npm ci
-
       - name: Run lint
         run: npm run lint
-
       - name: Run format
         run: npm run format
 
+  test:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    needs: lint-and-format
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
       - name: Run tests
         run: npm run test
 
+  build-and-push:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [lint-and-format, test]
+    steps:
+      - uses: actions/checkout@v4
       - name: Automatic Tagging of Releases
         id: increment-git-tag
         uses: anothrNick/github-tag-action@1.64.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true
-
       - name: Publish to Docker Hub
         uses: docker/build-push-action@v1
         with:
@@ -43,4 +70,3 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: miksiv/go-getter
           tags: latest, ${{ steps.increment-git-tag.outputs.new_tag }}
-
