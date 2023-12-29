@@ -28,26 +28,22 @@ export class UserService implements UserServiceInterface {
 
   async create(createUserDto: CreateUserDto) {
     const { username, password, email } = createUserDto;
-    try {
-      const existingUser: User[] = await this.findBy({ email });
-      if (existingUser.length > 0) {
-        throw new ConflictException('User with this email already exists');
-      }
-
-      const hashedPassword = await this.hashPassword(password);
-      const id = this.generateUuid();
-      const userData = {
-        id,
-        username,
-        email,
-        password: hashedPassword,
-      };
-
-      const user: User = await this.userRepository.create(userData);
-      return await this.userRepository.save(user);
-    } catch (error) {
-      throw error;
+    const existingUser: User[] = await this.findBy({ email });
+    if (existingUser.length > 0) {
+      throw new ConflictException('User with this email already exists');
     }
+
+    const hashedPassword = await this.hashPassword(password);
+    const id = this.generateUuid();
+    const userData = {
+      id,
+      username,
+      email,
+      password: hashedPassword,
+    };
+
+    const user: User = await this.userRepository.create(userData);
+    return await this.userRepository.save(user);
   }
 
   async findAll(): Promise<User[]> {
@@ -65,26 +61,18 @@ export class UserService implements UserServiceInterface {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    try {
-      const foundUser: User = await this.findById(id);
-      const { password } = updateUserDto;
-      if (password) {
-        updateUserDto.password = await this.hashPassword(password);
-      }
-      const updatedData = merge(foundUser, updateUserDto);
-      await this.userRepository.save(updatedData);
-      return updatedData;
-    } catch (err) {
-      throw err;
+    const foundUser: User = await this.findById(id);
+    const { password } = updateUserDto;
+    if (password) {
+      updateUserDto.password = await this.hashPassword(password);
     }
+    const updatedData = merge(foundUser, updateUserDto);
+    await this.userRepository.save(updatedData);
+    return updatedData;
   }
 
   async remove(id: string): Promise<User> {
-    try {
-      const foundUser: User = await this.findById(id);
-      return await this.userRepository.remove(foundUser);
-    } catch (err) {
-      throw err;
-    }
+    const foundUser: User = await this.findById(id);
+    return await this.userRepository.remove(foundUser);
   }
 }

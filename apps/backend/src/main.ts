@@ -5,16 +5,14 @@ import { UserModule } from './user/user.module';
 import { userSwaggerConfig } from './config/swagger/user.swagger-config';
 import { authSwaggerConfig } from './config/swagger/auth.swagger-config';
 import { AuthModule } from './auth/auth.module';
+import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  /*
-   * Setting route prefix and port
-   */
+  app.useGlobalFilters(new GlobalExceptionFilter());
+  //Setting route prefix
   app.setGlobalPrefix('api');
-  /*
-   * Swagger setup
-   */
+  //Swagger setup
   const userDocument = SwaggerModule.createDocument(app, userSwaggerConfig, {
     include: [UserModule],
   });
