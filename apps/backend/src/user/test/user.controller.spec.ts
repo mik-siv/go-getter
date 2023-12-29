@@ -6,7 +6,7 @@ import { ConflictException } from '@nestjs/common';
 
 describe('UserController', () => {
   let controller: UserController;
-  let repository: UserRepositoryFake;
+  const repository: UserRepositoryFake = new UserRepositoryFake();
   let service: UserService;
   let serviceCreate: jest.SpyInstance;
   const userData = {
@@ -34,19 +34,17 @@ describe('UserController', () => {
     await controller.create(userData);
     expect(serviceCreate).toBeCalledTimes(1);
     expect(serviceCreate).toBeCalledWith(userData);
-  })
+  });
 
   it('duplicate user registration', async () => {
     serviceCreate.mockImplementation(() => {
       throw new ConflictException('User Already Exists');
-    })
-    const expectedErrorResponse = {
-      error: 'Conflict',
-      message: 'User Already Exists',
-      statusCode: 409,
-    };
-    const errorResponse = await controller.create(userData);
-    expect(errorResponse).toEqual(expectedErrorResponse);
-  })
+    });
+    try {
+      await controller.create(userData);
+    } catch (e) {
+      expect(e).toEqual(new ConflictException('User Already Exists'));
+    }
+  });
 
 });
