@@ -4,8 +4,6 @@ import {
   Delete,
   Get,
   HttpCode,
-  HttpException,
-  InternalServerErrorException,
   Param,
   Patch,
   Post,
@@ -26,15 +24,7 @@ export class UserController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    try {
-      return await this.userService.create(createUserDto);
-    } catch (err) {
-      if (err instanceof HttpException) {
-        return err.getResponse();
-      } else {
-        return new InternalServerErrorException().getResponse();
-      }
-    }
+    return await this.userService.create(createUserDto);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -51,14 +41,14 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<User> {
     return this.userService.update(id, updateUserDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string): Promise<User> {
     return this.userService.remove(id);
   }
 }
