@@ -1,7 +1,8 @@
 import { Controller, UseGuards, Request, Post, Get, Body } from '@nestjs/common';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard, Public } from './guards/jwt-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import {Public} from '../common/decorators/public.decorator';
 import { RouteDto } from '../common/decorators/set-dto.decorator';
 import { UserLoginDto } from './dtos/user-login.dto';
 import { authenticatedUser } from '../common/types/general.types';
