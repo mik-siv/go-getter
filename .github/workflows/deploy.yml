@@ -19,7 +19,6 @@ jobs:
         uses: anothrNick/github-tag-action@1.64.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          INITIAL_VERSION: 0.8.0
       - name: Publish to Docker Hub
         uses: docker/build-push-action@v1
         with:
