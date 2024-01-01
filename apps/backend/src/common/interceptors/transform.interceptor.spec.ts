@@ -6,7 +6,7 @@ describe('TransformInterceptor', () => {
   let interceptor: TransformInterceptor<any>;
 
   const mockExecutionContext: ExecutionContext = {} as any;
-  let mockCallHandler: CallHandler = {
+  const mockCallHandler: CallHandler = {
     handle: () => of({}) // Default mock response
   };
 
