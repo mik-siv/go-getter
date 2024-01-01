@@ -1,8 +1,8 @@
 ### Get user documentation
-GET {{host}}/user/document HTTP/1.1
+GET {{host}}/users/document HTTP/1.1
 
 ### Create a new user
-POST {{host}}/user HTTP/1.1
+POST {{host}}/users HTTP/1.1
 Content-Type: application/json
 
 {
@@ -12,15 +12,15 @@ Content-Type: application/json
 }
 
 ### Get a user
-GET {{host}}/user/18dcd37c-5342-4dee-808a-c568fbc9d17a HTTP/1.1
+GET {{host}}/users/18dcd37c-5342-4dee-808a-c568fbc9d17a HTTP/1.1
 Authorization: Bearer {{auth_token}}
 
 ### Get all users
-GET {{host}}/user HTTP/1.1
+GET {{host}}/users HTTP/1.1
 Authorization: Bearer {{auth_token}}
 
 ### Patch a user
-PATCH {{host}}/user/18dcd37c-5342-4dee-808a-c568fbc9d17a HTTP/1.1
+PATCH {{host}}/users/18dcd37c-5342-4dee-808a-c568fbc9d17a HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
@@ -29,4 +29,4 @@ Authorization: Bearer {{auth_token}}
 }
 
 ### Delete a user
-DELETE {{host}}/user/54e8a827-8f1b-42e6-9c87-67a3304d160a HTTP/1.1
+DELETE {{host}}/users/54e8a827-8f1b-42e6-9c87-67a3304d160a HTTP/1.1
