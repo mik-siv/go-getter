@@ -28,7 +28,7 @@ async function bootstrap() {
   const authDocument = SwaggerModule.createDocument(app, authSwaggerConfig, {
     include: [AuthModule],
   });
-  SwaggerModule.setup('api/user/document', app, userDocument);
+  SwaggerModule.setup('api/users/document', app, userDocument);
   SwaggerModule.setup('api/auth/document', app, authDocument);
 
 
