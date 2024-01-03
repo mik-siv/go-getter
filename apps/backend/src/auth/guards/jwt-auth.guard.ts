@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
 
 /**
- * A decorator to mark a route as public, not requiring authentication
+ * A decorator to mark a route as public, not requiring JWT authentication
  */
 export const Public = () => SetMetadata('isPublic', true);
 
