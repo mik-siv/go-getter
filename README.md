@@ -6,16 +6,21 @@ This is a personal portfolio project built using the Nest.js framework. It focus
 
 ## Features
 
-- **100% Test Coverage:** Comprehensive suite of tests covering services, controllers, guards, interceptors, and modules.
+- **Test Coverage:** Comprehensive suite of tests covering services, controllers, guards, interceptors, and modules. Unit and E2E tests.
 - **Custom Guards and Middlewares:** Utilizes guards for authentication and provides custom middlewares for increased flexibility.
 - **TypeORM + Migrations:** Database management using TypeORM with migration support for schema evolution.
+- **Comprehensive data design:** DB-based timestamp tracking, Data association, including join tables and self-referencing association
 - **JWT and Local Authentication:** Implements JWT and local authentication via Passport.js for user identification and authorization.
+- **Centralized authentication guards and custom public routes:** All the routes are protected with the JWT auth guard by default with an option to reveal them as public
 - **Validation Pipes:** Ensures accurate and consistent request data with validation pipes.
+- **Centralized response interception:** password field is being stripped out of response body using global Nest.js interceptor
+- **Centralized error handling:** Exceptions across the application are being handled using Nest.js Filters
 - **Dynamic Module Loading:** Utilizes dynamic module loading for efficient module management.
 - **API Documentation:** Thorough API documentation using tools like Swagger UI.
 - **Clean Architecture:** Adheres to a clean architecture for maintainability and modularity.
 - **Automated Linting and Formatting:** Pre-commit hooks for automated linting and code formatting using Husky.
 - **Turbo Pipelines for Monorepo:** Optimized CI/CD pipeline setup for monorepo approach.
+- **Automated GitHub Actions pipelines:** Linting, Tests, Deploys and Tagging are fully automated using GH Actions
 - **Multi-environment setup:** Database connections are managed per environment.
 
 ## Getting Started
