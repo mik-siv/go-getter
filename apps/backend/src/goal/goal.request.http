@@ -1,0 +1,9 @@
+### POST Create a goal
+POST {{host}}/goal/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "name": "my first goal",
+  "description": "let's test it out!"
+}
