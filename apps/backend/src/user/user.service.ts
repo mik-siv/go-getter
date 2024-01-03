@@ -26,7 +26,7 @@ export class UserService implements UserServiceInterface {
     return uuidv4();
   }
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const { username, password, email } = createUserDto;
     const existingUser: User[] = await this.findBy({ email });
     if (existingUser.length > 0) {
@@ -51,6 +51,7 @@ export class UserService implements UserServiceInterface {
   }
 
   async findById(id: string): Promise<User> {
+    if(!id) throw new NotFoundException(`User with id ${id} not found`);
     const user: User = await this.userRepository.findOne({ where: { id } });
     if (!user) throw new NotFoundException(`User with id ${id} not found`);
     return user;
