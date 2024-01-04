@@ -3,11 +3,11 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from '../user/entities/user.entity';
-import { AuthServiceInterface } from './interfaces/auth-service.interface';
+import { IAuthService } from './interfaces/auth-service.interface';
 import { jwtPayload } from './types/auth.types';
 
 @Injectable()
-export class AuthService implements AuthServiceInterface {
+export class AuthService implements IAuthService {
   constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {
   }
 
