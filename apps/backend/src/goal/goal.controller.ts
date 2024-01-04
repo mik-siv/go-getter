@@ -12,27 +12,26 @@ export class GoalController {
 
   @Post()
   async create(@Body() createGoalDto: CreateGoalDto, @Request() req: { user: authenticatedUser['user'] }): Promise<Goal> {
-    console.log(req.user)
     return await this.goalService.create(createGoalDto, req.user.userId);
   }
 
   @Get()
-  findAll() {
-    return this.goalService.findAll();
+  async findAll() {
+    return await this.goalService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.goalService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.goalService.findById(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGoalDto: UpdateGoalDto) {
-    return this.goalService.update(+id, updateGoalDto);
+  async update(@Param('id') id: string, @Body() updateGoalDto: UpdateGoalDto) {
+    return await this.goalService.update(id, updateGoalDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.goalService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.goalService.remove(id);
   }
 }

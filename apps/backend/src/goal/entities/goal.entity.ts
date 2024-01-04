@@ -37,6 +37,9 @@ export class Goal {
   @Column({ type: 'json', default: [] })
   subgoals: any[];
 
-  @Column({ type: 'json', default: [] })
-  metadata: Record<string, any>;
+  @Column({ type: 'json', default: {} })
+  metadata: {
+    description?: string;
+    [key: string]: any
+  };
 }
