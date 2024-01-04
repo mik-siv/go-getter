@@ -7,7 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm/dist';
 import { dataSourceOptions } from './common/db/data-source';
 import { GoalModule } from './goal/goal.module';
-import { validationSchema } from './utils/validation/environment-validation.schema';
+import { validationSchema } from './common/utils/validation/environment-validation.schema';
 import { APP_PIPE } from '@nestjs/core';
 
 @Module({

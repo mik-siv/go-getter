@@ -1,7 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { ObjectLiteral } from '../../common/types/general.types';
+import { ObjectLiteral } from '../../types/general.types';
 
 export const validateDto = async (object: ObjectLiteral, dto: ClassConstructor<object>): Promise<boolean> => {
   // transform the request object to class instance

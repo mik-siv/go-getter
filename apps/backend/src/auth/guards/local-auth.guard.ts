@@ -3,7 +3,7 @@ import { AuthGuard } from "@nestjs/passport";
 import { ClassConstructor } from "class-transformer";
 import { Reflector } from "@nestjs/core";
 import { DTO_KEY } from "../../common/decorators/set-dto.decorator";
-import { validateDto } from "../../utils/validation/dto-validation.util";
+import { validateDto } from "../../common/utils/validation/dto-validation.util";
 
 @Injectable()
 export class LocalAuthGuard extends AuthGuard('local') {
