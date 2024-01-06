@@ -42,7 +42,7 @@ export class UserService implements IUserService {
       password: hashedPassword,
     };
 
-    const user: User = await this.userRepository.create(userData);
+    const user: User = this.userRepository.create(userData);
     return await this.userRepository.save(user);
   }
 
