@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from '../auth.service';
-import { UserRepositoryFake } from '../../common/mocks/user.repository.fake';
+import { UserRepositoryMock } from '../../user/test/mocks/user.repository.mock';
 import { UserService } from '../../user/user.service';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -8,13 +8,13 @@ import * as bcrypt from 'bcrypt'
 
 describe('AuthService', () => {
   let service: AuthService;
-  let repository: UserRepositoryFake;
+  let repository: UserRepositoryMock;
   let userService: UserService;
   let findUser;
   let jwtService: JwtService
 
   beforeEach(async () => {
-    repository = new UserRepositoryFake();
+    repository = new UserRepositoryMock();
     const module: TestingModule = await Test.createTestingModule({
       providers: [AuthService, JwtService, UserService, { provide: 'UserRepository', useValue: repository }],
     }).compile();
