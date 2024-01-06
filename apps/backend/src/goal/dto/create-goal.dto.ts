@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, MaxLength, ValidateNested } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class Metadata {
@@ -16,6 +16,11 @@ export class CreateGoalDto {
   @IsString()
   @MaxLength(255)
   name: string;
+
+  @ApiProperty({ description: 'goal privacy' })
+  @IsNotEmpty()
+  @IsBoolean()
+  private: boolean;
 
   @ApiProperty({ description: 'metadata for the goal', type: Metadata })
   @IsOptional()

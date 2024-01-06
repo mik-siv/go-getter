@@ -9,6 +9,9 @@ export class Goal {
   @Column({ type: 'varchar', length: 255, nullable: true })
   name: string;
 
+  @Column({ type: 'boolean', default: true })
+  private: boolean;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_date: Date;
 
@@ -39,7 +42,7 @@ export class Goal {
 
   @Column({ type: 'json', default: {} })
   metadata: {
-    description?: string;
+    description: string;
     [key: string]: any
   };
 }

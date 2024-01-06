@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
 import { Goal } from './entities/goal.entity';
@@ -32,21 +32,15 @@ export class GoalService implements IGoalService {
    * @param userId - unique identifier of the user creating a goal
    */
   async create(createGoalDto: CreateGoalDto, userId?: string): Promise<Goal> {
-    if (!userId) throw new UnauthorizedException();
-    const { name, metadata } = createGoalDto;
     const user: User = await this.userService.findById(userId);
-    if (!user) throw new UnauthorizedException(`User with id ${userId} is not found`);
-    const goal: Goal = await this.goalRepository.create(
-      {
-        name,
-        id: this.generateUuid(),
-        created_by: user,
-        contributors: [user],
-        parent: null,
-        metadata,
-      },
-    );
-    return await this.goalRepository.save(goal);
+    const goal: Goal = merge(createGoalDto, {
+      id: this.generateUuid(),
+      created_by: user,
+      contributors: [user],
+      parent: null,
+    });
+    const goalEntity: Goal = this.goalRepository.create(goal);
+    return await this.goalRepository.save(goalEntity);
   }
 
   async findAll(): Promise<Goal[]> {
@@ -56,7 +50,7 @@ export class GoalService implements IGoalService {
   async findById(id: string): Promise<Goal> {
     if (!id) throw new NotFoundException(`No goals with id ${id} found`);
     const goal: Goal = await this.goalRepository.findOne({ where: { id } });
-    if (!id) throw new NotFoundException(`No goals with id ${id} found`);
+    if (!goal) throw new NotFoundException(`No goals with id ${id} found`);
     return goal;
   }
 
@@ -66,13 +60,12 @@ export class GoalService implements IGoalService {
 
   async update(id: string, updateGoalDto: UpdateGoalDto): Promise<Goal> {
     const foundGoal: Goal = await this.findById(id);
-    const updatedGoal: Goal = merge(foundGoal, updateGoalDto)
+    const updatedGoal: Goal = merge(foundGoal, updateGoalDto);
     return await this.goalRepository.save(updatedGoal);
   }
 
   async remove(id: string): Promise<Goal> {
     const foundGoal: Goal = await this.findById(id);
-    if (!foundGoal) throw new NotFoundException(`No goals with id ${id} found`);
     return await this.goalRepository.remove(foundGoal);
   }
 }

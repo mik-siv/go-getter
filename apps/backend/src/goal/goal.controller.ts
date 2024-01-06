@@ -5,7 +5,7 @@ import { UpdateGoalDto } from './dto/update-goal.dto';
 import { Goal } from './entities/goal.entity';
 import { authenticatedUser } from '../common/types/general.types';
 
-@Controller('goal')
+@Controller('goals')
 export class GoalController {
   constructor(private readonly goalService: GoalService) {
   }
