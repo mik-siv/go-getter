@@ -33,6 +33,7 @@ export class GoalService implements IGoalService {
    */
   async create(createGoalDto: CreateGoalDto, userId?: string): Promise<Goal> {
     const user: User = await this.userService.findById(userId);
+    if (!user) throw new NotFoundException(`User with id ${userId} not found`);
     const goal: Goal = merge(createGoalDto, {
       id: this.generateUuid(),
       created_by: user,
