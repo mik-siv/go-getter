@@ -1,6 +1,6 @@
 {
   "name": "go-getter",
-  "version": "1.0.0",
+  "version": "0.9.1",
   "description": "go-getter portal source code",
   "main": "index.js",
   "scripts": {
@@ -36,8 +36,8 @@
   },
   "homepage": "https://github.com/mik-siv/go-getter#readme",
   "devDependencies": {
-    "husky": "^8.0.0",
-    "turbo": "^1.10.16"
+    "husky": "^8.0.3",
+    "turbo": "^1.11.3"
   },
   "workspaces": [
     "apps/*"
