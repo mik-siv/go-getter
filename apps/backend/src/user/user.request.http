@@ -29,4 +29,6 @@ Authorization: Bearer {{auth_token}}
 }
 
 ### Delete a user
-DELETE {{host}}/users/54e8a827-8f1b-42e6-9c87-67a3304d160a HTTP/1.1
+DELETE {{host}}/users/a0aa6ea6-c606-415e-99ea-5a5fd28cfa9c HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
