@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, HttpCode } from '@nestjs/common';
 import { GoalService } from './goal.service';
 import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
@@ -11,27 +11,30 @@ export class GoalController {
   }
 
   @Post()
-  async create(@Body() createGoalDto: CreateGoalDto, @Request() req: { user: authenticatedUser['user'] }): Promise<Goal> {
+  async create(@Body() createGoalDto: CreateGoalDto, @Request() req: {
+    user: authenticatedUser['user']
+  }): Promise<Goal> {
     return await this.goalService.create(createGoalDto, req.user.userId);
   }
 
   @Get()
-  async findAll() {
+  async findAll(): Promise<Goal[]> {
     return await this.goalService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<Goal> {
     return await this.goalService.findById(id);
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateGoalDto: UpdateGoalDto) {
+  async update(@Param('id') id: string, @Body() updateGoalDto: UpdateGoalDto): Promise<Goal> {
     return await this.goalService.update(id, updateGoalDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  @HttpCode(204)
+  async remove(@Param('id') id: string): Promise<Goal> {
     return await this.goalService.remove(id);
   }
 }
