@@ -13,7 +13,7 @@ describe('GoalService', () => {
   const goalData: CreateGoalDto = {
     name: 'First Goal',
     metadata: {
-      description: 'It\'s my first goal',
+      description: "It's my first goal",
     },
     private: true,
   };
@@ -29,10 +29,14 @@ describe('GoalService', () => {
   beforeEach(async () => {
     repository = new GoalRepositoryMock();
     const module: TestingModule = await Test.createTestingModule({
-      providers: [GoalService, { provide: UserService, useValue: userServiceMock }, {
-        provide: 'GoalRepository',
-        useValue: repository,
-      }],
+      providers: [
+        GoalService,
+        { provide: UserService, useValue: userServiceMock },
+        {
+          provide: 'GoalRepository',
+          useValue: repository,
+        },
+      ],
     }).compile();
 
     service = module.get<GoalService>(GoalService);
@@ -112,5 +116,4 @@ describe('GoalService', () => {
     expect(findByIdSpy).toBeCalledWith(goal.id);
     expect(repoDeleteSpy).toBeCalledWith(goal);
   });
-
 });

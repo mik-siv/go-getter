@@ -4,4 +4,4 @@ import { Goal } from '../../entities/goal.entity';
 /**
  * A mock goal repository for testing purposes
  */
-export class GoalRepositoryMock extends GenericRepositoryMock<Goal>{}
+export class GoalRepositoryMock extends GenericRepositoryMock<Goal> {}

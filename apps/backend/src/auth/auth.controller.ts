@@ -10,17 +10,20 @@ import { User } from '../user/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {
-  }
+  constructor(private authService: AuthService) {}
 
   @Post('login')
   @RouteDto(UserLoginDto)
   @Public()
   @UseGuards(LocalAuthGuard)
-  async login(@Body() body: UserLoginDto, @Request() req: {
-    user: User,
-    body: { email: string, password: string }
-  }): Promise<{ access_token: string }> {
+  async login(
+    @Body() body: UserLoginDto,
+    @Request()
+    req: {
+      user: User;
+      body: { email: string; password: string };
+    },
+  ): Promise<{ access_token: string }> {
     return await this.authService.login(req.user);
   }
 
@@ -30,4 +33,3 @@ export class AuthController {
     return req.user;
   }
 }
-

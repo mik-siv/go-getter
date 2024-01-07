@@ -16,7 +16,7 @@ describe('GoalController', () => {
     name: 'test goal',
     private: true,
     metadata: {
-      description: 'it\'s a test goal',
+      description: "it's a test goal",
     },
   };
   const userJWTData = { user: { userId: 'test-1234', username: 'test-user' } };

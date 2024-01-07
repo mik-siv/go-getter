@@ -10,12 +10,16 @@ import { JwtModuleOptionsFactory } from './jwt-module-options.factory';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
-  imports: [UserModule, PassportModule, JwtModule.registerAsync({
-    imports: [ConfigModule],
-    inject: [ConfigService],
-    useFactory: JwtModuleOptionsFactory
-  })],
+  imports: [
+    UserModule,
+    PassportModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: JwtModuleOptionsFactory,
+    }),
+  ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
 })
-export class AuthModule { }
+export class AuthModule {}

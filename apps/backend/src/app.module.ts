@@ -22,12 +22,14 @@ import { APP_PIPE } from '@nestjs/core';
     GoalModule,
   ],
   controllers: [AppController],
-  providers: [AppService, {
-    provide: APP_PIPE,
-    useValue: new ValidationPipe({
-      whitelist: true,
-    }),
-  }],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+      }),
+    },
+  ],
 })
-export class AppModule {
-}
+export class AppModule {}

@@ -13,14 +13,12 @@ import { IGoalService } from './interfaces/goal-service.interface';
 
 @Injectable()
 export class GoalService implements IGoalService {
-
   constructor(
     @InjectRepository(Goal)
     private readonly goalRepository: Repository<Goal>,
     @Inject(UserService)
     private readonly userService: IUserService,
-  ) {
-  }
+  ) {}
 
   generateUuid(): string {
     return uuidv4();

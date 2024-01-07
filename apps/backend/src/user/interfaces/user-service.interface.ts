@@ -4,5 +4,4 @@ import { User } from '../entities/user.entity';
 import { ICrudService } from '../../common/types/interfaces/crud.interface';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IUserService extends ICrudService<User, CreateUserDto, UpdateUserDto> {
-}
+export interface IUserService extends ICrudService<User, CreateUserDto, UpdateUserDto> {}

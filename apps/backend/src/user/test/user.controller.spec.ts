@@ -46,5 +46,4 @@ describe('UserController', () => {
       expect(e).toEqual(new ConflictException('User Already Exists'));
     }
   });
-
 });

@@ -7,13 +7,16 @@ import { authenticatedUser } from '../common/types/general.types';
 
 @Controller('goals')
 export class GoalController {
-  constructor(private readonly goalService: GoalService) {
-  }
+  constructor(private readonly goalService: GoalService) {}
 
   @Post()
-  async create(@Body() createGoalDto: CreateGoalDto, @Request() req: {
-    user: authenticatedUser['user']
-  }): Promise<Goal> {
+  async create(
+    @Body() createGoalDto: CreateGoalDto,
+    @Request()
+    req: {
+      user: authenticatedUser['user'];
+    },
+  ): Promise<Goal> {
     return await this.goalService.create(createGoalDto, req.user.userId);
   }
 

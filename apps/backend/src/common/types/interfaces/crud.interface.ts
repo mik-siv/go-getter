@@ -6,7 +6,6 @@
  * @template UpdateDTO - The data transfer object type for update.
  */
 export interface ICrudService<T, CreateDTO, UpdateDTO> {
-
   /**
    * Creates a new entity.
    * @param {CreateDTO} createDto - The creation data transfer object.

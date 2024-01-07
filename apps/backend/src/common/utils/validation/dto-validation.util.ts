@@ -11,9 +11,7 @@ export const validateDto = async (object: ObjectLiteral, dto: ClassConstructor<o
   const errors = await validate(dataInstance);
 
   // extract error messages from the errors array
-  const errorMessages = errors.flatMap(({ constraints }) =>
-    Object.values(constraints),
-  );
+  const errorMessages = errors.flatMap(({ constraints }) => Object.values(constraints));
 
   if (errorMessages.length > 0) {
     throw new BadRequestException(errorMessages);

@@ -49,9 +49,7 @@ const getDBConfig = (env: string): DataSourceOptions => {
   }
 };
 
-export const dataSourceOptions: DataSourceOptions = getDBConfig(
-  process.env.NODE_ENV,
-);
+export const dataSourceOptions: DataSourceOptions = getDBConfig(process.env.NODE_ENV);
 
 const dataSource = new DataSource(dataSourceOptions);
 

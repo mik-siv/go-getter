@@ -1,10 +1,4 @@
-import {
-  Entity,
-  Column,
-  CreateDateColumn,
-  PrimaryColumn,
-  Index,
-} from 'typeorm';
+import { Entity, Column, CreateDateColumn, PrimaryColumn, Index } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {

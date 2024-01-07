@@ -10,17 +10,10 @@
     "start:dev": "turbo run start:dev",
     "start:prod": "turbo run start:prod",
     "prepare": "husky install",
-    "lint-staged": "turbo run lint-staged",
     "lint": "turbo run lint",
     "format": "turbo run format",
-    "migration:run": "turbo run migration:run --filter=backend"
-  },
-  "lint-staged": {
-    "**/*.js": [
-      "eslint",
-      "prettier --write",
-      "test"
-    ]
+    "migration:run": "turbo run migration:run --filter=backend",
+    "lint-staged": "turbo run lint-staged"
   },
   "repository": {
     "type": "git",

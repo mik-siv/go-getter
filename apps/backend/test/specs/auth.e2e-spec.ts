@@ -8,7 +8,10 @@ import * as Joi from 'joi';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
-  const { auth: { endpoint }, user: { testUser } } = e2eTestData;
+  const {
+    auth: { endpoint },
+    user: { testUser },
+  } = e2eTestData;
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -22,10 +25,13 @@ describe('AuthController (e2e)', () => {
       email: 'fake@email.com',
       password: 'password',
     };
-    await request(app.getHttpServer()).post(`${endpoint}/login`).send({
-      email: fakeUserData.email,
-      password: fakeUserData.password,
-    }).expect(401);
+    await request(app.getHttpServer())
+      .post(`${endpoint}/login`)
+      .send({
+        email: fakeUserData.email,
+        password: fakeUserData.password,
+      })
+      .expect(401);
   });
 
   it('Login as a valid user', async () => {

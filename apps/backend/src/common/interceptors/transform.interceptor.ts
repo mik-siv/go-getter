@@ -14,9 +14,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T, T> {
    * @param {CallHandler} next
    */
   intercept(context: ExecutionContext, next: CallHandler<T>): Observable<T> {
-    return next.handle().pipe(
-      map(data => this.recursivelyStripPasswordField(data)),
-    );
+    return next.handle().pipe(map((data) => this.recursivelyStripPasswordField(data)));
   }
 
   /**
@@ -26,12 +24,12 @@ export class TransformInterceptor<T> implements NestInterceptor<T, T> {
    */
   private recursivelyStripPasswordField(value: any): any {
     if (Array.isArray(value)) {
-      return value.map(item => this.recursivelyStripPasswordField(item));
+      return value.map((item) => this.recursivelyStripPasswordField(item));
     }
 
     if (value instanceof Object) {
       delete value.password; // Adjust this line if your password field is named differently
-      Object.keys(value).forEach(key => {
+      Object.keys(value).forEach((key) => {
         value[key] = this.recursivelyStripPasswordField(value[key]);
       });
     }

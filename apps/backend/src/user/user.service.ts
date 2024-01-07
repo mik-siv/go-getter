@@ -15,8 +15,7 @@ export class UserService implements IUserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {
-  }
+  ) {}
 
   async hashPassword(password: string): Promise<string> {
     return await bcrypt.hash(password, saltRounds);

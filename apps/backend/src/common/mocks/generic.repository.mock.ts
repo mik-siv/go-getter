@@ -11,7 +11,7 @@ export class GenericRepositoryMock<T> {
    * @returns {Promise<T>} The newly created entity.
    */
   create(itemData: Partial<T>): T {
-    return  Object.assign({} as T, itemData);
+    return Object.assign({} as T, itemData);
   }
 
   /**
@@ -31,9 +31,7 @@ export class GenericRepositoryMock<T> {
    */
   async findOne(conditions: any): Promise<T | undefined> {
     const item = this.items.find((item) => {
-      return Object.entries(conditions.where).every(
-        ([key, value]) => item[key] === value,
-      );
+      return Object.entries(conditions.where).every(([key, value]) => item[key] === value);
     });
     return Promise.resolve(item);
   }
@@ -44,10 +42,8 @@ export class GenericRepositoryMock<T> {
    * @returns {Promise<T[] | []>} A promise that resolves to an array of found entities.
    */
   async findBy(conditions: any): Promise<T[] | []> {
-    const foundItems = this.items.filter(item => {
-      return Object.entries(conditions).every(
-        ([key, value]) => item[key] === value,
-      );
+    const foundItems = this.items.filter((item) => {
+      return Object.entries(conditions).every(([key, value]) => item[key] === value);
     });
     return Promise.resolve(foundItems);
   }
@@ -63,9 +59,7 @@ export class GenericRepositoryMock<T> {
    */
   async remove(item: T): Promise<T> {
     const itemIndex = this.items.findIndex((storedItem) => {
-      return Object.entries(storedItem).every(
-        ([key, value]) => item[key] === value,
-      );
+      return Object.entries(storedItem).every(([key, value]) => item[key] === value);
     });
     if (itemIndex > -1) {
       this.items.splice(itemIndex, 1);

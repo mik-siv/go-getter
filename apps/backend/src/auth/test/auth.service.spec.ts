@@ -4,14 +4,14 @@ import { UserRepositoryMock } from '../../user/test/mocks/user.repository.mock';
 import { UserService } from '../../user/user.service';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt';
 
 describe('AuthService', () => {
   let service: AuthService;
   let repository: UserRepositoryMock;
   let userService: UserService;
   let findUser;
-  let jwtService: JwtService
+  let jwtService: JwtService;
 
   beforeEach(async () => {
     repository = new UserRepositoryMock();
@@ -21,8 +21,8 @@ describe('AuthService', () => {
 
     service = module.get<AuthService>(AuthService);
     userService = module.get<UserService>(UserService);
-    jwtService = module.get<JwtService>(JwtService)
-    findUser = jest.spyOn(userService, 'findBy')
+    jwtService = module.get<JwtService>(JwtService);
+    findUser = jest.spyOn(userService, 'findBy');
   });
 
   it('should be defined', () => {
@@ -34,9 +34,7 @@ describe('AuthService', () => {
     const email = 'nonexistent@example.com';
     const password = 'password';
 
-    await expect(service.validate(email, password)).rejects.toThrow(
-      UnauthorizedException,
-    );
+    await expect(service.validate(email, password)).rejects.toThrow(UnauthorizedException);
   });
 
   it('should throw UnauthorizedException if password is invalid', async () => {
@@ -46,9 +44,7 @@ describe('AuthService', () => {
     const email = 'user@example.com';
     const password = 'invalidpassword';
 
-    await expect(service.validate(email, password)).rejects.toThrow(
-      UnauthorizedException,
-    );
+    await expect(service.validate(email, password)).rejects.toThrow(UnauthorizedException);
   });
 
   it('should return found user if email and password are valid', async () => {
@@ -70,5 +66,3 @@ describe('AuthService', () => {
     expect(jwtService.sign).toHaveBeenCalledWith(payload);
   });
 });
-
-
