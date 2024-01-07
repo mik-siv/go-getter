@@ -1,3 +1,4 @@
+import 'jest'
 export const e2eTestData = {
   user: {
     endpoint: '/user',
