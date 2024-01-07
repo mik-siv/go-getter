@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { goalSwaggerConfig } from './config/swagger/goal.swagger-config';
+import { GoalModule } from './goal/goal.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -28,8 +30,12 @@ async function bootstrap() {
   const authDocument = SwaggerModule.createDocument(app, authSwaggerConfig, {
     include: [AuthModule],
   });
+  const goalDocument = SwaggerModule.createDocument(app, goalSwaggerConfig, {
+    include: [GoalModule]
+  })
   SwaggerModule.setup('api/users/document', app, userDocument);
   SwaggerModule.setup('api/auth/document', app, authDocument);
+  SwaggerModule.setup('api/goals/document', app, goalDocument)
 
 
   await app.listen(3000);
