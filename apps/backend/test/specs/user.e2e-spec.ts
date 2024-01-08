@@ -1,10 +1,10 @@
 import { INestApplication } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from '../../src/app.module';
 import * as request from 'supertest';
 import { e2eTestData } from '../e2e-test-data';
 import * as Joi from 'joi';
 import { login } from '../helpers/auth.e2e.helper';
+import { userResponseSchema } from '../schemas/user.response-schema';
+import { bootstrap } from '../../src/main';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
@@ -23,12 +23,12 @@ describe('UserController (e2e)', () => {
     roles: ['user'],
   };
   beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-    app = module.createNestApplication();
-    await app.init();
+    app = await bootstrap();
     authToken = await login(email, password, app);
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 
   it('GET User list', async () => {
@@ -41,14 +41,7 @@ describe('UserController (e2e)', () => {
           res.body,
           Joi.array()
             .items(
-              Joi.object({
-                id: Joi.string().required(),
-                username: Joi.string().required(),
-                password: Joi.string().required(),
-                email: Joi.string().required(),
-                roles: Joi.array().required(),
-                created_date: Joi.date().required(),
-              }),
+              userResponseSchema()
             )
             .required(),
         );
@@ -67,14 +60,7 @@ describe('UserController (e2e)', () => {
     // Assert the response body schema
     Joi.assert(
       createResponse.body,
-      Joi.object({
-        id: Joi.string().required(),
-        username: Joi.string().required(),
-        password: Joi.string().required(),
-        email: Joi.string().required(),
-        roles: Joi.array().required(),
-        created_date: Joi.date().required(),
-      }).required(),
+      userResponseSchema()
     );
   });
 
@@ -87,14 +73,7 @@ describe('UserController (e2e)', () => {
     // Assert the response body schema for a single user
     Joi.assert(
       getSingleResponse.body,
-      Joi.object({
-        id: Joi.string().required(),
-        username: Joi.string().required(),
-        password: Joi.string().required(),
-        email: Joi.string().required(),
-        roles: Joi.array().required(),
-        created_date: Joi.date().required(),
-      }).required(),
+      userResponseSchema()
     );
   });
 
@@ -113,14 +92,7 @@ describe('UserController (e2e)', () => {
     // Assert the response body schema after update
     Joi.assert(
       updateResponse.body,
-      Joi.object({
-        id: Joi.string().required(),
-        username: Joi.string().required(),
-        password: Joi.string().required(),
-        email: Joi.string().required(),
-        roles: Joi.array().required(),
-        created_date: Joi.date().required(),
-      }).required(),
+      userResponseSchema()
     );
   });
 
