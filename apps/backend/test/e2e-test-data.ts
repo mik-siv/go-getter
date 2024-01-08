@@ -1,7 +1,7 @@
 import 'jest';
 export const e2eTestData = {
   user: {
-    endpoint: '/user',
+    endpoint: '/api/users',
     testUser: {
       username: 'tester',
       email: 'test@test.com',
@@ -9,6 +9,9 @@ export const e2eTestData = {
     },
   },
   auth: {
-    endpoint: '/auth',
+    endpoint: '/api/auth',
   },
+  goal:{
+    endpoint: '/api/goals'
+  }
 };
