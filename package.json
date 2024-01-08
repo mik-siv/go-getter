@@ -1,6 +1,6 @@
 {
   "name": "go-getter",
-  "version": "1.0.0",
+  "version": "0.9.1",
   "description": "go-getter portal source code",
   "main": "index.js",
   "scripts": {
@@ -10,17 +10,10 @@
     "start:dev": "turbo run start:dev",
     "start:prod": "turbo run start:prod",
     "prepare": "husky install",
-    "lint-staged": "turbo run lint-staged",
     "lint": "turbo run lint",
     "format": "turbo run format",
-    "migration:run": "turbo run migration:run --filter=backend"
-  },
-  "lint-staged": {
-    "**/*.js": [
-      "eslint",
-      "prettier --write",
-      "test"
-    ]
+    "migration:run": "turbo run migration:run --filter=backend",
+    "lint-staged": "turbo run lint-staged"
   },
   "repository": {
     "type": "git",
@@ -36,8 +29,8 @@
   },
   "homepage": "https://github.com/mik-siv/go-getter#readme",
   "devDependencies": {
-    "husky": "^8.0.0",
-    "turbo": "^1.10.16"
+    "husky": "^8.0.3",
+    "turbo": "^1.11.3"
   },
   "workspaces": [
     "apps/*"

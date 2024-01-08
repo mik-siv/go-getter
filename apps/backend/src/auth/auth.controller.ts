@@ -1,31 +1,35 @@
 import { Controller, UseGuards, Request, Post, Get, Body } from '@nestjs/common';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard, Public } from './guards/jwt-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { Public } from '../common/decorators/public.decorator';
 import { RouteDto } from '../common/decorators/set-dto.decorator';
 import { UserLoginDto } from './dtos/user-login.dto';
 import { authenticatedUser } from '../common/types/general.types';
 import { User } from '../user/entities/user.entity';
-import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {
-  }
+  constructor(private authService: AuthService) {}
 
   @Post('login')
   @RouteDto(UserLoginDto)
   @Public()
   @UseGuards(LocalAuthGuard)
-  async login(@Body() body: UserLoginDto, @Request() req: { user: User, body: { email: string, password: string } }): Promise<{ access_token: string }> {
+  async login(
+    @Body() body: UserLoginDto,
+    @Request()
+    req: {
+      user: User;
+      body: { email: string; password: string };
+    },
+  ): Promise<{ access_token: string }> {
     return await this.authService.login(req.user);
   }
 
-  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req: authenticatedUser): authenticatedUser['user'] {
     return req.user;
   }
 }
-

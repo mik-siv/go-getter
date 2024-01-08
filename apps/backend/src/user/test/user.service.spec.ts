@@ -1,12 +1,12 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from '../user.service';
-import { UserRepositoryFake } from '../../common/mocks/user.repository.fake';
+import { UserRepositoryMock } from './mocks/user.repository.mock';
 import { User } from '../entities/user.entity';
 
 describe('UserService', () => {
   let service: UserService;
-  let repository: UserRepositoryFake;
+  let repository: UserRepositoryMock;
   let repoCreate: jest.SpyInstance;
   let repoSave: jest.SpyInstance;
   let repoFindOne: jest.SpyInstance;
@@ -20,7 +20,7 @@ describe('UserService', () => {
   };
 
   beforeEach(async () => {
-    repository = new UserRepositoryFake();
+    repository = new UserRepositoryMock();
     const module: TestingModule = await Test.createTestingModule({
       providers: [UserService, { provide: 'UserRepository', useValue: repository }],
     }).compile();

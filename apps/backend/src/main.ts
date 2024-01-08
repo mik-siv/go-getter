@@ -1,13 +1,15 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { SwaggerModule } from '@nestjs/swagger';
 import { UserModule } from './user/user.module';
-import { userSwaggerConfig } from './config/swagger/user.swagger-config';
-import { authSwaggerConfig } from './config/swagger/auth.swagger-config';
+import { userSwaggerConfig } from './swagger/config/user.swagger-config';
+import { authSwaggerConfig } from './swagger/config/auth.swagger-config';
 import { AuthModule } from './auth/auth.module';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { goalSwaggerConfig } from './swagger/config/goal.swagger-config';
+import { GoalModule } from './goal/goal.module';
+import { setupSwaggerForModule } from './swagger/swagger.utils';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,17 +24,22 @@ async function bootstrap() {
   //Setting route prefix
   app.setGlobalPrefix('api');
   //Swagger setup
-  const userDocument = SwaggerModule.createDocument(app, userSwaggerConfig, {
-    include: [UserModule],
-  });
-  const authDocument = SwaggerModule.createDocument(app, authSwaggerConfig, {
+  setupSwaggerForModule('api/auth/document', app, authSwaggerConfig, {
     include: [AuthModule],
   });
-  SwaggerModule.setup('api/users/document', app, userDocument);
-  SwaggerModule.setup('api/auth/document', app, authDocument);
-
+  setupSwaggerForModule('api/goals/document', app, goalSwaggerConfig, {
+    include: [GoalModule],
+  });
+  setupSwaggerForModule('api/users/document', app, userSwaggerConfig, {
+    include: [UserModule],
+  });
 
   await app.listen(3000);
+  return app;
 }
 
-bootstrap();
+if (process.env.NODE_ENV !== 'test') {
+  bootstrap();
+}
+
+export { bootstrap };

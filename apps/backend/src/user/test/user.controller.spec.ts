@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from '../user.controller';
 import { UserService } from '../user.service';
-import { UserRepositoryFake } from '../../common/mocks/user.repository.fake';
+import { UserRepositoryMock } from './mocks/user.repository.mock';
 import { ConflictException } from '@nestjs/common';
 
 describe('UserController', () => {
   let controller: UserController;
-  const repository: UserRepositoryFake = new UserRepositoryFake();
+  const repository: UserRepositoryMock = new UserRepositoryMock();
   let service: UserService;
   let serviceCreate: jest.SpyInstance;
   const userData = {
@@ -46,5 +46,4 @@ describe('UserController', () => {
       expect(e).toEqual(new ConflictException('User Already Exists'));
     }
   });
-
 });

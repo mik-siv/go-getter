@@ -8,13 +8,11 @@ describe('JwtAuthGuard', () => {
   let guard: JwtAuthGuard;
   let reflector: Reflector;
   const mockExecutionContext = {
-    switchToHttp: jest.fn().mockReturnValue({
-    }),
+    switchToHttp: jest.fn().mockReturnValue({}),
     getHandler: jest.fn(),
   } as any as ExecutionContext;
 
   beforeEach(async () => {
-
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         JwtAuthGuard,
@@ -28,10 +26,8 @@ describe('JwtAuthGuard', () => {
     }).compile();
     guard = module.get<JwtAuthGuard>(JwtAuthGuard);
     reflector = module.get<Reflector>(Reflector);
-
   });
   it('should allow access to a public route', () => {
-
     jest.spyOn(reflector, 'get').mockImplementation(() => true); // Mock public route
     expect(guard.canActivate(mockExecutionContext)).toBe(true);
   });

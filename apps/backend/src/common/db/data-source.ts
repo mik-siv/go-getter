@@ -21,12 +21,18 @@ const getDBConfig = (env: string): DataSourceOptions => {
     case 'test':
       return {
         type: 'postgres',
-        host: process.env.DATABASE_HOST,
-        url: process.env.DATABASE_URL,
-        entities: [__dirname + '/../**/*.entity.{js,ts}'],
-        migrations: ['dist/db/migrations/*.js'],
+        host: process.env.PGHOST,
+        username: process.env.PGUSER,
+        password: process.env.PGPASSWORD,
+        port: Number(process.env.PGPORT),
+        database: process.env.PGDATABASE,
+        entities: [__dirname + '/../../**/*.entity.{js,ts}'],
+        migrations: ['dist/db/migrations/*.{ts,js}'],
         migrationsRun: true,
-        logging: ['query', 'info'],
+        ssl: {
+          rejectUnauthorized: false,
+        },
+        logging: ['error'],
       };
     case 'production':
       return {
@@ -49,9 +55,7 @@ const getDBConfig = (env: string): DataSourceOptions => {
   }
 };
 
-export const dataSourceOptions: DataSourceOptions = getDBConfig(
-  process.env.NODE_ENV,
-);
+export const dataSourceOptions: DataSourceOptions = getDBConfig(process.env.NODE_ENV);
 
 const dataSource = new DataSource(dataSourceOptions);
 

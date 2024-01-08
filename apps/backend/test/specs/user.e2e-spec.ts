@@ -1,14 +1,19 @@
 import { INestApplication } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from '../../src/app.module';
 import * as request from 'supertest';
 import { e2eTestData } from '../e2e-test-data';
 import * as Joi from 'joi';
 import { login } from '../helpers/auth.e2e.helper';
+import { userResponseSchema } from '../schemas/user.response-schema';
+import { bootstrap } from '../../src/main';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
-  const { user: { testUser: { email, password }, endpoint } } = e2eTestData;
+  const {
+    user: {
+      testUser: { email, password },
+      endpoint,
+    },
+  } = e2eTestData;
   let authToken: string;
   let newUserId: string; // Store the ID of the created user for update and delete tests
   const createUserDto = {
@@ -18,27 +23,29 @@ describe('UserController (e2e)', () => {
     roles: ['user'],
   };
   beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-    app = module.createNestApplication();
-    await app.init();
+    app = await bootstrap();
     authToken = await login(email, password, app);
   });
 
+  afterAll(async () => {
+    await app.close();
+  });
+
   it('GET User list', async () => {
-    return request(app.getHttpServer()).get(endpoint).set('Authorization', `Bearer ${authToken}`).expect(200).expect(res => {
-      Joi.assert(res.body, Joi.array().items(
-        Joi.object({
-          id: Joi.string().required(),
-          username: Joi.string().required(),
-          password: Joi.string().required(),
-          email: Joi.string().required(),
-          roles: Joi.array().required(),
-          created_date: Joi.date().required(),
-        }),
-      ).required());
-    });
+    return request(app.getHttpServer())
+      .get(endpoint)
+      .set('Authorization', `Bearer ${authToken}`)
+      .expect(200)
+      .expect((res) => {
+        Joi.assert(
+          res.body,
+          Joi.array()
+            .items(
+              userResponseSchema()
+            )
+            .required(),
+        );
+      });
   });
 
   it('POST Create User', async () => {
@@ -51,14 +58,10 @@ describe('UserController (e2e)', () => {
     newUserId = createResponse.body.id; // Store the ID for future tests
 
     // Assert the response body schema
-    Joi.assert(createResponse.body, Joi.object({
-      id: Joi.string().required(),
-      username: Joi.string().required(),
-      password: Joi.string().required(),
-      email: Joi.string().required(),
-      roles: Joi.array().required(),
-      created_date: Joi.date().required(),
-    }).required());
+    Joi.assert(
+      createResponse.body,
+      userResponseSchema()
+    );
   });
 
   it('GET Single User', async () => {
@@ -68,14 +71,10 @@ describe('UserController (e2e)', () => {
       .expect(200);
 
     // Assert the response body schema for a single user
-    Joi.assert(getSingleResponse.body, Joi.object({
-      id: Joi.string().required(),
-      username: Joi.string().required(),
-      password: Joi.string().required(),
-      email: Joi.string().required(),
-      roles: Joi.array().required(),
-      created_date: Joi.date().required(),
-    }).required());
+    Joi.assert(
+      getSingleResponse.body,
+      userResponseSchema()
+    );
   });
 
   it('PATCH User', async () => {
@@ -88,17 +87,13 @@ describe('UserController (e2e)', () => {
       .set('Authorization', `Bearer ${authToken}`)
       .set('Content-Type', 'application/json')
       .send(updateUserDto)
-      .expect(200)
+      .expect(200);
 
     // Assert the response body schema after update
-    Joi.assert(updateResponse.body, Joi.object({
-      id: Joi.string().required(),
-      username: Joi.string().required(),
-      password: Joi.string().required(),
-      email: Joi.string().required(),
-      roles: Joi.array().required(),
-      created_date: Joi.date().required(),
-    }).required());
+    Joi.assert(
+      updateResponse.body,
+      userResponseSchema()
+    );
   });
 
   it('DELETE User', async () => {

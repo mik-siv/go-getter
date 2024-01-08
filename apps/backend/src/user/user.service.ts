@@ -7,16 +7,15 @@ import { saltRounds } from '../common/constants';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
-import { UserServiceInterface } from './interfaces/user-service.interface';
+import { IUserService } from './interfaces/user-service.interface';
 import * as merge from 'lodash.merge';
 
 @Injectable()
-export class UserService implements UserServiceInterface {
+export class UserService implements IUserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {
-  }
+  ) {}
 
   async hashPassword(password: string): Promise<string> {
     return await bcrypt.hash(password, saltRounds);
@@ -26,7 +25,7 @@ export class UserService implements UserServiceInterface {
     return uuidv4();
   }
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const { username, password, email } = createUserDto;
     const existingUser: User[] = await this.findBy({ email });
     if (existingUser.length > 0) {
@@ -42,7 +41,7 @@ export class UserService implements UserServiceInterface {
       password: hashedPassword,
     };
 
-    const user: User = await this.userRepository.create(userData);
+    const user: User = this.userRepository.create(userData);
     return await this.userRepository.save(user);
   }
 
@@ -51,6 +50,7 @@ export class UserService implements UserServiceInterface {
   }
 
   async findById(id: string): Promise<User> {
+    if (!id) throw new NotFoundException(`User with id ${id} not found`);
     const user: User = await this.userRepository.findOne({ where: { id } });
     if (!user) throw new NotFoundException(`User with id ${id} not found`);
     return user;
@@ -73,6 +73,7 @@ export class UserService implements UserServiceInterface {
 
   async remove(id: string): Promise<User> {
     const foundUser: User = await this.findById(id);
+    if (!foundUser) throw new NotFoundException(`User with id ${id} not found`);
     return await this.userRepository.remove(foundUser);
   }
 }

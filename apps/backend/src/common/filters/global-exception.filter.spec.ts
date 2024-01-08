@@ -48,5 +48,4 @@ describe('GlobalExceptionFilter', () => {
       message: 'Internal server error',
     });
   });
-
 });
