@@ -35,6 +35,11 @@ async function bootstrap() {
   });
 
   await app.listen(3000);
+  return app;
 }
 
-bootstrap();
+if (process.env.NODE_ENV !== 'test') {
+  bootstrap();
+}
+
+export { bootstrap };
