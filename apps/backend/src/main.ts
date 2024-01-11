@@ -10,13 +10,14 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { goalSwaggerConfig } from './swagger/config/goal.swagger-config';
 import { GoalModule } from './goal/goal.module';
 import { setupSwaggerForModule } from './swagger/swagger.utils';
+import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { logger: ['log'] });
   // Get the reflector for metadata scanning
   const reflector: Reflector = app.get(Reflector);
   //Setting global error filter
-  app.useGlobalFilters(new GlobalExceptionFilter());
+  app.useGlobalFilters(new GlobalExceptionFilter(new Logger('GlobalExceptionFilter')));
   //Setting global password strip interceptor
   app.useGlobalInterceptors(new TransformInterceptor());
   //Setting global guards
