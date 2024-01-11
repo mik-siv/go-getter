@@ -15,8 +15,14 @@ describe('GlobalExceptionFilter', () => {
     }),
   };
 
+  const mockLogger = {
+    error: jest.fn(),
+    log: jest.fn(),
+  };
+
   beforeEach(() => {
-    filter = new GlobalExceptionFilter();
+    // Mock Logger implementation
+    filter = new GlobalExceptionFilter(mockLogger as any);
   });
 
   it('should handle HttpException correctly', () => {
@@ -32,6 +38,12 @@ describe('GlobalExceptionFilter', () => {
       path: '/test-url',
       message: 'Test error',
     });
+
+    // Check if logger.log was called correctly
+    expect(mockLogger.log).toHaveBeenCalledWith(
+      `HTTP Status: ${HttpStatus.BAD_REQUEST} Error Message: Test error`,
+      httpException.stack,
+    );
   });
 
   it('should handle non-HttpException correctly', () => {
@@ -45,7 +57,13 @@ describe('GlobalExceptionFilter', () => {
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       timestamp: expect.any(String),
       path: '/test-url',
-      message: 'Internal server error',
+      message: error.message,
     });
+
+    // Check if logger.error was called correctly
+    expect(mockLogger.error).toHaveBeenCalledWith(
+      `HTTP Status: ${HttpStatus.INTERNAL_SERVER_ERROR} Error Message: Generic error`,
+      error.stack,
+    );
   });
 });
