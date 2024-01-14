@@ -1,0 +1,40 @@
+### GET subgoals list
+GET {{host}}/subgoals/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### POST Create a subgoal
+POST {{host}}/subgoals/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "name": "my first subgoal",
+  "metadata": {
+    "description": "let's test it out!"
+  },
+  "private": true
+}
+
+### Find one subgoal
+GET {{host}}/subgoals/cfeb9fc6-cb7f-4a0c-96e2-ca45e4f720bb HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### Patch a subgoal
+PATCH {{host}}/subgoals/df92ff8e-fb55-48de-8acd-641666071452
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "name": "my second subgoal",
+  "metadata": {
+    "description": "let's rock it out!"
+  },
+  "private": false
+}
+
+### Delete a subgoal
+DELETE {{host}}/subgoals/5c424ec7-7c94-4a34-b63c-2aa1773f98db
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
