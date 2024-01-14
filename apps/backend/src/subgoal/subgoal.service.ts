@@ -10,6 +10,8 @@ import { IUserService } from '../user/interfaces/user-service.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Subgoal } from './entities/subgoal.entity';
+import { IGoalService } from '../goal/interfaces/goal-service.interface';
+import { GoalService } from '../goal/goal.service';
 
 @Injectable()
 export class SubgoalService implements ISubgoalService {
@@ -18,6 +20,8 @@ export class SubgoalService implements ISubgoalService {
     private readonly subgoalRepository: Repository<Subgoal>,
     @Inject(UserService)
     private readonly userService: IUserService,
+    @Inject(GoalService)
+    private readonly goalService: IGoalService,
   ) {}
 
   generateUuid(): string {
@@ -27,12 +31,21 @@ export class SubgoalService implements ISubgoalService {
   async create(createSubgoalDto: CreateSubgoalDto, userId?: string): Promise<Subgoal> {
     const user: User = await this.userService.findById(userId);
     if (!user) throw new NotFoundException(`User with id ${userId} not found`);
-    const subgoal: Subgoal = merge(createSubgoalDto, {
+    const {
+      goalIds: [goalId],
+      ...subGoalData
+    } = createSubgoalDto;
+    const subgoal: Subgoal = merge(subGoalData, {
       id: this.generateUuid(),
       created_by: user,
       parent: null,
     });
-    const subgoalEntity = this.subgoalRepository.create(subgoal);
+    if (goalId) {
+      const goal = await this.goalService.findById(goalId);
+      if (!goal) throw new NotFoundException(`Goal with id ${goalId} not found`);
+      subgoal.goal_subgoals = [goal];
+    }
+    const subgoalEntity: Subgoal = this.subgoalRepository.create(subgoal);
     return this.subgoalRepository.save(subgoalEntity);
   }
 
@@ -52,8 +65,9 @@ export class SubgoalService implements ISubgoalService {
   }
 
   async update(id: string, updateSubgoalDto: UpdateSubgoalDto): Promise<Subgoal> {
+    const { goalIds, ...subgoalData } = updateSubgoalDto;
     const foundSubgoal: Subgoal = await this.findById(id);
-    const updatedSubgoal = merge(foundSubgoal, updateSubgoalDto);
+    const updatedSubgoal = merge(foundSubgoal, subgoalData);
     return this.subgoalRepository.save(updatedSubgoal);
   }
 

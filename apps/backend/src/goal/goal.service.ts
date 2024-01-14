@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IUserService } from '../user/interfaces/user-service.interface';
 import { UserService } from '../user/user.service';
 import { IGoalService } from './interfaces/goal-service.interface';
+import { SubgoalService } from '../subgoal/subgoal.service';
 
 @Injectable()
 export class GoalService implements IGoalService {
@@ -18,6 +19,8 @@ export class GoalService implements IGoalService {
     private readonly goalRepository: Repository<Goal>,
     @Inject(UserService)
     private readonly userService: IUserService,
+    @Inject(SubgoalService)
+    private readonly subgoalService: SubgoalService,
   ) {}
 
   generateUuid(): string {

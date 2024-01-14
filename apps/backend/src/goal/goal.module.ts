@@ -4,10 +4,12 @@ import { GoalController } from './goal.controller';
 import { TypeOrmModule } from '@nestjs/typeorm/dist';
 import { Goal } from './entities/goal.entity';
 import { UserModule } from '../user/user.module';
+import { SubgoalModule } from '../subgoal/subgoal.module';
 
 @Module({
-  imports: [UserModule, TypeOrmModule.forFeature([Goal])],
+  imports: [UserModule, SubgoalModule, TypeOrmModule.forFeature([Goal])],
   controllers: [GoalController],
   providers: [GoalService],
+  exports: [GoalService],
 })
 export class GoalModule {}

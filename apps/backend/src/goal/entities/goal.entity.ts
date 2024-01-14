@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryColumn } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
+import { Subgoal } from '../../subgoal/entities/subgoal.entity';
 
 @Entity({ name: 'goals' })
 export class Goal {
@@ -37,8 +38,19 @@ export class Goal {
   @JoinColumn({ name: 'parentId' })
   parent: Goal;
 
-  @Column({ type: 'json', default: [] })
-  subgoals: any[];
+  @ManyToMany(() => Subgoal, { nullable: true })
+  @JoinTable({
+    name: 'goal_subgoals',
+    joinColumn: {
+      name: 'goal_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'subgoal_id',
+      referencedColumnName: 'id',
+    },
+  })
+  subgoals: Subgoal[];
 
   @Column({ type: 'json', default: {} })
   metadata: {

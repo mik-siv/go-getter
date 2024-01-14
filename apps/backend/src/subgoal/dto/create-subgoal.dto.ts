@@ -31,5 +31,5 @@ export class CreateSubgoalDto {
   @ApiProperty({ description: 'A bigger goal to attach to' })
   @IsOptional()
   @IsString()
-  goalId?: string;
+  goalIds?: string[];
 }

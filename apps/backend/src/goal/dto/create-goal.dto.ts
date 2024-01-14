@@ -22,6 +22,11 @@ export class CreateGoalDto {
   @IsBoolean()
   private: boolean;
 
+  @ApiProperty({ description: 'A list of subgoal ids' })
+  @IsOptional()
+  @IsString()
+  subgoals?: string[];
+
   @ApiProperty({ description: 'metadata for the goal', type: Metadata })
   @IsOptional()
   @ValidateNested()
