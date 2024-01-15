@@ -9,7 +9,7 @@ export const goalResponseSchema = (): Joi.ObjectSchema => {
   return Joi.object({
     id: Joi.string().required(),
     created_date: Joi.date().required(),
-    subgoals: Joi.array().required(),
+    subgoals: Joi.array().allow(null),
     metadata: Joi.object({
       description: Joi.string().required(),
     }),

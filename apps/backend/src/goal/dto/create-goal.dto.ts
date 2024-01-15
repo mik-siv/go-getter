@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, ValidateNested } from 'class-validator';
+import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class Metadata {
@@ -24,8 +24,9 @@ export class CreateGoalDto {
 
   @ApiProperty({ description: 'A list of subgoal ids' })
   @IsOptional()
-  @IsString()
-  subgoals?: string[];
+  @IsArray()
+  @IsString({ each: true, message: 'Each item in goalIds must be a string' })
+  subgoalIds?: string[];
 
   @ApiProperty({ description: 'metadata for the goal', type: Metadata })
   @IsOptional()

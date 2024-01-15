@@ -38,7 +38,7 @@ export class Goal {
   @JoinColumn({ name: 'parentId' })
   parent: Goal;
 
-  @ManyToMany(() => Subgoal, { nullable: true })
+  @ManyToMany(() => Subgoal, { nullable: true, eager: true })
   @JoinTable({
     name: 'goal_subgoals',
     joinColumn: {

@@ -13,7 +13,8 @@ Authorization: Bearer {{auth_token}}
   "metadata": {
     "description": "let's test it out!"
   },
-  "private": true
+  "private": true,
+  "goalIds": ["a47f7fb4-6888-4a50-b6ae-e1d501bef772"]
 }
 
 ### Find one subgoal
@@ -27,11 +28,12 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "name": "my second subgoal",
+  "name": "my first subgoal 1",
   "metadata": {
-    "description": "let's rock it out!"
+    "description": "let's test it out! 1"
   },
-  "private": false
+  "private": true,
+  "goalIds": ["a47f7fb4-6888-4a50-b6ae-e1d501bef772", "cfeb9fc6-cb7f-4a0c-96e2-ca45e4f720bb"]
 }
 
 ### Delete a subgoal

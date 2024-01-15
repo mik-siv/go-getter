@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSubgoalDto } from './dto/create-subgoal.dto';
 import { UpdateSubgoalDto } from './dto/update-subgoal.dto';
 import { ISubgoalService } from './interfaces/subgoal-service.interface';
@@ -8,10 +8,11 @@ import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { IUserService } from '../user/interfaces/user-service.interface';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, In, Repository } from 'typeorm';
 import { Subgoal } from './entities/subgoal.entity';
 import { IGoalService } from '../goal/interfaces/goal-service.interface';
 import { GoalService } from '../goal/goal.service';
+import { Goal } from '../goal/entities/goal.entity';
 
 @Injectable()
 export class SubgoalService implements ISubgoalService {
@@ -20,7 +21,7 @@ export class SubgoalService implements ISubgoalService {
     private readonly subgoalRepository: Repository<Subgoal>,
     @Inject(UserService)
     private readonly userService: IUserService,
-    @Inject(GoalService)
+    @Inject(forwardRef(() => GoalService))
     private readonly goalService: IGoalService,
   ) {}
 
@@ -41,7 +42,7 @@ export class SubgoalService implements ISubgoalService {
       parent: null,
     });
     if (goalId) {
-      const goal = await this.goalService.findById(goalId);
+      const goal: Goal = await this.goalService.findById(goalId);
       if (!goal) throw new NotFoundException(`Goal with id ${goalId} not found`);
       subgoal.goal_subgoals = [goal];
     }
@@ -60,7 +61,7 @@ export class SubgoalService implements ISubgoalService {
     return subgoal;
   }
 
-  async findBy(attrs: Partial<Subgoal>): Promise<Subgoal[]> {
+  async findBy(attrs: FindOptionsWhere<Subgoal> | FindOptionsWhere<Subgoal>[]): Promise<Subgoal[]> {
     return await this.subgoalRepository.findBy(attrs);
   }
 
@@ -68,6 +69,9 @@ export class SubgoalService implements ISubgoalService {
     const { goalIds, ...subgoalData } = updateSubgoalDto;
     const foundSubgoal: Subgoal = await this.findById(id);
     const updatedSubgoal = merge(foundSubgoal, subgoalData);
+    let goalsList: Goal[];
+    goalIds ? (goalsList = await this.goalService.findBy({ id: In(goalIds) })) : (goalsList = []);
+    updatedSubgoal.goal_subgoals = goalsList;
     return this.subgoalRepository.save(updatedSubgoal);
   }
 

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { SubgoalService } from './subgoal.service';
 import { SubgoalController } from './subgoal.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,7 +7,7 @@ import { UserModule } from '../user/user.module';
 import { GoalModule } from '../goal/goal.module';
 
 @Module({
-  imports: [UserModule, GoalModule, TypeOrmModule.forFeature([Subgoal])],
+  imports: [UserModule, forwardRef(() => GoalModule), TypeOrmModule.forFeature([Subgoal])],
   controllers: [SubgoalController],
   providers: [SubgoalService],
   exports: [SubgoalService],

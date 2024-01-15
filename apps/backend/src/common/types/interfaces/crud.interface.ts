@@ -1,3 +1,5 @@
+import { FindOptionsWhere } from 'typeorm';
+
 /**
  * Interface for CRUD operations on a generic type `T`.
  * @interface
@@ -24,7 +26,7 @@ export interface ICrudService<T, CreateDTO, UpdateDTO> {
    * @param {Partial<T>} attrs - The attributes to query by.
    * @returns {Promise<T[]>} A promise that resolves to an array of entities matching the criteria.
    */
-  findBy(attrs: Partial<T>): Promise<T[]>;
+  findBy(attrs: FindOptionsWhere<T> | FindOptionsWhere<T>[]): Promise<T[]>;
 
   /**
    * Finds a single entity by its identifier.
