@@ -32,16 +32,14 @@ export class SubgoalService implements ISubgoalService {
   async create(createSubgoalDto: CreateSubgoalDto, userId?: string): Promise<Subgoal> {
     const user: User = await this.userService.findById(userId);
     if (!user) throw new NotFoundException(`User with id ${userId} not found`);
-    const {
-      goalIds: [goalId],
-      ...subGoalData
-    } = createSubgoalDto;
+    const { goalIds, ...subGoalData } = createSubgoalDto;
     const subgoal: Subgoal = merge(subGoalData, {
       id: this.generateUuid(),
       created_by: user,
       parent: null,
     });
-    if (goalId) {
+    if (goalIds) {
+      const [goalId] = goalIds;
       const goal: Goal = await this.goalService.findById(goalId);
       if (!goal) throw new NotFoundException(`Goal with id ${goalId} not found`);
       subgoal.goal_subgoals = [goal];

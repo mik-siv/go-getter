@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, HttpCode } from '@nestjs/common';
 import { SubgoalService } from './subgoal.service';
 import { CreateSubgoalDto } from './dto/create-subgoal.dto';
 import { UpdateSubgoalDto } from './dto/update-subgoal.dto';
@@ -35,6 +35,7 @@ export class SubgoalController {
   }
 
   @Delete(':id')
+  @HttpCode(204)
   async remove(@Param('id') id: string) {
     return await this.subgoalService.remove(id);
   }
