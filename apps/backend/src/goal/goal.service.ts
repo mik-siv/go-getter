@@ -1,15 +1,17 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
 import { Goal } from './entities/goal.entity';
 import { v4 as uuidv4 } from 'uuid';
 import * as merge from 'lodash.merge';
 import { User } from '../user/entities/user.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IUserService } from '../user/interfaces/user-service.interface';
 import { UserService } from '../user/user.service';
 import { IGoalService } from './interfaces/goal-service.interface';
+import { SubgoalService } from '../subgoal/subgoal.service';
+import { Subgoal } from '../subgoal/entities/subgoal.entity';
 
 @Injectable()
 export class GoalService implements IGoalService {
@@ -18,6 +20,8 @@ export class GoalService implements IGoalService {
     private readonly goalRepository: Repository<Goal>,
     @Inject(UserService)
     private readonly userService: IUserService,
+    @Inject(forwardRef(() => SubgoalService))
+    private readonly subgoalService: SubgoalService,
   ) {}
 
   generateUuid(): string {
@@ -32,7 +36,9 @@ export class GoalService implements IGoalService {
   async create(createGoalDto: CreateGoalDto, userId?: string): Promise<Goal> {
     const user: User = await this.userService.findById(userId);
     if (!user) throw new NotFoundException(`User with id ${userId} not found`);
-    const goal: Goal = merge(createGoalDto, {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { subgoalIds, ...goalData } = createGoalDto;
+    const goal: Goal = merge(goalData, {
       id: this.generateUuid(),
       created_by: user,
       contributors: [user],
@@ -53,13 +59,17 @@ export class GoalService implements IGoalService {
     return goal;
   }
 
-  async findBy(attrs: Partial<Goal>): Promise<Goal[]> {
+  async findBy(attrs: FindOptionsWhere<Goal> | FindOptionsWhere<Goal>[]): Promise<Goal[]> {
     return await this.goalRepository.findBy(attrs);
   }
 
   async update(id: string, updateGoalDto: UpdateGoalDto): Promise<Goal> {
+    const { subgoalIds, ...goalData } = updateGoalDto;
     const foundGoal: Goal = await this.findById(id);
-    const updatedGoal: Goal = merge(foundGoal, updateGoalDto);
+    const updatedGoal: Goal = merge(foundGoal, goalData);
+    let subgoalsList: Subgoal[];
+    subgoalIds ? (subgoalsList = await this.subgoalService.findBy({ id: In(subgoalIds) })) : (subgoalsList = []);
+    updatedGoal.subgoals = subgoalsList;
     return await this.goalRepository.save(updatedGoal);
   }
 

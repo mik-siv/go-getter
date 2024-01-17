@@ -10,11 +10,13 @@ describe('Goals module (e2e)', () => {
   let app: INestApplication;
   let authToken: string;
   let goalId: string;
+  let subgoalId: string;
   const {
     user: {
       testUser: { email, password },
     },
     goal: { endpoint },
+    subgoal: { endpoint: subgoalsEndpoint },
   } = e2eTestData;
 
   beforeAll(async () => {
@@ -65,12 +67,21 @@ describe('Goals module (e2e)', () => {
       });
   });
 
+  it("Get a random subgoal's id", async () => {
+    subgoalId = await request(app.getHttpServer())
+      .get(subgoalsEndpoint)
+      .set('Authorization', `Bearer ${authToken}`)
+      .expect(200)
+      .then((res) => res.body[0].id);
+  });
+
   it('Update the created goal by id', async () => {
     return request(app.getHttpServer())
       .patch(`${endpoint}/${goalId}`)
       .set('Authorization', `Bearer ${authToken}`)
       .send({
         name: 'Updated Goal',
+        subgoalIds: [subgoalId],
         metadata: {
           description: 'This goal has been updated',
         },
@@ -83,6 +94,7 @@ describe('Goals module (e2e)', () => {
         expect(res.body.name).toEqual('Updated Goal');
         expect(res.body.metadata.description).toEqual('This goal has been updated');
         expect(res.body.private).toEqual(false);
+        expect(res.body.subgoals[0].id).toEqual(subgoalId);
       });
   });
 

@@ -9,6 +9,7 @@ import { dataSourceOptions } from './common/db/data-source';
 import { GoalModule } from './goal/goal.module';
 import { validationSchema } from './common/utils/validation/environment-validation.schema';
 import { APP_PIPE } from '@nestjs/core';
+import { SubgoalModule } from './subgoal/subgoal.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { APP_PIPE } from '@nestjs/core';
     UserModule,
     AuthModule,
     GoalModule,
+    SubgoalModule,
   ],
   controllers: [AppController],
   providers: [
