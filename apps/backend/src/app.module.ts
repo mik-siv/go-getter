@@ -1,4 +1,5 @@
 import { Module, ValidationPipe } from '@nestjs/common';
+import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -10,6 +11,7 @@ import { GoalModule } from './goal/goal.module';
 import { validationSchema } from './common/utils/validation/environment-validation.schema';
 import { APP_PIPE } from '@nestjs/core';
 import { SubgoalModule } from './subgoal/subgoal.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -18,6 +20,9 @@ import { SubgoalModule } from './subgoal/subgoal.module';
       validationSchema: validationSchema,
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../..', 'frontend', 'dist'),
+    }),
     UserModule,
     AuthModule,
     GoalModule,
