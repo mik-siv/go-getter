@@ -34,5 +34,8 @@
   },
   "workspaces": [
     "apps/*"
-  ]
+  ],
+  "dependencies": {
+    "react-router-dom": "^6.21.3"
+  }
 }
