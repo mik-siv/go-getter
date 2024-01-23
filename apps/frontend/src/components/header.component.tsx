@@ -3,7 +3,7 @@ import '../Header.css';
 
 export const Header = () => {
   return (
-    <div id="header">
+    <div id="header" className='peripheral'>
       <Link to="/" id="title">GoGetter</Link>
     </div>
   );
