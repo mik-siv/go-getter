@@ -16,6 +16,10 @@
         padding-left: 2rem;
         color: white;
     }
+
+    #logout {
+        margin-left: auto;
+    }
 }
 
 #header > * {

@@ -1,17 +1,17 @@
+import React from 'react';
 import './App.css';
-import { Header } from './components/header.component.tsx';
-import { Home } from './pages/home.tsx';
-import { Route, Routes } from 'react-router-dom';
+import { Header } from './components/header.component';
+import { AuthProvider } from './providers/authentication.provider';
+import Routes from './Routes';
 
-function App() {
+const App: React.FC = () => {
   return (
     <div id="app-div">
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
+      <AuthProvider>
+        <Header />
+        <Routes />
+      </AuthProvider>
     </div>
   );
-}
-
+};
 export default App;
