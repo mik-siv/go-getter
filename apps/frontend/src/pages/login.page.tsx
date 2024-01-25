@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import '../Login.css';
 import { AuthContext } from '../contexts/authentication.context.ts';
 
 const LoginPage = () => {
@@ -17,45 +18,52 @@ const LoginPage = () => {
     });
 
     const data: { access_token: string } = await response.json();
-
     if (data.access_token) {
       logIn(data.access_token);
     }
+    setPassword('');
+    setEmail('');
   };
 
   const handleRegister = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // Implement your register functionality here
     console.log('Register button clicked. Email: ', email, ' Password: ', password);
   };
 
   return (
-    <div>
-      <h2>Login Page</h2>
-      <form>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+    <div className="container">
+      <div className="left-side">
+        <div id="description">GoGetter is your personal goal setter, designed to turn
+          ambitions into achievements.
         </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+      </div>
+      <div className="form">
+        <div className="control">
+          <h2>Login</h2>
+          <form>
+            <input
+              className="input-field"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="Username"
+            />
+            <input
+              className="input-field"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="Password"
+            />
+            <div>
+              <button className="btn" onClick={handleLogin}>Login</button>
+              <button className="btn" onClick={handleRegister}>Register</button>
+            </div>
+          </form>
         </div>
-        <div>
-          <button onClick={handleLogin}>Login</button>
-          <button onClick={handleRegister}>Register</button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 };
