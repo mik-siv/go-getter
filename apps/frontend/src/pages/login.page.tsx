@@ -84,6 +84,7 @@ const LoginPage = () => {
               className="input-field"
               type="email"
               value={email}
+              maxLength={50}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="Username"
@@ -92,6 +93,7 @@ const LoginPage = () => {
               className="input-field"
               type="password"
               value={password}
+              maxLength={32}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Password"
