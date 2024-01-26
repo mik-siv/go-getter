@@ -32,7 +32,10 @@ const LoginPage = () => {
 
   const handleRegister = async () => {
     if (!password || !email || !confirmPassword || !username) return setError('Please fill in all the fields');
+    if (password.length < 6 || password.length > 50) return setError('Password must be between 6 and 32 characters');
     if (password !== confirmPassword) return setError('Passwords don\'t match');
+    if (username.length > 3 || username.length > 50) return setError('Name must be between 3 and 32 characters');
+    if (!email.match(/^[a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) return setError('Invalid email format');
     const response = await fetch('/api/users', {
       method: 'POST',
       headers: {
@@ -99,6 +102,7 @@ const LoginPage = () => {
                   className="input-field"
                   type="password"
                   value={confirmPassword}
+                  maxLength={32}
                   onChange={(e) => setConfrimPassword(e.target.value)}
                   required
                   placeholder="Confirm Password"
@@ -107,6 +111,7 @@ const LoginPage = () => {
                   className="input-field"
                   type="text"
                   value={username}
+                  maxLength={32}
                   onChange={(e) => setUsername(e.target.value)}
                   required
                   placeholder="Your Name"
