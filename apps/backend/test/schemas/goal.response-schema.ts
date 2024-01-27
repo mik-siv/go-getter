@@ -17,6 +17,6 @@ export const goalResponseSchema = (): Joi.ObjectSchema => {
     name: Joi.string().required(),
     parent: Joi.any(),
     private: Joi.boolean().required(),
-    contributors: Joi.array().items(userResponseSchema()).required(),
+    contributors: Joi.array().required(),
   });
 };

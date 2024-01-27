@@ -81,7 +81,7 @@ describe('Goals module (e2e)', () => {
       .set('Authorization', `Bearer ${authToken}`)
       .send({
         name: 'Updated Goal',
-        subgoalIds: [subgoalId],
+        subgoals: [subgoalId],
         metadata: {
           description: 'This goal has been updated',
         },
