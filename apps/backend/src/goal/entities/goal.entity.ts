@@ -53,8 +53,8 @@ export class Goal {
   subgoals: Subgoal[];
 
   @Column({ type: 'json', default: {} })
-  metadata: {
-    description: string;
+  metadata?: {
+    description?: string;
     [key: string]: any;
   };
 }

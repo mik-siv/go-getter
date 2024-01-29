@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { IUserService } from './interfaces/user-service.interface';
-import * as merge from 'lodash.merge';
+import { merge } from 'lodash';
 
 @Injectable()
 export class UserService implements IUserService {
@@ -17,8 +17,8 @@ export class UserService implements IUserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async hashPassword(password: string): Promise<string> {
-    return await bcrypt.hash(password, saltRounds);
+  hashPassword(password: string): Promise<string> {
+    return bcrypt.hash(password, saltRounds);
   }
 
   generateUuid(): string {
@@ -45,7 +45,7 @@ export class UserService implements IUserService {
     return await this.userRepository.save(user);
   }
 
-  async findAll(): Promise<User[]> {
+  findAll(): Promise<User[]> {
     return this.userRepository.find();
   }
 
@@ -56,8 +56,8 @@ export class UserService implements IUserService {
     return user;
   }
 
-  async findBy(attrs: Partial<User>): Promise<User[]> {
-    return await this.userRepository.findBy(attrs);
+  findBy(attrs: Partial<User>): Promise<User[]> {
+    return this.userRepository.findBy(attrs);
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {

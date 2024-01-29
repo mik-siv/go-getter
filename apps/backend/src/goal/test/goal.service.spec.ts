@@ -62,8 +62,9 @@ describe('GoalService', () => {
     expect(result).toEqual({
       id: expect.any(String),
       created_by: fakeUser,
-      contributors: [fakeUser],
+      contributors: [],
       parent: null,
+      subgoals: [],
       ...goalData,
     });
   });
@@ -110,10 +111,10 @@ describe('GoalService', () => {
     const subgoalSpy = jest.spyOn(subgoalServiceMock, 'findBy');
     service.findById = jest.fn().mockReturnValue({ id, name: 'oldName', metadata: { description: 'old description' } });
     findByIdSpy = jest.spyOn(service, 'findById');
-    const updateGoalData = { subgoalIds: ['1', '2', '3'], ...goalData };
+    const updateGoalData = { subgoals: ['1', '2', '3'], ...goalData };
     const repoSaveSpy = jest.spyOn(repository, 'save');
     expect(await service.update(id, updateGoalData)).toEqual({ id, subgoals: [subgoalData], ...goalData });
-    expect(subgoalSpy).toBeCalledWith({ id: In(updateGoalData.subgoalIds) });
+    expect(subgoalSpy).toBeCalledWith({ id: In(updateGoalData.subgoals) });
     expect(findByIdSpy).toBeCalledWith(id);
     expect(repoSaveSpy).toBeCalledWith({ id, subgoals: [subgoalData], ...goalData });
   });

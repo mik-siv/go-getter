@@ -40,7 +40,7 @@ describe('AuthService', () => {
   it('should throw UnauthorizedException if password is invalid', async () => {
     const foundUser = { id: '1', email: 'user@example.com', password: 'hashedpassword' };
     userService.findBy = jest.fn().mockResolvedValue([foundUser]);
-    bcrypt.compare = jest.fn().mockResolvedValue(false);
+    jest.spyOn(bcrypt, 'compare').mockImplementation(() => false);
     const email = 'user@example.com';
     const password = 'invalidpassword';
 
@@ -50,7 +50,7 @@ describe('AuthService', () => {
   it('should return found user if email and password are valid', async () => {
     const foundUser = { id: '1', email: 'user@example.com', password: 'hashedpassword' };
     userService.findBy = jest.fn().mockResolvedValue([foundUser]);
-    bcrypt.compare = jest.fn().mockResolvedValue(true);
+    jest.spyOn(bcrypt, 'compare').mockImplementation(() => true);
     const email = 'user@example.com';
     const password = 'password';
 
