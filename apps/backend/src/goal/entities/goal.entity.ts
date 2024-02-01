@@ -16,11 +16,11 @@ export class Goal {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_date: Date;
 
-  @ManyToOne(() => User, { eager: true })
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'created_by' })
   created_by: User;
 
-  @ManyToMany(() => User, { eager: true })
+  @ManyToMany(() => User)
   @JoinTable({
     name: 'goal_contributors',
     joinColumn: {

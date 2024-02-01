@@ -1,4 +1,6 @@
-import { Entity, Column, CreateDateColumn, PrimaryColumn, Index } from 'typeorm';
+import { Entity, Column, CreateDateColumn, PrimaryColumn, Index, OneToMany, JoinTable, ManyToMany } from 'typeorm';
+import { Goal } from '../../goal/entities/goal.entity';
+import { Subgoal } from '../../subgoal/entities/subgoal.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -20,4 +22,24 @@ export class User {
 
   @Column({ type: 'json', default: [] })
   roles: any[];
+
+  @OneToMany(() => Goal, (goal) => goal.created_by)
+  goals: Goal[];
+
+  @OneToMany(() => Subgoal, (subgoal) => subgoal.created_by)
+  subgoals: Subgoal[];
+
+  @ManyToMany(() => Goal, (goal) => goal.contributors)
+  @JoinTable({
+    name: 'goal_contributors',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'goal_id',
+      referencedColumnName: 'id',
+    },
+  })
+  contributing_to: Goal[];
 }

@@ -10,7 +10,7 @@ export class Subgoal {
   @Column({ type: 'varchar', length: 255, nullable: true })
   name: string;
 
-  @ManyToOne(() => User, { eager: true })
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'created_by' })
   created_by: User;
 
