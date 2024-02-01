@@ -20,11 +20,16 @@ export class AuthService implements IAuthService {
     if (!isValidPassword) {
       throw new UnauthorizedException();
     }
-
+    //Lazy loading relations
+    await foundUser.goals;
+    await foundUser.subgoals;
+    await foundUser.contributing_to;
     return foundUser;
   }
 
   async login(user: User): Promise<{ access_token: string }> {
+    if (!user) throw new UnauthorizedException();
+    //todo: add goals, subgoals and contributions to JWT token
     const payload: jwtPayload = { username: user.username, sub: user.id, roles: user.roles };
     return {
       access_token: this.jwtService.sign(payload),

@@ -24,10 +24,10 @@ export class User {
   roles: any[];
 
   @OneToMany(() => Goal, (goal) => goal.created_by)
-  goals: Goal[];
+  goals: Promise<Goal[]>;
 
   @OneToMany(() => Subgoal, (subgoal) => subgoal.created_by)
-  subgoals: Subgoal[];
+  subgoals: Promise<Subgoal[]>;
 
   @ManyToMany(() => Goal, (goal) => goal.contributors)
   @JoinTable({
@@ -41,5 +41,5 @@ export class User {
       referencedColumnName: 'id',
     },
   })
-  contributing_to: Goal[];
+  contributing_to: Promise<Goal[]>;
 }

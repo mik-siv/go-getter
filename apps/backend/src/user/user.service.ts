@@ -4,7 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { saltRounds } from '../common/constants';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { IUserService } from './interfaces/user-service.interface';
@@ -56,7 +56,7 @@ export class UserService implements IUserService {
     return user;
   }
 
-  findBy(attrs: Partial<User>): Promise<User[]> {
+  findBy(attrs: FindOptionsWhere<User> | FindOptionsWhere<User>[]): Promise<User[]> {
     return this.userRepository.findBy(attrs);
   }
 
