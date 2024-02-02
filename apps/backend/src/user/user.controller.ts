@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Request } 
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { authenticatedUser } from '../common/types/general.types';
+import { AuthenticatedUser } from '../common/types/general.types';
 import { User } from './entities/user.entity';
 import { Public } from '../common/decorators/public.decorator';
 
@@ -22,7 +22,7 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @Request() req: authenticatedUser): Promise<User> {
+  findOne(@Param('id') id: string, @Request() req: AuthenticatedUser): Promise<User> {
     return this.userService.findById(id);
   }
 
