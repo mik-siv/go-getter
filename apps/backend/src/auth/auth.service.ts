@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from '../user/entities/user.entity';
 import { IAuthService } from './interfaces/auth-service.interface';
-import { jwtPayload } from './types/auth.types';
+import { UserJwtPayload } from './types/auth.types';
 import { EntityWithId } from '../common/types/general.types';
 
 @Injectable()
@@ -29,7 +29,7 @@ export class AuthService implements IAuthService {
     const goals = await this.extractIDs(user.goals);
     const subgoals = await this.extractIDs(user.subgoals);
     const contributing_to = await this.extractIDs(user.contributing_to);
-    const payload: jwtPayload = {
+    const payload: UserJwtPayload = {
       username: user.username,
       sub: user.id,
       roles: user.roles,
