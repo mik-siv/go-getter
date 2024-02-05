@@ -7,7 +7,7 @@ class Metadata {
   @IsOptional()
   @IsString()
   @MaxLength(255)
-  description?: string;
+  description: string;
 }
 
 export class CreateGoalDto {
@@ -38,5 +38,5 @@ export class CreateGoalDto {
   @IsOptional()
   @ValidateNested()
   @Type(() => Metadata)
-  metadata?: Metadata;
+  metadata: Metadata;
 }
