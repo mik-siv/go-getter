@@ -51,7 +51,7 @@ describe('GoalController', () => {
   });
 
   it('should create a goal', async () => {
-    expect(await controller.create(goalData, userJWTData)).toEqual(goalData);
+    expect(await controller.create(goalData, userJWTData as any)).toEqual(goalData);
     expect(createGoalSpy).toBeCalledWith(goalData, userJWTData.user.userId);
   });
 
