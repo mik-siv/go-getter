@@ -38,7 +38,6 @@ export class SubgoalService implements ISubgoalService {
       created_by: user,
       parent: null,
       goal_subgoals: [],
-      metadata: { description: {} },
     });
     if (goalIds) {
       const [goalId] = goalIds;
