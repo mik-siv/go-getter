@@ -10,8 +10,7 @@ import { UserJwtData } from '../types/general.types';
  */
 @Injectable()
 export class ResourceOwnerGuard implements CanActivate {
-  constructor(private reflector: Reflector) {
-  }
+  constructor(private reflector: Reflector) {}
 
   /**
    * Determines whether the user is authorized to access a particular resource by ownership.
@@ -24,9 +23,7 @@ export class ResourceOwnerGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-
-    if (!ownedResources) return true;
-
+    if (!ownedResources || (Array.isArray(ownedResources) && ownedResources.length === 0)) return true;
     const request = context.switchToHttp().getRequest();
     const user: UserJwtData = request.user;
     if (!user) throw new UnauthorizedException();
