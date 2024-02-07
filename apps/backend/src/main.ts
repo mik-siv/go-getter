@@ -11,7 +11,8 @@ import { goalSwaggerConfig } from './swagger/config/goal.swagger-config';
 import { GoalModule } from './goal/goal.module';
 import { setupSwaggerForModule } from './swagger/swagger.utils';
 import { Logger } from '@nestjs/common';
-import { RolesGuard } from './user/guards/roles.guard';
+import { RolesGuard } from './common/guards/roles.guard';
+import { ResourceOwnerGuard } from './common/guards/resource-owner.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { logger: ['log'] });
@@ -22,7 +23,7 @@ async function bootstrap() {
   //Setting global password strip interceptor
   app.useGlobalInterceptors(new TransformInterceptor());
   //Setting global guards
-  app.useGlobalGuards(new JwtAuthGuard(reflector), new RolesGuard(reflector));
+  app.useGlobalGuards(new JwtAuthGuard(reflector), new RolesGuard(reflector), new ResourceOwnerGuard(reflector));
   //Setting route prefix
   app.setGlobalPrefix('api');
   //Swagger setup
