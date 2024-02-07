@@ -1,7 +1,7 @@
 import { ResourceOwnerGuard } from './resource-owner.guard';
 import { UserJwtData } from '../types/general.types';
 import { BadRequestException, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { OwnedResource } from './owned-resources.enum';
+import { OwnedResource } from '../constants/enums/owned-resources.enum';
 
 describe('ResourceOwner guard', () => {
   let guard: ResourceOwnerGuard;

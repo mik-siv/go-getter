@@ -1,6 +1,6 @@
 import { BadRequestException, CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { OwnedResource } from './owned-resources.enum';
+import { OwnedResource } from '../constants/enums/owned-resources.enum';
 import { RESOURCES_KEY } from '../decorators/resource.decorator';
 import { UserJwtData } from '../types/general.types';
 
