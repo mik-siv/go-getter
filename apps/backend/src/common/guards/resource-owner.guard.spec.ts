@@ -2,7 +2,9 @@ import { ResourceOwnerGuard } from './resource-owner.guard';
 import { UserJwtData } from '../types/general.types';
 import { BadRequestException, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { OwnedResource } from '../constants/enums/owned-resources.enum';
+import { RolesGuard } from './roles.guard';
 
+jest.mock('./roles.guard');
 describe('ResourceOwner guard', () => {
   let guard: ResourceOwnerGuard;
   const reflectorMock = { getAllAndOverride: jest.fn() };
@@ -71,5 +73,17 @@ describe('ResourceOwner guard', () => {
     (mockExecutionContext.switchToHttp().getRequest as jest.Mock).mockReturnValue({ user, params: { id: '123' } });
     const canActivateResult = guard.canActivate(mockExecutionContext);
     expect(canActivateResult).toBe(true);
+  });
+
+  it('should allow access to an admin user', () => {
+    reflectorMock.getAllAndOverride.mockReturnValue([
+      OwnedResource.USER_ID,
+      OwnedResource.CONTRIBUTING_TO,
+      OwnedResource.SUBGOALS,
+      OwnedResource.GOALS,
+    ]);
+    (mockExecutionContext.switchToHttp().getRequest as jest.Mock).mockReturnValue({ user, params: { id: '123' } });
+    RolesGuard.checkUserPermissionForRoles = jest.fn().mockReturnValue(true);
+    expect(guard.canActivate(mockExecutionContext)).toEqual(true);
   });
 });
