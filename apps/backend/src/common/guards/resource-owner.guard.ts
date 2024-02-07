@@ -3,6 +3,8 @@ import { Reflector } from '@nestjs/core';
 import { OwnedResource } from '../constants/enums/owned-resources.enum';
 import { RESOURCES_KEY } from '../decorators/resource.decorator';
 import { UserJwtData } from '../types/general.types';
+import { RolesGuard } from './roles.guard';
+import { UserRole } from '../../user/entities/user-roles.enum';
 
 /**
  * ResourceOwnerGuard class is a guard that checks if the current user is the owner of the requested resource.
@@ -27,8 +29,8 @@ export class ResourceOwnerGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user: UserJwtData = request.user;
     if (!user) throw new UnauthorizedException();
+    if (RolesGuard.checkUserPermissionForRoles(user, [UserRole.ADMIN])) return true;
     const resourceId: string = request.params?.id;
-
     if (!resourceId) return true;
 
     return ownedResources.some(this.checkResourceOwnership(user, resourceId));
