@@ -9,6 +9,7 @@ import { User } from './entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { IUserService } from './interfaces/user-service.interface';
 import { merge } from 'lodash';
+import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 
 @Injectable()
 export class UserService implements IUserService {
@@ -69,6 +70,20 @@ export class UserService implements IUserService {
     const updatedData = merge(foundUser, updateUserDto);
     await this.userRepository.save(updatedData);
     return updatedData;
+  }
+
+  /**
+   * Updates the roles of a user with the specified ID.
+   *
+   * @param {string} id - The ID of the user to update.
+   * @param {UpdateUserRoleDto} updateUserRoleDto - The DTO containing the new roles for the user.
+   * @return {Promise<User>} - A promise that resolves to the updated user.
+   */
+  async updateRoles(id: string, updateUserRoleDto: UpdateUserRoleDto) {
+    const foundUser: User = await this.findById(id);
+    foundUser.roles = updateUserRoleDto.roles;
+    await this.userRepository.save(foundUser);
+    return foundUser;
   }
 
   async remove(id: string): Promise<User> {
