@@ -3,6 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from '../user.service';
 import { UserRepositoryMock } from './mocks/user.repository.mock';
 import { User } from '../entities/user.entity';
+import { UpdateUserRoleDto } from '../dto/update-user-role.dto';
+import { UserRole } from '../entities/user-roles.enum';
 
 describe('UserService', () => {
   let service: UserService;
@@ -108,5 +110,32 @@ describe('UserService', () => {
     repoFindOne.mockReturnValue(userData);
     expect(await service.remove(fakeId)).toEqual(userData);
     expect(repoRemove).toBeCalledWith(userData);
+  });
+
+  it('should update user roles', async () => {
+    const roles: UserRole[] = [UserRole.ADMIN, UserRole.USER];
+    const updateUserRoleDto: UpdateUserRoleDto = { roles };
+    await seedMockDataToRepo({ id: fakeId, ...userData });
+
+    const updatedUser: User = await service.updateRoles(fakeId, updateUserRoleDto);
+
+    const expectedUser: User = { id: fakeId, ...userData, roles: updateUserRoleDto.roles };
+    expect(updatedUser).toEqual(expectedUser);
+
+    expect(repoFindOne).toBeCalledWith({ where: { id: fakeId } });
+    expect(repoSave).toBeCalledWith(expectedUser);
+  });
+
+  it('should throw an error when updating roles of non-existent user', async () => {
+    const roles: UserRole[] = [UserRole.ADMIN, UserRole.USER];
+    const updateUserRoleDto: UpdateUserRoleDto = { roles };
+
+    try {
+      await service.updateRoles(fakeId, updateUserRoleDto);
+    } catch (err) {
+      expect(err).toBeInstanceOf(NotFoundException);
+    }
+
+    expect(repoFindOne).toBeCalledWith({ where: { id: fakeId } });
   });
 });
