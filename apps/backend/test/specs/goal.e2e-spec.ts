@@ -8,12 +8,14 @@ import { bootstrap } from '../../src/main';
 
 describe('Goals module (e2e)', () => {
   let app: INestApplication;
-  let authToken: string;
+  let adminAuthToken: string;
+  let userAuthToken: string;
   let goalId: string;
   let subgoalId: string;
   const {
     user: {
-      testUser: { email, password },
+      adminUser: { email, password },
+      testUser,
     },
     goal: { endpoint },
     subgoal: { endpoint: subgoalsEndpoint },
@@ -21,7 +23,8 @@ describe('Goals module (e2e)', () => {
 
   beforeAll(async () => {
     app = await bootstrap();
-    authToken = await login(email, password, app);
+    adminAuthToken = await login(email, password, app);
+    userAuthToken = await login(testUser.email, testUser.password, app);
   });
 
   afterAll(async () => {
@@ -31,7 +34,7 @@ describe('Goals module (e2e)', () => {
   it('Get Goals list', async () => {
     return request(app.getHttpServer())
       .get(endpoint)
-      .set('Authorization', `Bearer ${authToken}`)
+      .set('Authorization', `Bearer ${adminAuthToken}`)
       .expect(200)
       .expect((res) => {
         Joi.assert(res.body, Joi.array().items(goalResponseSchema()).required());
@@ -41,7 +44,7 @@ describe('Goals module (e2e)', () => {
   it('Create a new goal', async () => {
     return request(app.getHttpServer())
       .post(endpoint)
-      .set('Authorization', `Bearer ${authToken}`)
+      .set('Authorization', `Bearer ${adminAuthToken}`)
       .send({
         name: 'New Goal',
         metadata: {
@@ -59,7 +62,7 @@ describe('Goals module (e2e)', () => {
   it('Read the created goal by id', async () => {
     return request(app.getHttpServer())
       .get(`${endpoint}/${goalId}`)
-      .set('Authorization', `Bearer ${authToken}`)
+      .set('Authorization', `Bearer ${adminAuthToken}`)
       .expect(200)
       .expect((res) => {
         Joi.assert(res.body, goalResponseSchema().required());
@@ -70,7 +73,7 @@ describe('Goals module (e2e)', () => {
   it("Get a random subgoal's id", async () => {
     subgoalId = await request(app.getHttpServer())
       .get(subgoalsEndpoint)
-      .set('Authorization', `Bearer ${authToken}`)
+      .set('Authorization', `Bearer ${adminAuthToken}`)
       .expect(200)
       .then((res) => res.body[0].id);
   });
@@ -78,7 +81,7 @@ describe('Goals module (e2e)', () => {
   it('Update the created goal by id', async () => {
     return request(app.getHttpServer())
       .patch(`${endpoint}/${goalId}`)
-      .set('Authorization', `Bearer ${authToken}`)
+      .set('Authorization', `Bearer ${adminAuthToken}`)
       .send({
         name: 'Updated Goal',
         subgoals: [subgoalId],
@@ -98,10 +101,23 @@ describe('Goals module (e2e)', () => {
       });
   });
 
+  describe('RBAC asserts', () => {
+    it('GET goals list', async () => {
+      return request(app.getHttpServer()).get(endpoint).set('Authorization', `Bearer ${userAuthToken}`).expect(403);
+    });
+
+    it("GET other owner's goal", async () => {
+      await request(app.getHttpServer())
+        .get(`${endpoint}/${goalId}`)
+        .set('Authorization', `Bearer ${userAuthToken}`)
+        .expect(403);
+    });
+  });
+
   it('Delete the created goal by id', async () => {
     return request(app.getHttpServer())
       .delete(`${endpoint}/${goalId}`)
-      .set('Authorization', `Bearer ${authToken}`)
+      .set('Authorization', `Bearer ${adminAuthToken}`)
       .expect(204);
   });
 });
