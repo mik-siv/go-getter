@@ -1,10 +1,10 @@
 import { ResourceOwnerGuard } from './resource-owner.guard';
-import { UserJwtData } from '../types/general.types';
+import { UserJwtData } from '../../types/general.types';
 import { BadRequestException, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { OwnedResource } from '../constants/enums/owned-resources.enum';
-import { RolesGuard } from './roles.guard';
+import { OwnedResource } from '../../constants/enums/owned-resources.enum';
+import { RolesGuard } from '../roles/roles.guard';
 
-jest.mock('./roles.guard');
+jest.mock('../roles/roles.guard');
 describe('ResourceOwner guard', () => {
   let guard: ResourceOwnerGuard;
   const reflectorMock = { getAllAndOverride: jest.fn() };

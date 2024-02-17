@@ -1,6 +1,6 @@
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserRole } from '../../user/entities/user-roles.enum';
+import { UserRole } from '../../../user/entities/user-roles.enum';
 import { RolesGuard } from './roles.guard';
 
 describe('RolesGuard', () => {

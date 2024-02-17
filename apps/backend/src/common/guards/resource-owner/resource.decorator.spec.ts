@@ -1,5 +1,5 @@
 import { Resources, RESOURCES_KEY } from './resource.decorator';
-import { OwnedResource } from '../constants/enums/owned-resources.enum';
+import { OwnedResource } from '../../constants/enums/owned-resources.enum';
 
 describe('Resource decorator', () => {
   it('should set metadata with the provided resources', () => {

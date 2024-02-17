@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import { OwnedResource } from '../constants/enums/owned-resources.enum';
+import { OwnedResource } from '../../constants/enums/owned-resources.enum';
 
 export const RESOURCES_KEY = 'resources';
 

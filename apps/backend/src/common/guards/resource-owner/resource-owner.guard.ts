@@ -1,10 +1,10 @@
 import { BadRequestException, CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { OwnedResource } from '../constants/enums/owned-resources.enum';
-import { RESOURCES_KEY } from '../decorators/resource.decorator';
-import { UserJwtData } from '../types/general.types';
-import { RolesGuard } from './roles.guard';
-import { UserRole } from '../../user/entities/user-roles.enum';
+import { OwnedResource } from '../../constants/enums/owned-resources.enum';
+import { RESOURCES_KEY } from './resource.decorator';
+import { UserJwtData } from '../../types/general.types';
+import { RolesGuard } from '../roles/roles.guard';
+import { UserRole } from '../../../user/entities/user-roles.enum';
 
 /**
  * ResourceOwnerGuard class is a guard that checks if the current user is the owner of the requested resource.

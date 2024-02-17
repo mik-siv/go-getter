@@ -4,9 +4,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { Public } from '../auth/guards/jwt-auth.guard';
-import { Resources } from '../common/decorators/resource.decorator';
+import { Resources } from '../common/guards/resource-owner/resource.decorator';
 import { OwnedResource } from '../common/constants/enums/owned-resources.enum';
-import { Roles } from '../common/decorators/role.decorator';
+import { Roles } from '../common/guards/roles/role.decorator';
 import { UserRole } from './entities/user-roles.enum';
 import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 

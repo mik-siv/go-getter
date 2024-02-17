@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AuthContext } from '../contexts/authentication.context';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -11,10 +11,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
-      const decodedToken: any = jwtDecode(storedToken);
+      const decodedToken: JwtPayload = jwtDecode(storedToken);
       const currentTime = Date.now() / 1000;
 
-      if (decodedToken.exp > currentTime) {
+      if (decodedToken.exp && (decodedToken.exp > currentTime)) {
         setToken(storedToken);
       } else {
         localStorage.removeItem('token');

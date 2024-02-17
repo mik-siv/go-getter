@@ -4,8 +4,8 @@ import { CreateSubgoalDto } from './dto/create-subgoal.dto';
 import { UpdateSubgoalDto } from './dto/update-subgoal.dto';
 import { UserJwtData } from '../common/types/general.types';
 import { OwnedResource } from '../common/constants/enums/owned-resources.enum';
-import { Resources } from '../common/decorators/resource.decorator';
-import { Roles } from '../common/decorators/role.decorator';
+import { Resources } from '../common/guards/resource-owner/resource.decorator';
+import { Roles } from '../common/guards/roles/role.decorator';
 import { UserRole } from '../user/entities/user-roles.enum';
 
 @Controller('subgoals')

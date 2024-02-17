@@ -13,7 +13,7 @@ export interface MenuItemProps {
  */
 export interface SuitableForLeftHandPanel {
   name: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**

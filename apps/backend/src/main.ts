@@ -11,8 +11,8 @@ import { goalSwaggerConfig } from './swagger/config/goal.swagger-config';
 import { GoalModule } from './goal/goal.module';
 import { setupSwaggerForModule } from './swagger/swagger.utils';
 import { Logger } from '@nestjs/common';
-import { RolesGuard } from './common/guards/roles.guard';
-import { ResourceOwnerGuard } from './common/guards/resource-owner.guard';
+import { RolesGuard } from './common/guards/roles/roles.guard';
+import { ResourceOwnerGuard } from './common/guards/resource-owner/resource-owner.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { logger: ['log'] });

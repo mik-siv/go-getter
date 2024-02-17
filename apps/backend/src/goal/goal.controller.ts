@@ -4,9 +4,9 @@ import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
 import { Goal } from './entities/goal.entity';
 import { UserJwtData } from '../common/types/general.types';
-import { Roles } from '../common/decorators/role.decorator';
+import { Roles } from '../common/guards/roles/role.decorator';
 import { UserRole } from '../user/entities/user-roles.enum';
-import { Resources } from '../common/decorators/resource.decorator';
+import { Resources } from '../common/guards/resource-owner/resource.decorator';
 import { OwnedResource } from '../common/constants/enums/owned-resources.enum';
 
 @Controller('goals')

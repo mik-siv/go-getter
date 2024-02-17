@@ -15,7 +15,7 @@ export const HomePage = () => {
   const [activeGoal, setActiveGoal] = useState<Goal>();
   const [goals, setGoals] = useState<Goal[]>([]);
 
-  useEffect(() => setGoals(goalsApiData), []);
+  useEffect(() => setGoals(goalsApiData), [goalsApiData]);
 
   return (
     <div id="home-page">

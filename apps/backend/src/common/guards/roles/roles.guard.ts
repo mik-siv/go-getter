@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserRole } from '../../user/entities/user-roles.enum';
-import { ROLES_KEY } from '../decorators/role.decorator';
-import { UserJwtData } from '../types/general.types';
+import { UserRole } from '../../../user/entities/user-roles.enum';
+import { ROLES_KEY } from './role.decorator';
+import { UserJwtData } from '../../types/general.types';
 
 /**
  * A guard that checks if a user has the required roles to access a route.
