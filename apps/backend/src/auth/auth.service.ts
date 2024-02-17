@@ -11,15 +11,19 @@ import { EntityWithId } from '../common/types/general.types';
 export class AuthService implements IAuthService {
   constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
 
+  async validatePassword(password: string, hashedPassword: string): Promise<boolean> {
+    return bcrypt.compare(password, hashedPassword);
+  }
+
   async validate(email: string, password: string): Promise<User> {
     const [foundUser]: User[] = await this.userService.findBy({ email });
     if (!foundUser) {
       throw new UnauthorizedException();
     }
 
-    const isValidPassword = await bcrypt.compare(password, foundUser.password);
+    const isValidPassword = await this.validatePassword(password, foundUser.password);
     if (!isValidPassword) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Invalid credentials');
     }
     return foundUser;
   }
