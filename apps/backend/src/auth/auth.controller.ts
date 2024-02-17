@@ -1,11 +1,10 @@
-import { Controller, UseGuards, Request, Post, Get, Body } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Public } from '../common/decorators/public.decorator';
 import { RouteDto } from '../common/decorators/set-dto.decorator';
 import { UserLoginDto } from './dtos/user-login.dto';
-import { authenticatedUser } from '../common/types/general.types';
+import { AuthenticatedUser, UserJwtData } from '../common/types/general.types';
 import { User } from '../user/entities/user.entity';
 
 @Controller('auth')
@@ -27,9 +26,8 @@ export class AuthController {
     return await this.authService.login(req.user);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req: authenticatedUser): authenticatedUser['user'] {
+  getProfile(@Request() req: AuthenticatedUser): UserJwtData {
     return req.user;
   }
 }

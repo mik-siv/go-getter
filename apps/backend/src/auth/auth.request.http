@@ -3,12 +3,12 @@ POST {{host}}/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "email": "te1stt@test.com",
+    "email": "test@test.com",
     "password": "QQww!!22"
 }
 
 > {% client.global.set("auth_token", response.body.access_token); %}
 
 ### GET current user
-GET {{host}}/auth/profile HTTP/1.1
+GET {{host}}/auth/profile/ HTTP/1.1
 Authorization: Bearer {{auth_token}}
