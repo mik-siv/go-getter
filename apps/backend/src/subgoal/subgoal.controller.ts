@@ -5,6 +5,8 @@ import { UpdateSubgoalDto } from './dto/update-subgoal.dto';
 import { UserJwtData } from '../common/types/general.types';
 import { OwnedResource } from '../common/constants/enums/owned-resources.enum';
 import { Resources } from '../common/decorators/resource.decorator';
+import { Roles } from '../common/decorators/role.decorator';
+import { UserRole } from '../user/entities/user-roles.enum';
 
 @Controller('subgoals')
 export class SubgoalController {
@@ -22,7 +24,7 @@ export class SubgoalController {
   }
 
   @Get()
-  @Resources(OwnedResource.SUBGOALS)
+  @Roles(UserRole.ADMIN)
   async findAll() {
     return await this.subgoalService.findAll();
   }

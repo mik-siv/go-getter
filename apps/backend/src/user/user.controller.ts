@@ -21,7 +21,7 @@ export class UserController {
   }
 
   @Get()
-  @Resources(OwnedResource.USER_ID)
+  @Roles(UserRole.ADMIN)
   findAll(): Promise<User[]> {
     return this.userService.findAll();
   }
