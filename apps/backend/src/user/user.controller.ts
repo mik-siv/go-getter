@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { Public } from '../common/decorators/public.decorator';
+import { Public } from '../auth/guards/jwt-auth.guard';
 import { Resources } from '../common/decorators/resource.decorator';
 import { OwnedResource } from '../common/constants/enums/owned-resources.enum';
 import { Roles } from '../common/decorators/role.decorator';
