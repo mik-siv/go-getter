@@ -7,7 +7,7 @@ class SubgoalMetadata {
   @IsOptional()
   @IsString()
   @MaxLength(255)
-  description?: string;
+  description: string;
 }
 
 export class CreateSubgoalDto {
@@ -26,7 +26,7 @@ export class CreateSubgoalDto {
   @IsOptional()
   @ValidateNested()
   @Type(() => SubgoalMetadata)
-  metadata?: SubgoalMetadata;
+  metadata: SubgoalMetadata;
 
   @ApiProperty({ description: 'A bigger goal to attach to' })
   @IsOptional()

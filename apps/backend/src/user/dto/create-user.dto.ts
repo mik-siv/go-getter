@@ -6,14 +6,14 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(3)
-  @MaxLength(20)
+  @MaxLength(32)
   username: string;
 
   @ApiProperty({ description: 'password' })
   @IsNotEmpty()
   @IsString()
   @MinLength(6)
-  @MaxLength(20)
+  @MaxLength(32)
   password: string;
 
   @ApiProperty({ description: 'email' })

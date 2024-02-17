@@ -1,9 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, HttpCode } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Request } from '@nestjs/common';
 import { GoalService } from './goal.service';
 import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
 import { Goal } from './entities/goal.entity';
-import { authenticatedUser } from '../common/types/general.types';
+import { UserJwtData } from '../common/types/general.types';
+import { Roles } from '../common/guards/roles/role.decorator';
+import { UserRole } from '../user/entities/user-roles.enum';
+import { Resources } from '../common/guards/resource-owner/resource.decorator';
+import { OwnedResource } from '../common/constants/enums/owned-resources.enum';
 
 @Controller('goals')
 export class GoalController {
@@ -14,29 +18,33 @@ export class GoalController {
     @Body() createGoalDto: CreateGoalDto,
     @Request()
     req: {
-      user: authenticatedUser['user'];
+      user: UserJwtData;
     },
   ): Promise<Goal> {
     return await this.goalService.create(createGoalDto, req.user.userId);
   }
 
   @Get()
+  @Roles(UserRole.ADMIN)
   async findAll(): Promise<Goal[]> {
     return await this.goalService.findAll();
   }
 
   @Get(':id')
+  @Resources(OwnedResource.GOALS, OwnedResource.CONTRIBUTING_TO)
   async findOne(@Param('id') id: string): Promise<Goal> {
     return await this.goalService.findById(id);
   }
 
   @Patch(':id')
+  @Resources(OwnedResource.GOALS, OwnedResource.CONTRIBUTING_TO)
   async update(@Param('id') id: string, @Body() updateGoalDto: UpdateGoalDto): Promise<Goal> {
     return await this.goalService.update(id, updateGoalDto);
   }
 
   @Delete(':id')
   @HttpCode(204)
+  @Resources(OwnedResource.GOALS)
   async remove(@Param('id') id: string): Promise<Goal> {
     return await this.goalService.remove(id);
   }

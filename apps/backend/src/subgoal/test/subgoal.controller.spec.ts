@@ -51,7 +51,7 @@ describe('SubgoalController', () => {
   });
 
   it('should create a subgoal', async () => {
-    expect(await controller.create(subgoalData, userJWTData)).toEqual(subgoalData);
+    expect(await controller.create(subgoalData, userJWTData as any)).toEqual(subgoalData);
     expect(createSubgoalSpy).toBeCalledWith(subgoalData, userJWTData.user.userId);
   });
 

@@ -40,7 +40,7 @@ describe('AuthService', () => {
   it('should throw UnauthorizedException if password is invalid', async () => {
     const foundUser = { id: '1', email: 'user@example.com', password: 'hashedpassword' };
     userService.findBy = jest.fn().mockResolvedValue([foundUser]);
-    bcrypt.compare = jest.fn().mockResolvedValue(false);
+    jest.spyOn(bcrypt, 'compare').mockImplementation(() => false);
     const email = 'user@example.com';
     const password = 'invalidpassword';
 
@@ -50,19 +50,49 @@ describe('AuthService', () => {
   it('should return found user if email and password are valid', async () => {
     const foundUser = { id: '1', email: 'user@example.com', password: 'hashedpassword' };
     userService.findBy = jest.fn().mockResolvedValue([foundUser]);
-    bcrypt.compare = jest.fn().mockResolvedValue(true);
+    jest.spyOn(bcrypt, 'compare').mockImplementation(() => true);
     const email = 'user@example.com';
     const password = 'password';
 
     const result = await service.validate(email, password);
     expect(result).toEqual(foundUser);
   });
+
+  it('should extract ids from lazy loaded arrays', async () => {
+    const lazyLoadedArray = () => Promise.resolve([{ id: '1' }, { id: '2' }]);
+    const idsFromLazyLoadedArray = ['1', '2'];
+    const result = await service['extractIDs'](lazyLoadedArray());
+    expect(result).toEqual(idsFromLazyLoadedArray);
+  });
+
   it('should return an access token for a user', async () => {
-    const user = { id: '1', username: 'user1' };
-    const payload = { username: user.username, sub: user.id };
+    const lazyLoadedArray = () => Promise.resolve([{ id: '1' }, { id: '2' }]);
+    const idsFromLazyLoadedArray = ['1', '2'];
+    const extractIdsSpy = jest.spyOn(service, 'extractIDs' as any);
+    const user = {
+      id: '1',
+      username: 'user1',
+      goals: lazyLoadedArray(),
+      subgoals: lazyLoadedArray(),
+      contributing_to: lazyLoadedArray(),
+      roles: [],
+    };
+    const payload = {
+      username: user.username,
+      sub: user.id,
+      roles: user.roles,
+      goals: idsFromLazyLoadedArray,
+      subgoals: idsFromLazyLoadedArray,
+      contributing_to: idsFromLazyLoadedArray,
+    };
     jwtService.sign = jest.fn().mockReturnValue('access_token');
+    extractIdsSpy.mockReturnValue(idsFromLazyLoadedArray);
     const result = await service.login(user as any);
-    expect(result).toEqual({ access_token: 'access_token' });
+    expect(result).toEqual({
+      access_token: 'access_token',
+    });
+    expect(extractIdsSpy).toBeCalledTimes(3);
+    expect(extractIdsSpy).toBeCalledWith(lazyLoadedArray());
     expect(jwtService.sign).toHaveBeenCalledWith(payload);
   });
 });

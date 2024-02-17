@@ -3,7 +3,7 @@ import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
 import { Goal } from './entities/goal.entity';
 import { v4 as uuidv4 } from 'uuid';
-import * as merge from 'lodash.merge';
+import { merge } from 'lodash';
 import { User } from '../user/entities/user.entity';
 import { FindOptionsWhere, In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,7 +11,7 @@ import { IUserService } from '../user/interfaces/user-service.interface';
 import { UserService } from '../user/user.service';
 import { IGoalService } from './interfaces/goal-service.interface';
 import { SubgoalService } from '../subgoal/subgoal.service';
-import { Subgoal } from '../subgoal/entities/subgoal.entity';
+import { ISubgoalService } from '../subgoal/interfaces/subgoal-service.interface';
 
 @Injectable()
 export class GoalService implements IGoalService {
@@ -21,7 +21,7 @@ export class GoalService implements IGoalService {
     @Inject(UserService)
     private readonly userService: IUserService,
     @Inject(forwardRef(() => SubgoalService))
-    private readonly subgoalService: SubgoalService,
+    private readonly subgoalService: ISubgoalService,
   ) {}
 
   generateUuid(): string {
@@ -35,21 +35,42 @@ export class GoalService implements IGoalService {
    */
   async create(createGoalDto: CreateGoalDto, userId?: string): Promise<Goal> {
     const user: User = await this.userService.findById(userId);
-    if (!user) throw new NotFoundException(`User with id ${userId} not found`);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { subgoalIds, ...goalData } = createGoalDto;
-    const goal: Goal = merge(goalData, {
+    const { subgoals, ...goalData } = createGoalDto;
+    const goal: Omit<Goal, 'created_date'> = merge(goalData, {
       id: this.generateUuid(),
       created_by: user,
-      contributors: [user],
+      contributors: [],
       parent: null,
+      subgoals: [],
     });
     const goalEntity: Goal = this.goalRepository.create(goal);
     return await this.goalRepository.save(goalEntity);
   }
 
-  async findAll(): Promise<Goal[]> {
-    return await this.goalRepository.find();
+  findAll(): Promise<Goal[]> {
+    return this.goalRepository.find();
+  }
+
+  /**
+   * Finds the available goals for a given user.
+   * @param {string} userId - The ID of the user.
+   * @returns {Promise<Record<string, Goal[]>>} - An object that contains owned goals and contributing goals.
+   * @throws {NotFoundException} - If the user is not found.
+   */
+  async findAvailableGoals(userId?: string): Promise<Record<string, Goal[]>> {
+    const user: User = await this.userService.findById(userId);
+    const ownedGoals: Goal[] = await this.goalRepository.find({
+      where: {
+        created_by: user,
+      },
+    });
+    const contributingGoals: Goal[] = await this.goalRepository
+      .createQueryBuilder('goal')
+      .innerJoinAndSelect('goal.contributors', 'user')
+      .where('user.id = :userId', { userId })
+      .getMany();
+    return { ownedGoals, contributingGoals };
   }
 
   async findById(id: string): Promise<Goal> {
@@ -59,17 +80,23 @@ export class GoalService implements IGoalService {
     return goal;
   }
 
-  async findBy(attrs: FindOptionsWhere<Goal> | FindOptionsWhere<Goal>[]): Promise<Goal[]> {
-    return await this.goalRepository.findBy(attrs);
+  findBy(attrs: FindOptionsWhere<Goal> | FindOptionsWhere<Goal>[]): Promise<Goal[]> {
+    return this.goalRepository.findBy(attrs);
   }
 
   async update(id: string, updateGoalDto: UpdateGoalDto): Promise<Goal> {
-    const { subgoalIds, ...goalData } = updateGoalDto;
+    const { subgoals, contributors, ...goalData } = updateGoalDto;
     const foundGoal: Goal = await this.findById(id);
     const updatedGoal: Goal = merge(foundGoal, goalData);
-    let subgoalsList: Subgoal[];
-    subgoalIds ? (subgoalsList = await this.subgoalService.findBy({ id: In(subgoalIds) })) : (subgoalsList = []);
-    updatedGoal.subgoals = subgoalsList;
+
+    if (typeof subgoals !== 'undefined') {
+      updatedGoal.subgoals = subgoals.length > 0 ? await this.subgoalService.findBy({ id: In(subgoals) }) : [];
+    }
+
+    if (typeof contributors !== 'undefined') {
+      updatedGoal.contributors = contributors.length > 0 ? await this.userService.findBy({ id: In(contributors) }) : [];
+    }
+
     return await this.goalRepository.save(updatedGoal);
   }
 

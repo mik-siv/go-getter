@@ -3,12 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
-import { saltRounds } from '../common/constants';
-import { Repository } from 'typeorm';
+import { saltRounds } from '../common/constants/constants';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { IUserService } from './interfaces/user-service.interface';
-import * as merge from 'lodash.merge';
+import { merge } from 'lodash';
+import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 
 @Injectable()
 export class UserService implements IUserService {
@@ -17,8 +18,8 @@ export class UserService implements IUserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async hashPassword(password: string): Promise<string> {
-    return await bcrypt.hash(password, saltRounds);
+  hashPassword(password: string): Promise<string> {
+    return bcrypt.hash(password, saltRounds);
   }
 
   generateUuid(): string {
@@ -45,7 +46,7 @@ export class UserService implements IUserService {
     return await this.userRepository.save(user);
   }
 
-  async findAll(): Promise<User[]> {
+  findAll(): Promise<User[]> {
     return this.userRepository.find();
   }
 
@@ -56,8 +57,8 @@ export class UserService implements IUserService {
     return user;
   }
 
-  async findBy(attrs: Partial<User>): Promise<User[]> {
-    return await this.userRepository.findBy(attrs);
+  findBy(attrs: FindOptionsWhere<User> | FindOptionsWhere<User>[]): Promise<User[]> {
+    return this.userRepository.findBy(attrs);
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
@@ -69,6 +70,20 @@ export class UserService implements IUserService {
     const updatedData = merge(foundUser, updateUserDto);
     await this.userRepository.save(updatedData);
     return updatedData;
+  }
+
+  /**
+   * Updates the roles of a user with the specified ID.
+   *
+   * @param {string} id - The ID of the user to update.
+   * @param {UpdateUserRoleDto} updateUserRoleDto - The DTO containing the new roles for the user.
+   * @return {Promise<User>} - A promise that resolves to the updated user.
+   */
+  async updateRoles(id: string, updateUserRoleDto: UpdateUserRoleDto) {
+    const foundUser: User = await this.findById(id);
+    foundUser.roles = updateUserRoleDto.roles;
+    await this.userRepository.save(foundUser);
+    return foundUser;
   }
 
   async remove(id: string): Promise<User> {

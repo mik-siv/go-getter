@@ -8,6 +8,11 @@ export const e2eTestData = {
       email: 'test@test.com',
       password: 'QQww!!22',
     },
+    adminUser: {
+      username: 'admin',
+      email: 'admin@test.com',
+      password: 'QQww!!22',
+    },
   },
   auth: {
     endpoint: '/api/auth',

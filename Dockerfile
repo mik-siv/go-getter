@@ -5,7 +5,7 @@ COPY package-lock.json /app/package-lock.json
 RUN npm install
 
 COPY apps/backend/package.json /app/apps/backend/package.json
-#COPY apps/frontend/package.json /app/apps/frontend/package.json
+COPY apps/frontend/package.json /app/apps/frontend/package.json
 RUN npm install
 
 COPY . .

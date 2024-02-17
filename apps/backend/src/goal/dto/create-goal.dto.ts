@@ -7,7 +7,7 @@ class Metadata {
   @IsOptional()
   @IsString()
   @MaxLength(255)
-  description?: string;
+  description: string;
 }
 
 export class CreateGoalDto {
@@ -26,11 +26,17 @@ export class CreateGoalDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true, message: 'Each item in goalIds must be a string' })
-  subgoalIds?: string[];
+  subgoals?: string[];
+
+  @ApiProperty({ description: 'A list of contributor user ids' })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true, message: 'Each item in goalIds must be a string' })
+  contributors?: string[];
 
   @ApiProperty({ description: 'metadata for the goal', type: Metadata })
   @IsOptional()
   @ValidateNested()
   @Type(() => Metadata)
-  metadata?: Metadata;
+  metadata: Metadata;
 }

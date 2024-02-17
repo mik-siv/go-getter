@@ -9,8 +9,10 @@ This is a personal portfolio project built using the Nest.js framework. It focus
 - **Test Coverage:** Comprehensive suite of tests covering services, controllers, guards, interceptors, and modules. Unit and E2E tests.
 - **Custom Guards and Middlewares:** Utilizes guards for authentication and provides custom middlewares for increased flexibility.
 - **TypeORM + Migrations:** Database management using TypeORM with migration support for schema evolution.
-- **Comprehensive data design:** DB-based timestamp tracking, Data association, including join tables and self-referencing association
+- **Comprehensive data design:** DB-based timestamp tracking, Data association, including join tables and self-referencing association 
+- **Data fetching strategies:** Utilized eager and lazy data loading to optimize query utilization
 - **JWT and Local Authentication:** Implements JWT and local authentication via Passport.js for user identification and authorization.
+- **Granular access control:** A set of guards to manage access based on user roles and owned resources
 - **Centralized authentication guards and custom public routes:** All the routes are protected with the JWT auth guard by default with an option to reveal them as public
 - **Validation Pipes:** Ensures accurate and consistent request data with validation pipes.
 - **Centralized response interception:** password field is being stripped out of response body using global Nest.js interceptor

@@ -2,6 +2,9 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
+      "dependsOn": [
+        "^build"
+      ],
       "outputs": [
         "dist/**"
       ]
@@ -11,7 +14,7 @@
     "lint": {},
     "migration:run": {},
     "test": {},
-    "test:e2e":{},
+    "test:e2e": {},
     "start:dev": {
       "cache": false
     },

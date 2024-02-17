@@ -3,7 +3,7 @@ import { CreateSubgoalDto } from './dto/create-subgoal.dto';
 import { UpdateSubgoalDto } from './dto/update-subgoal.dto';
 import { ISubgoalService } from './interfaces/subgoal-service.interface';
 import { v4 as uuidv4 } from 'uuid';
-import * as merge from 'lodash.merge';
+import { merge } from 'lodash';
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { IUserService } from '../user/interfaces/user-service.interface';
@@ -37,6 +37,7 @@ export class SubgoalService implements ISubgoalService {
       id: this.generateUuid(),
       created_by: user,
       parent: null,
+      goal_subgoals: [],
     });
     if (goalIds) {
       const [goalId] = goalIds;

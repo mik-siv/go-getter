@@ -1,6 +1,6 @@
 import { JwtModuleOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { authTokenExpiration } from '../common/constants';
+import { authTokenExpiration } from '../common/constants/constants';
 
 export function JwtModuleOptionsFactory(configService: ConfigService): JwtModuleOptions {
   return {

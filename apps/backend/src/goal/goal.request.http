@@ -27,11 +27,14 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "name": "my second goal",
-  "metadata": {
-    "description": "let's rock it out!"
-  },
-  "private": false
+  "contributors": [
+    "966f86e0-eee8-4eeb-af1d-6e6ec49e6c8a",
+    "5e0bbba8-fee5-4151-8266-58dfa31047d8"
+  ],
+  "subgoals": [
+    "5ffaf898-f8e1-4432-99fb-3319d2584a99",
+    "6d5045d9-ab9c-4bb1-afa7-771f4c86f552"
+  ]
 }
 
 ### Delete a goal
