@@ -30,16 +30,10 @@ export class AuthService implements IAuthService {
 
   async login(user: User): Promise<{ access_token: string }> {
     if (!user) throw new UnauthorizedException();
-    const goals = await this.extractIDs(user.goals);
-    const subgoals = await this.extractIDs(user.subgoals);
-    const contributing_to = await this.extractIDs(user.contributing_to);
     const payload: UserJwtPayload = {
       username: user.username,
       sub: user.id,
       roles: user.roles,
-      goals,
-      subgoals,
-      contributing_to,
     };
     return {
       access_token: this.jwtService.sign(payload),

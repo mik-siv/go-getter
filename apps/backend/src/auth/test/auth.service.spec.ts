@@ -66,33 +66,21 @@ describe('AuthService', () => {
   });
 
   it('should return an access token for a user', async () => {
-    const lazyLoadedArray = () => Promise.resolve([{ id: '1' }, { id: '2' }]);
-    const idsFromLazyLoadedArray = ['1', '2'];
-    const extractIdsSpy = jest.spyOn(service, 'extractIDs' as any);
     const user = {
       id: '1',
       username: 'user1',
-      goals: lazyLoadedArray(),
-      subgoals: lazyLoadedArray(),
-      contributing_to: lazyLoadedArray(),
       roles: [],
     };
     const payload = {
       username: user.username,
       sub: user.id,
       roles: user.roles,
-      goals: idsFromLazyLoadedArray,
-      subgoals: idsFromLazyLoadedArray,
-      contributing_to: idsFromLazyLoadedArray,
     };
     jwtService.sign = jest.fn().mockReturnValue('access_token');
-    extractIdsSpy.mockReturnValue(idsFromLazyLoadedArray);
     const result = await service.login(user as any);
     expect(result).toEqual({
       access_token: 'access_token',
     });
-    expect(extractIdsSpy).toBeCalledTimes(3);
-    expect(extractIdsSpy).toBeCalledWith(lazyLoadedArray());
     expect(jwtService.sign).toHaveBeenCalledWith(payload);
   });
 });
