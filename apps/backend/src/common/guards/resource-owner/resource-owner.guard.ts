@@ -1,10 +1,19 @@
-import { BadRequestException, CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { OwnedResource } from '../../constants/enums/owned-resources.enum';
 import { RESOURCES_KEY } from './resource.decorator';
 import { UserJwtData } from '../../types/general.types';
 import { RolesGuard } from '../roles/roles.guard';
 import { UserRole } from '../../../user/entities/user-roles.enum';
+import { UserService } from '../../../user/user.service';
+import { IUserService } from '../../../user/interfaces/user-service.interface';
 
 /**
  * ResourceOwnerGuard class is a guard that checks if the current user is the owner of the requested resource.
@@ -12,7 +21,11 @@ import { UserRole } from '../../../user/entities/user-roles.enum';
  */
 @Injectable()
 export class ResourceOwnerGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    @Inject(UserService)
+    private readonly userService: IUserService,
+  ) {}
 
   /**
    * Determines whether the user is authorized to access a particular resource by ownership.
@@ -38,8 +51,10 @@ export class ResourceOwnerGuard implements CanActivate {
     if (!resourceId) return true;
     //allowing access if requested resource id is stored in JWT token
     if (ownedResources.some(this.checkResourceOwnership(user, resourceId))) return true;
-
-    return false;
+    //checking if required resource is not cached in JWT but exists in DB
+    return ownedResources.some((resource) =>
+      this.userService.validateUserResourceAllowance(user.id, resourceId, resource),
+    );
   }
 
   /**
@@ -54,7 +69,7 @@ export class ResourceOwnerGuard implements CanActivate {
       if (Array.isArray(user[resource])) {
         return user[resource].includes(resourceId);
       } else if (resource === OwnedResource.USER_ID) {
-        return user[resource] === resourceId;
+        return user[OwnedResource.USER_ID] === resourceId;
       } else {
         throw new BadRequestException('Invalid resource requested');
       }

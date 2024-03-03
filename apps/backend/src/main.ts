@@ -16,14 +16,10 @@ import { ResourceOwnerGuard } from './common/guards/resource-owner/resource-owne
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { logger: ['log'] });
-  // Get the reflector for metadata scanning
-  const reflector: Reflector = app.get(Reflector);
   //Setting global error filter
   app.useGlobalFilters(new GlobalExceptionFilter(new Logger('GlobalExceptionFilter')));
   //Setting global password strip interceptor
   app.useGlobalInterceptors(new TransformInterceptor());
-  //Setting global guards
-  app.useGlobalGuards(new JwtAuthGuard(reflector), new RolesGuard(reflector), new ResourceOwnerGuard(reflector));
   //Setting route prefix
   app.setGlobalPrefix('api');
   //Swagger setup

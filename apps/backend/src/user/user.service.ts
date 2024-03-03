@@ -10,6 +10,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { IUserService } from './interfaces/user-service.interface';
 import { merge } from 'lodash';
 import { UpdateUserRoleDto } from './dto/update-user-role.dto';
+import { UserSubset } from './types/user.types';
+import { OwnedResource } from '../common/constants/enums/owned-resources.enum';
+import { DataUtils } from '../common/utils/data/data.util';
 
 @Injectable()
 export class UserService implements IUserService {
@@ -79,7 +82,7 @@ export class UserService implements IUserService {
    * @param {UpdateUserRoleDto} updateUserRoleDto - The DTO containing the new roles for the user.
    * @return {Promise<User>} - A promise that resolves to the updated user.
    */
-  async updateRoles(id: string, updateUserRoleDto: UpdateUserRoleDto) {
+  async updateRoles(id: string, updateUserRoleDto: UpdateUserRoleDto): Promise<User> {
     const foundUser: User = await this.findById(id);
     foundUser.roles = updateUserRoleDto.roles;
     await this.userRepository.save(foundUser);
@@ -90,5 +93,20 @@ export class UserService implements IUserService {
     const foundUser: User = await this.findById(id);
     if (!foundUser) throw new NotFoundException(`User with id ${id} not found`);
     return await this.userRepository.remove(foundUser);
+  }
+
+  async validateUserResourceAllowance(
+    userId: string,
+    requiredResourceId: string,
+    requiredProperty: keyof UserSubset,
+  ): Promise<boolean> {
+    const user: User = await this.findById(userId);
+    const requiredData = user[requiredProperty];
+    if (requiredProperty === OwnedResource.USER_ID) return requiredResourceId === userId;
+    if (requiredData instanceof Promise) {
+      const relationIds: string[] = await DataUtils.extractRelationIds(user[requiredProperty]);
+      return relationIds.includes(requiredResourceId);
+    }
+    return false;
   }
 }

@@ -17,9 +17,12 @@ describe('ResourceOwner guard', () => {
     username: 'test-user',
     roles: [],
   };
+  const fakeUserService = {
+    validateUserResourceAllowance: jest.fn(),
+  };
 
   beforeEach(() => {
-    guard = new ResourceOwnerGuard(reflectorMock as any);
+    guard = new ResourceOwnerGuard(reflectorMock as any, fakeUserService as any);
     mockExecutionContext = {
       switchToHttp: jest.fn().mockReturnValue({ getRequest: jest.fn() }),
       getHandler: jest.fn(),
