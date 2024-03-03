@@ -10,7 +10,7 @@ describe('ResourceOwner guard', () => {
   const reflectorMock = { getAllAndOverride: jest.fn() };
   let mockExecutionContext: ExecutionContext;
   const user: UserJwtData = {
-    userId: '123',
+    id: '123',
     goals: ['123', '456'],
     subgoals: ['789', '101112'],
     contributing_to: ['1', '2'],
@@ -36,8 +36,8 @@ describe('ResourceOwner guard', () => {
     ['goals', '999', false],
     ['subgoals', '789', true],
     ['contributing_to', '123', false],
-    ['userId', '123', true],
-    ['userId', '456', false],
+    ['id', '123', true],
+    ['id', '456', false],
   ])('should return %s when checking ownership of %s', (resource, resourceId, expected) => {
     const checkFn = guard['checkResourceOwnership'](user, resourceId);
     const result = checkFn(resource as any);

@@ -3,7 +3,7 @@ import { UserRole } from '../../user/entities/user-roles.enum';
 export type ObjectLiteral = { [key: string]: any };
 
 export type UserJwtData = {
-  userId: string;
+  id: string;
   username: string;
   roles: UserRole[];
   goals: string[];
