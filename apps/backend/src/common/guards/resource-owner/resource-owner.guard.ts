@@ -21,19 +21,25 @@ export class ResourceOwnerGuard implements CanActivate {
    * @throws {UnauthorizedException} If the user is not authenticated.
    */
   canActivate(context: ExecutionContext): boolean {
+    //extracting the needed resources to be owned to access route from metadata
     const ownedResources = this.reflector.getAllAndOverride<OwnedResource[]>(RESOURCES_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
+    //allowing access if no resources are required
     if (!ownedResources || (Array.isArray(ownedResources) && ownedResources.length === 0)) return true;
     const request = context.switchToHttp().getRequest();
     const user: UserJwtData = request.user;
     if (!user) throw new UnauthorizedException();
+    //always allowing access to admins
     if (RolesGuard.checkUserPermissionForRoles(user, [UserRole.ADMIN])) return true;
     const resourceId: string = request.params?.id;
+    //allowing access if resource is not requested by id
     if (!resourceId) return true;
+    //allowing access if requested resource id is stored in JWT token
+    if (ownedResources.some(this.checkResourceOwnership(user, resourceId))) return true;
 
-    return ownedResources.some(this.checkResourceOwnership(user, resourceId));
+    return false;
   }
 
   /**

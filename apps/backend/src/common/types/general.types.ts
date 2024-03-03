@@ -16,4 +16,4 @@ export type AuthenticatedUser = {
   [key: string]: any;
 };
 
-export type EntityWithId = { id: string; [key: string]: any };
+export type EntityWithId = { id: string } & ObjectLiteral;
