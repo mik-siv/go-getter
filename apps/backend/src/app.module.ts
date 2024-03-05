@@ -1,4 +1,4 @@
-import { Module, ValidationPipe } from '@nestjs/common';
+import { Logger, Module, ValidationPipe } from '@nestjs/common';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -9,12 +9,14 @@ import { TypeOrmModule } from '@nestjs/typeorm/dist';
 import { dataSourceOptions } from './common/db/data-source';
 import { GoalModule } from './goal/goal.module';
 import { validationSchema } from './common/utils/validation/environment-validation.schema';
-import { APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { SubgoalModule } from './subgoal/subgoal.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ResourceOwnerGuard } from './common/guards/resource-owner/resource-owner.guard';
 import { RolesGuard } from './common/guards/roles/roles.guard';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 @Module({
   imports: [
@@ -34,6 +36,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
   controllers: [AppController],
   providers: [
     AppService,
+    Logger,
     {
       provide: APP_PIPE,
       useValue: new ValidationPipe({
@@ -42,7 +45,15 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     },
     {
       provide: APP_GUARD,
-      useClass: ResourceOwnerGuard,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: GlobalExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
     },
     {
       provide: APP_GUARD,
@@ -50,7 +61,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     },
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard,
+      useClass: ResourceOwnerGuard,
     },
   ],
 })
