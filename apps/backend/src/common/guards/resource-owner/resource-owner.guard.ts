@@ -33,7 +33,7 @@ export class ResourceOwnerGuard implements CanActivate {
    * @returns {boolean} True if the user is authorized, false otherwise.
    * @throws {UnauthorizedException} If the user is not authenticated.
    */
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     //extracting the needed resources to be owned to access route from metadata
     const ownedResources = this.reflector.getAllAndOverride<OwnedResource[]>(RESOURCES_KEY, [
       context.getHandler(),
@@ -52,9 +52,12 @@ export class ResourceOwnerGuard implements CanActivate {
     //allowing access if requested resource id is stored in JWT token
     if (ownedResources.some(this.checkResourceOwnership(user, resourceId))) return true;
     //checking if required resource is not cached in JWT but exists in DB
-    return ownedResources.some((resource) =>
-      this.userService.validateUserResourceAllowance(user.id, resourceId, resource),
-    );
+    for (const resource of ownedResources) {
+      if (await this.userService.validateUserResourceAllowance(user.id, resourceId, resource)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
