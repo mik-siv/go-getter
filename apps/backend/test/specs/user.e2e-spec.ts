@@ -4,7 +4,7 @@ import { e2eTestData } from '../e2e-test-data';
 import * as Joi from 'joi';
 import { login } from '../helpers/auth.e2e.helper';
 import { userResponseSchema } from '../schemas/user.response-schema';
-import { bootstrap } from '../../src/main';
+import { e2eTestBootstrap } from '../helpers/bootstrap.helper';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
@@ -25,7 +25,8 @@ describe('UserController (e2e)', () => {
     roles: ['user'],
   };
   beforeAll(async () => {
-    app = await bootstrap();
+    app = await e2eTestBootstrap();
+    await app.init();
     adminAuthToken = await login(email, password, app);
     nonAdminUserToken = await login(testUser.email, testUser.password, app);
   });
