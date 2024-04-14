@@ -29,7 +29,7 @@ export class User {
   @OneToMany(() => Subgoal, (subgoal) => subgoal.created_by)
   subgoals: Promise<Subgoal[]>;
 
-  @ManyToMany(() => Goal, (goal) => goal.contributors)
+  @ManyToMany(() => Goal)
   @JoinTable({
     name: 'goal_contributors',
     joinColumn: {
