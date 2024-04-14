@@ -1,19 +1,18 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { bootstrap } from '../../src/main';
+import { e2eTestBootstrap } from '../helpers/bootstrap.helper';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
-    app = await bootstrap();
+    app = await e2eTestBootstrap();
+    await app.init();
   });
 
-  afterAll(async () => {
-    await app.close();
-  });
+  afterAll(async () => await app.close());
 
   it('/ (GET)', () => {
-    return request(app.getHttpServer()).get('/api/').expect(200).expect('Ok');
+    return request(app.getHttpServer()).get('/').expect(200).expect('Ok');
   });
 });

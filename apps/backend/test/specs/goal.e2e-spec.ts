@@ -4,7 +4,7 @@ import { e2eTestData } from '../e2e-test-data';
 import * as request from 'supertest';
 import * as Joi from 'joi';
 import { goalResponseSchema } from '../schemas/goal.response-schema';
-import { bootstrap } from '../../src/main';
+import { e2eTestBootstrap } from '../helpers/bootstrap.helper';
 
 describe('Goals module (e2e)', () => {
   let app: INestApplication;
@@ -22,7 +22,8 @@ describe('Goals module (e2e)', () => {
   } = e2eTestData;
 
   beforeAll(async () => {
-    app = await bootstrap();
+    app = await e2eTestBootstrap();
+    await app.init();
     adminAuthToken = await login(email, password, app);
     userAuthToken = await login(testUser.email, testUser.password, app);
   });

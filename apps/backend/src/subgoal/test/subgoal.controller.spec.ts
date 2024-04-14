@@ -19,7 +19,7 @@ describe('SubgoalController', () => {
       description: "it's a test subgoal",
     },
   };
-  const userJWTData = { user: { userId: 'test-1234', username: 'test-user' } };
+  const userJWTData = { user: { id: 'test-1234', username: 'test-user' } };
 
   beforeEach(async () => {
     subgoalServiceMock = new MockCrudService<Subgoal, CreateSubgoalDto, UpdateSubgoalDto>();
@@ -52,7 +52,7 @@ describe('SubgoalController', () => {
 
   it('should create a subgoal', async () => {
     expect(await controller.create(subgoalData, userJWTData as any)).toEqual(subgoalData);
-    expect(createSubgoalSpy).toBeCalledWith(subgoalData, userJWTData.user.userId);
+    expect(createSubgoalSpy).toBeCalledWith(subgoalData, userJWTData.user.id);
   });
 
   it('should get all subgoals', async () => {

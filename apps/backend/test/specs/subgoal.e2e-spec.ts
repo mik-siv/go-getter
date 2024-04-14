@@ -1,10 +1,10 @@
 import { INestApplication } from '@nestjs/common';
 import { e2eTestData } from '../e2e-test-data';
-import { bootstrap } from '../../src/main';
 import { login } from '../helpers/auth.e2e.helper';
 import * as request from 'supertest';
 import * as Joi from 'joi';
 import { subgoalResponseSchema } from '../schemas/subgoal.response-schema';
+import { e2eTestBootstrap } from '../helpers/bootstrap.helper';
 
 describe('Subgoals module (e2e)', () => {
   let app: INestApplication;
@@ -23,7 +23,8 @@ describe('Subgoals module (e2e)', () => {
   } = e2eTestData;
 
   beforeAll(async () => {
-    app = await bootstrap();
+    app = await e2eTestBootstrap();
+    await app.init();
     adminAuthToken = await login(email, password, app);
     userAuthToken = await login(testUser.email, testUser.password, app);
   });

@@ -4,6 +4,7 @@ import { UserRepositoryMock } from '../../user/test/mocks/user.repository.mock';
 import { UserService } from '../../user/user.service';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { DataUtils } from '../../common/utils/data/data.util';
 import * as bcrypt from 'bcrypt';
 
 describe('AuthService', () => {
@@ -12,6 +13,7 @@ describe('AuthService', () => {
   let userService: UserService;
   let findUser;
   let jwtService: JwtService;
+  let extractIdsSpy: jest.SpyInstance;
 
   beforeEach(async () => {
     repository = new UserRepositoryMock();
@@ -23,6 +25,7 @@ describe('AuthService', () => {
     userService = module.get<UserService>(UserService);
     jwtService = module.get<JwtService>(JwtService);
     findUser = jest.spyOn(userService, 'findBy');
+    extractIdsSpy = jest.spyOn(DataUtils, 'extractRelationIds');
   });
 
   it('should be defined', () => {
@@ -58,17 +61,9 @@ describe('AuthService', () => {
     expect(result).toEqual(foundUser);
   });
 
-  it('should extract ids from lazy loaded arrays', async () => {
-    const lazyLoadedArray = () => Promise.resolve([{ id: '1' }, { id: '2' }]);
-    const idsFromLazyLoadedArray = ['1', '2'];
-    const result = await service['extractIDs'](lazyLoadedArray());
-    expect(result).toEqual(idsFromLazyLoadedArray);
-  });
-
   it('should return an access token for a user', async () => {
     const lazyLoadedArray = () => Promise.resolve([{ id: '1' }, { id: '2' }]);
     const idsFromLazyLoadedArray = ['1', '2'];
-    const extractIdsSpy = jest.spyOn(service, 'extractIDs' as any);
     const user = {
       id: '1',
       username: 'user1',

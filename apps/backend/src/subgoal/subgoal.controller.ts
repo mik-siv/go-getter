@@ -20,7 +20,7 @@ export class SubgoalController {
       user: UserJwtData;
     },
   ) {
-    return this.subgoalService.create(createSubgoalDto, req.user.userId);
+    return this.subgoalService.create(createSubgoalDto, req.user.id);
   }
 
   @Get()

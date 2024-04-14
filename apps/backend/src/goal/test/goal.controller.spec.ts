@@ -19,7 +19,7 @@ describe('GoalController', () => {
       description: "it's a test goal",
     },
   };
-  const userJWTData = { user: { userId: 'test-1234', username: 'test-user' } };
+  const userJWTData = { user: { id: 'test-1234', username: 'test-user' } };
 
   beforeEach(async () => {
     goalServiceMock = new MockCrudService<Goal, CreateGoalDto, UpdateGoalDto>();
@@ -52,7 +52,7 @@ describe('GoalController', () => {
 
   it('should create a goal', async () => {
     expect(await controller.create(goalData, userJWTData as any)).toEqual(goalData);
-    expect(createGoalSpy).toBeCalledWith(goalData, userJWTData.user.userId);
+    expect(createGoalSpy).toBeCalledWith(goalData, userJWTData.user.id);
   });
 
   it('should get all goals', async () => {

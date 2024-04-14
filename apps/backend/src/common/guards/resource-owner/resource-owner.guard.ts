@@ -1,10 +1,19 @@
-import { BadRequestException, CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { OwnedResource } from '../../constants/enums/owned-resources.enum';
 import { RESOURCES_KEY } from './resource.decorator';
 import { UserJwtData } from '../../types/general.types';
 import { RolesGuard } from '../roles/roles.guard';
 import { UserRole } from '../../../user/entities/user-roles.enum';
+import { UserService } from '../../../user/user.service';
+import { IUserService } from '../../../user/interfaces/user-service.interface';
 
 /**
  * ResourceOwnerGuard class is a guard that checks if the current user is the owner of the requested resource.
@@ -12,7 +21,11 @@ import { UserRole } from '../../../user/entities/user-roles.enum';
  */
 @Injectable()
 export class ResourceOwnerGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    @Inject(UserService)
+    private readonly userService: IUserService,
+  ) {}
 
   /**
    * Determines whether the user is authorized to access a particular resource by ownership.
@@ -20,20 +33,31 @@ export class ResourceOwnerGuard implements CanActivate {
    * @returns {boolean} True if the user is authorized, false otherwise.
    * @throws {UnauthorizedException} If the user is not authenticated.
    */
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    //extracting the needed resources to be owned to access route from metadata
     const ownedResources = this.reflector.getAllAndOverride<OwnedResource[]>(RESOURCES_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
+    //allowing access if no resources are required
     if (!ownedResources || (Array.isArray(ownedResources) && ownedResources.length === 0)) return true;
     const request = context.switchToHttp().getRequest();
     const user: UserJwtData = request.user;
     if (!user) throw new UnauthorizedException();
+    //always allowing access to admins
     if (RolesGuard.checkUserPermissionForRoles(user, [UserRole.ADMIN])) return true;
     const resourceId: string = request.params?.id;
+    //allowing access if resource is not requested by id
     if (!resourceId) return true;
-
-    return ownedResources.some(this.checkResourceOwnership(user, resourceId));
+    //allowing access if requested resource id is stored in JWT token
+    if (ownedResources.some(this.checkResourceOwnership(user, resourceId))) return true;
+    //checking if required resource is not cached in JWT but exists in DB
+    for (const resource of ownedResources) {
+      if (await this.userService.validateUserResourceAllowance(user.id, resourceId, resource)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -48,7 +72,7 @@ export class ResourceOwnerGuard implements CanActivate {
       if (Array.isArray(user[resource])) {
         return user[resource].includes(resourceId);
       } else if (resource === OwnedResource.USER_ID) {
-        return user[resource] === resourceId;
+        return user[OwnedResource.USER_ID] === resourceId;
       } else {
         throw new BadRequestException('Invalid resource requested');
       }

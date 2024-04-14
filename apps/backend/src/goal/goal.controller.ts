@@ -21,7 +21,7 @@ export class GoalController {
       user: UserJwtData;
     },
   ): Promise<Goal> {
-    return await this.goalService.create(createGoalDto, req.user.userId);
+    return await this.goalService.create(createGoalDto, req.user.id);
   }
 
   @Get()

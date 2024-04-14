@@ -9,7 +9,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "name": "my first goal",
+  "name": "user contributing goal",
   "metadata": {
     "description": "let's test it out!"
   },
@@ -17,23 +17,21 @@ Authorization: Bearer {{auth_token}}
 }
 
 ### Find one goal
-GET {{host}}/goals/cfeb9fc6-cb7f-4a0c-96e2-ca45e4f720bb HTTP/1.1
+GET {{host}}/goals/40174db4-2ecb-4d99-8c2e-a65a5c4d6bcc HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 ### Patch a goal
-PATCH {{host}}/goals/cfeb9fc6-cb7f-4a0c-96e2-ca45e4f720bb
+PATCH {{host}}/goals/40174db4-2ecb-4d99-8c2e-a65a5c4d6bcc
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
   "contributors": [
-    "966f86e0-eee8-4eeb-af1d-6e6ec49e6c8a",
-    "5e0bbba8-fee5-4151-8266-58dfa31047d8"
+    "fa59dd7d-07bb-40f0-a1b9-275c026048b8"
   ],
   "subgoals": [
-    "5ffaf898-f8e1-4432-99fb-3319d2584a99",
-    "6d5045d9-ab9c-4bb1-afa7-771f4c86f552"
+    "20f9a1ef-30d7-4911-a5fe-0035fe78d770"
   ]
 }
 

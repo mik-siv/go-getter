@@ -3,7 +3,7 @@ import { e2eTestData } from '../e2e-test-data';
 import * as request from 'supertest';
 import { login } from '../helpers/auth.e2e.helper';
 import * as Joi from 'joi';
-import { bootstrap } from '../../src/main';
+import { e2eTestBootstrap } from '../helpers/bootstrap.helper';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -12,7 +12,8 @@ describe('AuthController (e2e)', () => {
     user: { testUser },
   } = e2eTestData;
   beforeAll(async () => {
-    app = await bootstrap();
+    app = await e2eTestBootstrap();
+    await app.init();
   });
 
   afterAll(async () => {
