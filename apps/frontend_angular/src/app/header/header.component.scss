@@ -1,1 +1,11 @@
+@use '../../styles/variables.styles' as vars;
 
+.header {
+  position: fixed;
+  opacity: 90%;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  height: vars.$fixed-header-height;
+}

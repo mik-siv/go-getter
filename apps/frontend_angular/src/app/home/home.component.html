@@ -1,1 +1,10 @@
-<p>home works!</p>
+<mat-sidenav-container class="navigation-container">
+  <mat-sidenav class="left-side-nav" mode="side" opened>
+    @for (goal of goalsApiData; track goal.id){
+
+    }
+    <p>Goals</p>
+  </mat-sidenav>
+
+  <mat-sidenav-content>Main content</mat-sidenav-content>
+</mat-sidenav-container>

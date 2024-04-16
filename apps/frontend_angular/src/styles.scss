@@ -1,8 +1,17 @@
 @use '@angular/material' as mat;
 @use 'styles/material.styles' as styles;
+
 @include mat.core();
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
 
 @include mat.all-component-themes(styles.$darcula-theme);
