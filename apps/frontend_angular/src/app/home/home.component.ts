@@ -18,4 +18,6 @@ export class HomeComponent {
     name: 'Become a Backend developer',
     subgoals: [{ name: '3rd subgoal' }, { name: '4th subgoal' }],
   }];
+
+  activeGoal = {name: 'Default'};
 }
