@@ -9,3 +9,8 @@
   z-index: 2;
   height: vars.$fixed-header-height;
 }
+
+.mat-toolbar a {
+  color: inherit;    /* Ensures the color matches the parent elements */
+  text-decoration: none;    /* Removes underline */
+}
