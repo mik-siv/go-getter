@@ -1,0 +1,11 @@
+<mat-sidenav-container class="navigation-container">
+  <mat-sidenav-content>{{ activeGoal.name }}</mat-sidenav-content>
+  <mat-sidenav class="left-side-nav" mode="side" opened>
+    <app-item-list
+      [items]="goalsApiData"
+      [activeItem]="activeGoal"
+      (itemClicked)="setActiveGoal($event)">
+    >
+    </app-item-list>
+  </mat-sidenav>
+</mat-sidenav-container>

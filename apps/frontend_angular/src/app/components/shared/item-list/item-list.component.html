@@ -1,0 +1,13 @@
+@if (!!items) {
+  <mat-list role="list">
+    @for (item of items; track item.id) {
+      <mat-list-item
+        [class]="{'active': activeItem === item}"
+        (click)="onClick(item)"
+        role="listitem">{{ item.name }}
+      </mat-list-item>
+    }
+  </mat-list>
+} @else {
+  <p>No items found.</p>
+}
