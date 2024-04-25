@@ -1,5 +1,13 @@
 <mat-sidenav-container class="navigation-container">
-  <mat-sidenav-content>{{ activeGoal.name }}</mat-sidenav-content>
+  <mat-sidenav-content>
+    @for (subgoal of activeGoal.subgoals; track subgoal?.id){
+      <app-subgoal-card
+      [name]="subgoal.name"
+      [description]="subgoal.description"
+      [uuid]="subgoal.id"
+      ></app-subgoal-card>
+    }
+  </mat-sidenav-content>
   <mat-sidenav class="left-side-nav" mode="side" opened>
     <app-item-list
       [items]="goalsApiData"
