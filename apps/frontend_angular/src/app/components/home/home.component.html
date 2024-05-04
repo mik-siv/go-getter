@@ -1,6 +1,6 @@
 <mat-sidenav-container class="navigation-container">
   <mat-sidenav-content>
-    <mat-grid-list cols="4" rowHeight="250px" gutterSize="10px" style="margin: 5px 10px">
+    <mat-grid-list cols="4" rowHeight="250px" gutterSize="10px" style="margin: 10px 10px">
       @for (subgoal of activeGoal.subgoals; track subgoal) {
         <mat-grid-tile colspan="1" style="height: 250px; width: 250px">
           <app-subgoal-card
