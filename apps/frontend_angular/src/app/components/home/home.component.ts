@@ -4,27 +4,29 @@ import { ItemListComponent } from '../shared/item-list/item-list.component';
 import { GoalService } from '../../services/restful/goal/goal.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SubgoalCardComponent } from './components/subgoal-card/subgoal-card.component';
+import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.component';
+import { Goal } from '../../models/goal.model';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MaterialModule, ItemListComponent, SubgoalCardComponent],
+  imports: [MaterialModule, ItemListComponent, SubgoalCardComponent, SubgoalListComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
   goalService = inject(GoalService);
-  goalsApiData: any[] = [];
+  goalsApiData: Goal[] = [];
   destroyRef = inject(DestroyRef);
 
-  activeGoal = { id: '0', name: 'Default', subgoals: [{ id: '0', name: 'Default', description: 'Default' }] };
+  activeGoal$: Goal;
 
   ngOnInit() {
     this.fetchGoals();
   }
 
   setActiveGoal(goal: any) {
-    this.activeGoal = goal;
+    this.activeGoal$ = goal;
   }
 
   fetchGoals() {

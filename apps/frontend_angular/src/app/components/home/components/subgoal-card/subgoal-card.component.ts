@@ -9,9 +9,9 @@ import { MaterialModule } from '../../../../material/material.module';
   styleUrl: './subgoal-card.component.scss',
 })
 export class SubgoalCardComponent {
-  @Input() name: string = '';
-  @Input() description: string = '';
-  @Input() icon: string = '';
-  @Input() uuid: string = '';
+  @Input() name: string;
+  @Input() description: string;
+  @Input() icon: string;
+  @Input() uuid: string;
 
 }

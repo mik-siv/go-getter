@@ -16,9 +16,9 @@ export interface ListItem {
   styleUrl: './item-list.component.scss',
 })
 export class ItemListComponent {
-  @Input() items: ListItem[] = []; // List of items to display
-  @Input() activeItem: ListItem | null = null; // Currently active item
-  @Output() itemClicked = new EventEmitter<ListItem>(); // Event emitted on item click
+  @Input() items: ListItem[];
+  @Input() activeItem: ListItem;
+  @Output() itemClicked = new EventEmitter<ListItem>();
 
   onClick(item: ListItem) {
     this.itemClicked.emit(item);
