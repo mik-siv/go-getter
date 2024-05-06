@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MaterialModule } from '../../../../material/material.module';
+import { Subgoal } from '../../../../models/goal.model';
 
 @Component({
   selector: 'app-subgoal-card',
@@ -8,10 +9,13 @@ import { MaterialModule } from '../../../../material/material.module';
   templateUrl: './subgoal-card.component.html',
   styleUrl: './subgoal-card.component.scss',
 })
-export class SubgoalCardComponent {
-  @Input() name: string;
-  @Input() description: string;
-  @Input() icon: string;
-  @Input() uuid: string;
+export class SubgoalCardComponent implements OnInit {
+  name: string;
+  description: string;
+  @Input() subgoal: Subgoal;
 
+  ngOnInit(): void {
+    this.name = this.subgoal.name;
+    this.description = this.subgoal.metadata?.description;
+  }
 }
