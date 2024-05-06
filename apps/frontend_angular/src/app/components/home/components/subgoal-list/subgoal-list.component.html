@@ -1,10 +1,10 @@
 @if (!!activeGoal && activeGoal.subgoals) {
-  <mat-grid-list cols="4" rowHeight="250px" gutterSize="10px" style="margin: 10px 10px">
+  <mat-grid-list class="subgoal-list" cols="4" rowHeight="250px" gutterSize="10px">
     @for (subgoal of activeGoal.subgoals; track subgoal) {
-      <mat-grid-tile colspan="1" style="height: 250px; width: 250px">
+      <mat-grid-tile class="subgoal-grid-tile" colspan="1">
         <app-subgoal-card
           [name]="subgoal.name"
-          [description]="subgoal.description"
+          [description]="subgoal.metadata?.['description']"
           [uuid]="subgoal.id"
         ></app-subgoal-card>
       </mat-grid-tile>

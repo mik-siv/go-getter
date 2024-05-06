@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit {
   fetchGoals() {
     this.goalService.getGoals().pipe(
       takeUntilDestroyed(this.destroyRef),
-    ).subscribe((goals: any[]) => {
+    ).subscribe((goals: Goal[]) => {
       this.goalsApiData = goals;
       if (Array.isArray(this.goalsApiData) && this.goalsApiData.length > 0) {
         this.setActiveGoal(this.goalsApiData[0]);
