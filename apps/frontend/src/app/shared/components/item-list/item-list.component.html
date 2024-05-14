@@ -1,6 +1,6 @@
 @if (!!items) {
   <mat-list role="list">
-    @for (item of items; track item.id) {
+    @for (item of items; track item) {
       <mat-list-item
         [class]="{'active': activeItem === item}"
         (click)="onClick(item)"

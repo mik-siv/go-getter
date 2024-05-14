@@ -1,11 +1,11 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { MaterialModule } from '../../material/material.module';
-import { ItemListComponent } from '../shared/item-list/item-list.component';
-import { GoalService } from '../../services/restful/goal/goal.service';
+import { MaterialModule } from '../shared/material/material.module';
+import { ItemListComponent } from '../shared/components/item-list/item-list.component';
+import { GoalService } from '../shared/services/data-access/goal/goal.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SubgoalCardComponent } from './components/subgoal-card/subgoal-card.component';
 import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.component';
-import { Goal } from '../../models/goal.model';
+import { Goal } from '../shared/models/goal.model';
 
 @Component({
   selector: 'app-home',

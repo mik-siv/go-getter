@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MaterialModule } from '../../../material/material.module';
+import { MaterialModule } from '../../material/material.module';
 
 export interface ListItem {
   name: string;
