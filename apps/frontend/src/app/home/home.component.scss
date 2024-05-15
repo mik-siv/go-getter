@@ -1,8 +1,5 @@
-@use '../../styles/variables.styles' as vars;
-
 .navigation-container {
-  margin-top: vars.$fixed-header-height;
-  height: calc(100vh - #{vars.$fixed-header-height});
+  height: 100%
 }
 
 .left-side-nav {
