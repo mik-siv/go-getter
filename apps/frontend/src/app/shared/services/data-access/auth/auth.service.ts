@@ -1,13 +1,18 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { CrudService } from '../crud.service';
+import { Observable } from 'rxjs';
+
+export interface AuthResponse {
+  access_token: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
-  private http = inject(HttpClient);
+export class AuthService extends CrudService<any> {
   private baseUrl = '/api/auth';
 
-  constructor() {
+  login(email: string, password: string): Observable<AuthResponse> {
+    return this.post(`${this.baseUrl}/login`, { email, password });
   }
 }
