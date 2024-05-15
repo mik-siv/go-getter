@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { GlobalErrorHandler } from './shared/services/common/global-error-handler.service';
+import { GlobalErrorHandler } from './shared/services/common/error-handler/global-error-handler.service';
 import { MaterialModule } from './shared/material/material.module';
 
 export const appConfig: ApplicationConfig = {
@@ -13,6 +13,6 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     MaterialModule,
-    importProvidersFrom(HttpClientModule)
+    importProvidersFrom(HttpClientModule),
   ],
 };
