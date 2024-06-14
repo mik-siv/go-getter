@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export abstract class CrudService<T> {
+export abstract class RestfulService<T> {
   private http: HttpClient = inject(HttpClient)
 
   getAll(endpoint: string): Observable<T[]> {
