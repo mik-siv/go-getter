@@ -3,7 +3,7 @@ import { GoalService } from './goal.service';
 import { CreateGoalDto } from './dto/create-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
 import { Goal } from './entities/goal.entity';
-import { UserJwtData } from '../common/types/general.types';
+import { AuthenticatedUser, UserJwtData } from '../common/types/general.types';
 import { Roles } from '../common/guards/roles/role.decorator';
 import { UserRole } from '../user/entities/user-roles.enum';
 import { Resources } from '../common/guards/resource-owner/resource.decorator';
@@ -28,6 +28,11 @@ export class GoalController {
   @Roles(UserRole.ADMIN)
   async findAll(): Promise<Goal[]> {
     return await this.goalService.findAll();
+  }
+
+  @Get('/my-goals')
+  async findUserGoals(@Request() req: AuthenticatedUser){
+    return await this.goalService.findAvailableGoals(req.user.id);
   }
 
   @Get(':id')

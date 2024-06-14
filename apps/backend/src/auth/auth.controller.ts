@@ -6,6 +6,7 @@ import { RouteDto } from '../common/decorators/set-dto.decorator';
 import { UserLoginDto } from './dtos/user-login.dto';
 import { AuthenticatedUser, UserJwtData } from '../common/types/general.types';
 import { User } from '../user/entities/user.entity';
+import { UserJwtPayload } from './types/auth.types';
 
 @Controller('auth')
 export class AuthController {
@@ -22,7 +23,7 @@ export class AuthController {
       user: User;
       body: { email: string; password: string };
     },
-  ): Promise<{ access_token: string }> {
+  ): Promise<{ access_token: string } & UserJwtPayload> {
     return await this.authService.login(req.user);
   }
 

@@ -33,14 +33,14 @@ export class AuthService implements IAuthService {
     return foundUser;
   }
 
-  async login(user: User): Promise<{ access_token: string }> {
+  async login(user: User): Promise<{ access_token: string } & UserJwtPayload> {
     if (!user) throw new UnauthorizedException();
     const goals = await DataUtils.extractRelationIds(user.goals);
     const subgoals = await DataUtils.extractRelationIds(user.subgoals);
     const contributing_to = await DataUtils.extractRelationIds(user.contributing_to);
     const payload: UserJwtPayload = {
       username: user.username,
-      sub: user.id,
+      id: user.id,
       roles: user.roles,
       goals,
       subgoals,
@@ -48,6 +48,7 @@ export class AuthService implements IAuthService {
     };
     return {
       access_token: this.jwtService.sign(payload),
+      ...payload
     };
   }
 }

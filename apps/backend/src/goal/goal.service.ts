@@ -60,16 +60,8 @@ export class GoalService implements IGoalService {
    */
   async findAvailableGoals(userId?: string): Promise<Record<string, Goal[]>> {
     const user: User = await this.userService.findById(userId);
-    const ownedGoals: Goal[] = await this.goalRepository.find({
-      where: {
-        created_by: user,
-      },
-    });
-    const contributingGoals: Goal[] = await this.goalRepository
-      .createQueryBuilder('goal')
-      .innerJoinAndSelect('goal.contributors', 'user')
-      .where('user.id = :userId', { userId })
-      .getMany();
+    const ownedGoals: Goal[] = await user.goals;
+    const contributingGoals: Goal[] = await user.contributing_to;
     return { ownedGoals, contributingGoals };
   }
 

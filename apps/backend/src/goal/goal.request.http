@@ -21,6 +21,11 @@ GET {{host}}/goals/40174db4-2ecb-4d99-8c2e-a65a5c4d6bcc HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
+### Find user's goals
+GET {{host}}/goals/my-goals HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
 ### Patch a goal
 PATCH {{host}}/goals/40174db4-2ecb-4d99-8c2e-a65a5c4d6bcc
 Content-Type: application/json

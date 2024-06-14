@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CrudService } from '../crud.service';
+import { RestfulService } from '../restful.service';
 import { Observable } from 'rxjs';
 
 export interface AuthResponse {
@@ -9,7 +9,7 @@ export interface AuthResponse {
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService extends CrudService<any> {
+export class AuthService extends RestfulService<any> {
   private baseUrl = '/api/auth';
 
   login(email: string, password: string): Observable<AuthResponse> {
