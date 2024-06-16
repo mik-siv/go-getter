@@ -16,7 +16,7 @@ export abstract class RestfulService<T> {
     return this.http.get<T>(`${endpoint}/${id}`);
   }
 
-  post(endpoint: string, data: T): Observable<T> {
+  post(endpoint: string, data: any): Observable<T> {
     return this.http.post<T>(endpoint, data);
   }
 
