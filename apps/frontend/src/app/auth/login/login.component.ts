@@ -4,6 +4,7 @@ import { FormGroup, FormsModule, ReactiveFormsModule, FormBuilder, FormControl, 
 import { AsyncPipe } from '@angular/common';
 import { AuthService } from '../../shared/services/data-access/auth/auth.service';
 import { Router } from '@angular/router';
+import { RoutePaths } from '../../app.routes';
 
 export interface UserFormData {
   email: FormControl<string | null>;
@@ -26,7 +27,7 @@ export class LoginComponent implements OnInit {
   constructor() {
     effect(() => {
       if (this.authService.user()) {
-        this.router.navigate(['home']);
+        this.router.navigate([RoutePaths.Home]);
       }
     });
   }
