@@ -1,18 +1,63 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { RestfulService } from '../restful.service';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 export interface AuthResponse {
-  access_token: string;
+  access_token?: string;
+  user?: {
+    username: string;
+    id: string;
+    roles: string[];
+    goals: string[];
+    subgoals: string[];
+    contributing_to: string[];
+  };
+}
+
+export type RequestStatus = 'pending' | 'success' | 'error';
+
+export interface AuthState extends AuthResponse {
+  error?: string;
+  status: RequestStatus;
 }
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService extends RestfulService<any> {
-  private baseUrl = '/api/auth';
+export class AuthService extends RestfulService<AuthResponse> {
+  private baseUrl = 'http://localhost:3000/api/auth';
+
+  // state
+  private state = signal<AuthState>({
+    user: undefined,
+    access_token: undefined,
+    error: undefined,
+    status: 'pending',
+  });
+
+  // selectors
+  user = computed(() => this.state().user);
+  token = computed(() => computed(() => this.state().access_token));
 
   login(email: string, password: string): Observable<AuthResponse> {
-    return this.post(`${this.baseUrl}/login`, { email, password });
+    return this.post(`${this.baseUrl}/login`, { email, password })
+      .pipe(
+        catchError((error) => {
+          this.state.set({ ...this.state(), error: error.message, status: 'error' });
+          throw error; // Re-throw the error for component handling
+        }),
+        map((response) => {
+          this.state.set({
+            ...this.state(),
+            user: response.user, // Update user information
+            access_token: response.access_token,
+            error: undefined,
+            status: 'success', // Set status to 'success' on success
+          });
+          return response;
+        }), tap(() => console.log(this.state)),
+      );
+
   }
 }
