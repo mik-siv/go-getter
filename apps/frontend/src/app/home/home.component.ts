@@ -16,9 +16,9 @@ import { Goal } from '../shared/models/goal.model';
 })
 export class HomeComponent implements OnInit {
   goalService = inject(GoalService);
-  goalsApiData: Goal[] = [];
   destroyRef = inject(DestroyRef);
 
+  goalsApiData: Goal[] = [];
   activeGoal$: Goal;
 
   ngOnInit() {
