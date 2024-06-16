@@ -1,1 +1,24 @@
-<p>login works!</p>
+<mat-sidenav-container class="login-container">
+  <mat-sidenav-content>
+    <form [formGroup]="loginForm">
+      <div class="centered-form">
+        <h2>Login</h2>
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input formControlName="email" matInput placeholder="example@mail.com">
+          <mat-icon matSuffix>alternate_email</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input type="password" formControlName="password" matInput placeholder="Password">
+          <mat-icon matSuffix>lock</mat-icon>
+        </mat-form-field>
+        <div class="auth-buttons">
+          <button (click)="login()" mat-raised-button [disabled]="isFormInvalid">Login</button>
+          <button mat-raised-button>Register</button>
+        </div>
+      </div>
+    </form>
+  </mat-sidenav-content>
+  <mat-sidenav mode="side" opened class="left-side-nav"></mat-sidenav>
+</mat-sidenav-container>
