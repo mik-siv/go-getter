@@ -1,25 +1,25 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { RestfulService } from '../restful.service';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 export interface AuthResponse {
   access_token?: string;
-  user?: {
-    username: string;
-    id: string;
-    roles: string[];
-    goals: string[];
-    subgoals: string[];
-    contributing_to: string[];
-  };
+  username: string;
+  id: string;
+  roles: string[];
+  goals: string[];
+  subgoals: string[];
+  contributing_to: string[];
 }
 
 export type RequestStatus = 'pending' | 'success' | 'error';
 
-export interface AuthState extends AuthResponse {
+export interface AuthState {
   error?: string;
   status: RequestStatus;
+  access_token?: string;
+  user?: Omit<AuthResponse, 'access_token'>;
 }
 
 @Injectable({
@@ -48,15 +48,16 @@ export class AuthService extends RestfulService<AuthResponse> {
           throw error; // Re-throw the error for component handling
         }),
         map((response) => {
+          const { access_token, ...user } = response;
           this.state.set({
             ...this.state(),
-            user: response.user, // Update user information
-            access_token: response.access_token,
+            user: user, // Update user information
+            access_token: access_token,
             error: undefined,
             status: 'success', // Set status to 'success' on success
           });
           return response;
-        }), tap(() => console.log(this.state)),
+        }),
       );
 
   }
