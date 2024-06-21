@@ -16,10 +16,10 @@ export interface AuthResponse {
 export type RequestStatus = 'pending' | 'success' | 'error';
 
 export interface AuthState {
-  error?: string;
+  error: string;
   status: RequestStatus;
   access_token?: string;
-  user?: Omit<AuthResponse, 'access_token'>;
+  user: Omit<AuthResponse, 'access_token'>;
 }
 
 @Injectable({
@@ -38,24 +38,24 @@ export class AuthService extends RestfulService<AuthResponse> {
 
   // selectors
   user = computed(() => this.state().user);
-  token = computed(() => computed(() => this.state().access_token));
+  token = computed(() => this.state().access_token);
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.post(`${this.baseUrl}/login`, { email, password })
       .pipe(
         catchError((error) => {
-          this.state.set({ ...this.state(), error: error.message, status: 'error' });
+          this.state.update((state) => ({ ...state, error: error.message, status: 'error' }));
           throw error; // Re-throw the error for component handling
         }),
         map((response) => {
           const { access_token, ...user } = response;
-          this.state.set({
-            ...this.state(),
+          this.state.update(state => ({
+            ...state,
             user: user, // Update user information
             access_token: access_token,
             error: undefined,
             status: 'success', // Set status to 'success' on success
-          });
+          }));
           return response;
         }),
       );
