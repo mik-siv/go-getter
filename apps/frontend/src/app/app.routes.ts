@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { isAuthenticatedGuard } from './shared/guards/auth.guard';
 
 export enum RoutePaths {
   Home = '',
@@ -10,6 +11,7 @@ export const routes: Routes = [
   {
     path: RoutePaths.Home,
     component: HomeComponent,
+    canActivate: [isAuthenticatedGuard()],
   },
   {
     path: RoutePaths.Auth,

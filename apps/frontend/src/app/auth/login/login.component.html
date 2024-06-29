@@ -19,6 +19,11 @@
         </div>
       </div>
     </form>
+    @if (isAuthPending) {
+      <div class="progress-bar">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+    }
   </mat-sidenav-content>
   <mat-sidenav mode="side" opened class="left-side-nav"></mat-sidenav>
 </mat-sidenav-container>

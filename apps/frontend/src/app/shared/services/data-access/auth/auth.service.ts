@@ -2,9 +2,9 @@ import { computed, Injectable, signal } from '@angular/core';
 import { RestfulService } from '../restful.service';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { RequestStatus } from '../models/RequestStatus';
 
-export interface AuthResponse {
-  access_token?: string;
+export interface User {
   username: string;
   id: string;
   roles: string[];
@@ -13,13 +13,15 @@ export interface AuthResponse {
   contributing_to: string[];
 }
 
-export type RequestStatus = 'pending' | 'success' | 'error';
+export interface AuthResponse extends User {
+  access_token: string;
+}
 
 export interface AuthState {
   error: string;
   status: RequestStatus;
   access_token?: string;
-  user: Omit<AuthResponse, 'access_token'>;
+  user: User;
 }
 
 @Injectable({
@@ -33,18 +35,20 @@ export class AuthService extends RestfulService<AuthResponse> {
     user: undefined,
     access_token: undefined,
     error: undefined,
-    status: 'pending',
+    status: undefined,
   });
 
   // selectors
   user = computed(() => this.state().user);
   token = computed(() => this.state().access_token);
+  status = computed(() => this.state().status);
 
   login(email: string, password: string): Observable<AuthResponse> {
+    this.state.update(state => ({ ...state, status: RequestStatus.PENDING }));
     return this.post(`${this.baseUrl}/login`, { email, password })
       .pipe(
         catchError((error) => {
-          this.state.update((state) => ({ ...state, error: error.message, status: 'error' }));
+          this.state.update((state) => ({ ...state, error: error.message, status: RequestStatus.ERROR }));
           throw error; // Re-throw the error for component handling
         }),
         map((response) => {
@@ -54,11 +58,10 @@ export class AuthService extends RestfulService<AuthResponse> {
             user: user, // Update user information
             access_token: access_token,
             error: undefined,
-            status: 'success', // Set status to 'success' on success
+            status: RequestStatus.SUCCESS, // Set status to 'success' on success
           }));
           return response;
         }),
       );
-
   }
 }

@@ -6,6 +6,7 @@ import { AuthService } from '../../shared/services/data-access/auth/auth.service
 import { Router } from '@angular/router';
 import { RoutePaths } from '../../app.routes';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RequestStatus } from '../../shared/services/data-access/models/RequestStatus';
 
 export interface UserFormData {
   email: FormControl<string>;
@@ -37,7 +38,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', { validators: [Validators.required, Validators.email] }],
-      password: ['', { validators: [Validators.required, Validators.minLength(8)] }],
+      password: ['', { validators: [Validators.required, Validators.minLength(8), Validators.maxLength(256)] }],
     });
   }
 
@@ -49,6 +50,10 @@ export class LoginComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
+  }
+
+  public get isAuthPending(): boolean {
+    return this.authService.status() === RequestStatus.PENDING;
   }
 
   get isFormInvalid(): boolean {

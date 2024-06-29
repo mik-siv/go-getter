@@ -8,8 +8,22 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
-const material = [MatToolbarModule, MatSidenavModule, MatListModule, MatListOption, MatSelectionList, MatCardModule, MatButtonModule, MatGridListModule, MatFormFieldModule, MatIconModule, MatInputModule];
+const material = [
+  MatToolbarModule,
+  MatSidenavModule,
+  MatListModule,
+  MatListOption,
+  MatSelectionList,
+  MatCardModule,
+  MatButtonModule,
+  MatGridListModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatProgressBarModule,
+];
 
 
 @NgModule({
