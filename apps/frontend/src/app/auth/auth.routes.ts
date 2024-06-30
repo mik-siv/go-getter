@@ -1,22 +1,17 @@
 import { Routes } from '@angular/router';
 
 export enum AuthRoutePaths {
-  Login = 'login',
-  Register = 'register',
+  Auth = '',
 }
 
 export const AUTH_ROUTES: Routes = [
   {
-    path: AuthRoutePaths.Login,
-    loadComponent: () => import('./login/login.component').then(m => m.LoginComponent),
-  },
-  {
-    path: AuthRoutePaths.Register,
-    loadComponent: () => import('./register/register.component').then(m => m.RegisterComponent),
+    path: AuthRoutePaths.Auth,
+    loadComponent: () => import('./auth.component').then(m => m.AuthComponent),
   },
   {
     path: '',
-    redirectTo: AuthRoutePaths.Login,
+    redirectTo: AuthRoutePaths.Auth,
     pathMatch: 'full',
   },
 ];

@@ -1,12 +1,10 @@
-import { Component, DestroyRef, effect, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { MaterialModule } from '../../shared/material/material.module';
 import { FormGroup, FormsModule, ReactiveFormsModule, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
 import { AuthService } from '../../shared/services/data-access/auth/auth.service';
 import { Router } from '@angular/router';
-import { RoutePaths } from '../../app.routes';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RequestStatus } from '../../shared/services/data-access/models/RequestStatus';
 
 export interface UserFormData {
   email: FormControl<string>;
@@ -27,14 +25,6 @@ export class LoginComponent implements OnInit {
   router = inject(Router);
   destroyRef = inject(DestroyRef);
 
-  constructor() {
-    effect(() => {
-      if (this.authService.user()) {
-        this.router.navigate([RoutePaths.Home]);
-      }
-    });
-  }
-
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', { validators: [Validators.required, Validators.email] }],
@@ -50,10 +40,6 @@ export class LoginComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
-  }
-
-  public get isAuthPending(): boolean {
-    return this.authService.status() === RequestStatus.PENDING;
   }
 
   get isFormInvalid(): boolean {

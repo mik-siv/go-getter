@@ -1,24 +1,9 @@
-.login-container {
-  height: 100%
-}
+@use "../../../styles/mixins";
 
-.left-side-nav {
-  width: 60%;
-}
-
-.centered-form {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 2rem;
+.login-form {
+  @include mixins.centered-form
 }
 
 .auth-buttons button {
   margin: 0 .5rem;
-}
-
-.progress-bar {
-  height: .5rem;
-  margin: .25rem 0;
 }
