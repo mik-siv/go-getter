@@ -5,11 +5,12 @@ import { AuthService } from '../shared/services/data-access/auth/auth.service';
 import { RequestStatus } from '../shared/services/data-access/models/RequestStatus';
 import { RoutePaths } from '../app.routes';
 import { Router } from '@angular/router';
+import { RegisterComponent } from './register/register.component';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [MaterialModule, LoginComponent],
+  imports: [MaterialModule, LoginComponent, RegisterComponent],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
 })

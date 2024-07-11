@@ -1,7 +1,9 @@
 <mat-sidenav-container class="auth-container">
   <mat-sidenav-content>
     @if (isLogin()) {
-      <app-login></app-login>
+      <app-login (isLogin)="isLogin.set($event)"></app-login>
+    } @else {
+      <app-register></app-register>
     }
     @if (isAuthPending) {
       <div class="progress-bar">

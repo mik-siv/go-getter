@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, output } from '@angular/core';
 import { MaterialModule } from '../../shared/material/material.module';
 import { FormGroup, FormsModule, ReactiveFormsModule, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
@@ -6,7 +6,7 @@ import { AuthService } from '../../shared/services/data-access/auth/auth.service
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-export interface UserFormData {
+export interface LoginFormData {
   email: FormControl<string>;
   password: FormControl<string>;
 }
@@ -19,11 +19,12 @@ export interface UserFormData {
   styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup<UserFormData>;
+  loginForm: FormGroup<LoginFormData>;
   fb: FormBuilder = inject(FormBuilder);
   authService: AuthService = inject(AuthService);
   router = inject(Router);
   destroyRef = inject(DestroyRef);
+  isLogin = output<boolean>();
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -44,6 +45,10 @@ export class LoginComponent implements OnInit {
 
   get isFormInvalid(): boolean {
     return this.loginForm.invalid;
+  }
+
+  switchToRegister(): void {
+    this.isLogin.emit(false);
   }
 }
 
