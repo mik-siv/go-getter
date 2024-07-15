@@ -3,9 +3,9 @@
     @if (isLogin()) {
       <app-login (isLogin)="isLogin.set($event)"></app-login>
     } @else {
-      <app-register></app-register>
+      <app-register (isLogin)="isLogin.set($event)"></app-register>
     }
-    @if (isAuthPending) {
+    @if (isPending) {
       <div class="progress-bar">
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </div>

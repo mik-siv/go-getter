@@ -1,0 +1,9 @@
+@use "../../../styles/mixins";
+
+.login-form {
+  @include mixins.centered-form
+}
+
+.auth-buttons button {
+  margin: 0 .5rem;
+}
