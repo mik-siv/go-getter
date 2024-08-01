@@ -1,4 +1,4 @@
-import { ApplicationConfig, ErrorHandler, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, ErrorHandler } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -13,6 +13,6 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     MaterialModule,
-    // provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptorsFromDi())
   ],
 };
