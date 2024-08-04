@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const material = [
   MatToolbarModule,
@@ -23,6 +24,7 @@ const material = [
   MatIconModule,
   MatInputModule,
   MatProgressBarModule,
+  MatTooltipModule
 ];
 
 

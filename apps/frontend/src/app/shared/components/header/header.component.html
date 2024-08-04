@@ -1,3 +1,16 @@
 <mat-toolbar color="primary" class="header">
-  <a [routerLink]="RoutePaths.Home"><span>GoGetter</span></a>
+  <div class="primary-actions">
+    <a [routerLink]="RoutePaths.Home"><span>GoGetter</span></a>
+  </div>
+  @if (isLoggedIn) {
+    <div class="secondary-actions">
+      <button mat-icon-button
+              aria-label="Logout"
+              (click)="logout()"
+              matTooltip="Logout"
+      >
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  }
 </mat-toolbar>
