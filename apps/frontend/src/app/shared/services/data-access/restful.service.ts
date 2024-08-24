@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
 export abstract class RestfulService<T> {
   private http: HttpClient = inject(HttpClient)
 
-  getAll(endpoint: string): Observable<T[]> {
-    return this.http.get<T[]>(endpoint);
+  getAll<T>(endpoint: string): Observable<T> {
+    return this.http.get<T>(endpoint);
   }
 
   getById(endpoint: string, id: number): Observable<T> {
