@@ -11,5 +11,14 @@
       (itemClicked)="setActiveGoal($event)">
       >
     </app-item-list>
+    @if (!!contributingToGoalsApiData){
+      <p>Contributions</p>
+      <app-item-list
+        [items]="contributingToGoalsApiData"
+        [activeItem]="activeGoal$"
+        (itemClicked)="setActiveGoal($event)">
+        >
+      </app-item-list>
+    }
   </mat-sidenav>
 </mat-sidenav-container>

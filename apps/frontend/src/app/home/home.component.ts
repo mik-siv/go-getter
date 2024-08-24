@@ -5,7 +5,7 @@ import { GoalService } from '../shared/services/data-access/goal/goal.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SubgoalCardComponent } from './components/subgoal-card/subgoal-card.component';
 import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.component';
-import { Goal } from '../shared/models/goal.model';
+import { Goal, GoalsList } from '../shared/models/goal.model';
 import { AuthService } from '../shared/services/data-access/auth/auth.service';
 import { Router } from '@angular/router';
 import { RoutePaths } from '../app.routes';
@@ -24,12 +24,13 @@ export class HomeComponent implements OnInit {
   router = inject(Router);
 
   goalsApiData: Goal[] = [];
+  contributingToGoalsApiData: Goal[] = [];
   activeGoal$: Goal;
 
   constructor() {
     effect(() => {
-      if(!this.authService.user()){
-        this.router.navigate([RoutePaths.Auth])
+      if (!this.authService.user()) {
+        this.router.navigate([RoutePaths.Auth]);
       }
     });
   }
@@ -45,10 +46,14 @@ export class HomeComponent implements OnInit {
   fetchGoals() {
     this.goalService.getGoals().pipe(
       takeUntilDestroyed(this.destroyRef),
-    ).subscribe((goals: Goal[]) => {
-      this.goalsApiData = goals;
+    ).subscribe((goals: GoalsList) => {
+      this.goalsApiData = goals.goals;
+      this.contributingToGoalsApiData = goals.contributing_to;
       if (Array.isArray(this.goalsApiData) && this.goalsApiData.length > 0) {
         this.setActiveGoal(this.goalsApiData[0]);
+      }
+      else if (Array.isArray(this.contributingToGoalsApiData) && this.contributingToGoalsApiData.length > 0) {
+        this.setActiveGoal(this.contributingToGoalsApiData[0]);
       }
     });
   }

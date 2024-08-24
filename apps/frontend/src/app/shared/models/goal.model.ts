@@ -1,3 +1,8 @@
+export interface GoalsList {
+  goals: Goal[];
+  contributing_to?: Goal[];
+}
+
 export interface Goal {
   id: string;
   name: string;
