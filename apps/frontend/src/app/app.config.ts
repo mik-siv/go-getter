@@ -5,7 +5,8 @@ import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { GlobalErrorHandler } from './shared/services/common/error-handler/global-error-handler.service';
 import { MaterialModule } from './shared/material/material.module';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { AuthInterceptor } from './shared/interceptors/auth-interceptor.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +14,6 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     MaterialModule,
-    provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptors([AuthInterceptor])),
   ],
 };
