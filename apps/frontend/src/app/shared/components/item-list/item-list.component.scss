@@ -10,3 +10,11 @@ mat-list-item:hover {
 mat-list-item.active {
   background-color: rgba(0, 0, 0, 0.2); /* Highlight the selected item */
 }
+
+::ng-deep {
+  mat-expansion-panel {
+    .mat-expansion-panel-body {
+      padding: 0;
+    }
+  }
+}

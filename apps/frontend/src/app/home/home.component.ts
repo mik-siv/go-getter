@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, OnInit } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnInit } from '@angular/core';
 import { MaterialModule } from '../shared/material/material.module';
 import { ItemListComponent } from '../shared/components/item-list/item-list.component';
 import { GoalService } from '../shared/services/data-access/goal/goal.service';
@@ -9,6 +9,7 @@ import { Goal, GoalsList } from '../shared/models/goal.model';
 import { AuthService } from '../shared/services/data-access/auth/auth.service';
 import { Router } from '@angular/router';
 import { RoutePaths } from '../app.routes';
+import { RequestStatus } from '../shared/services/data-access/models/RequestStatus';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,7 @@ export class HomeComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   router = inject(Router);
 
+  isPending = computed(() => this.goalService.status() === RequestStatus.PENDING);
   goalsApiData: Goal[] = [];
   contributingToGoalsApiData: Goal[] = [];
   activeGoal$: Goal;
@@ -51,8 +53,7 @@ export class HomeComponent implements OnInit {
       this.contributingToGoalsApiData = goals.contributing_to;
       if (Array.isArray(this.goalsApiData) && this.goalsApiData.length > 0) {
         this.setActiveGoal(this.goalsApiData[0]);
-      }
-      else if (Array.isArray(this.contributingToGoalsApiData) && this.contributingToGoalsApiData.length > 0) {
+      } else if (Array.isArray(this.contributingToGoalsApiData) && this.contributingToGoalsApiData.length > 0) {
         this.setActiveGoal(this.contributingToGoalsApiData[0]);
       }
     });

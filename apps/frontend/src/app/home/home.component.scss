@@ -1,7 +1,18 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
 .navigation-container {
-  height: 100%
+  height: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: #aaa transparent;
 }
 
 .left-side-nav {
   width: 20%;
+}
+
+.progress-bar {
+  height: .5rem;
+  margin: .25rem 0;
 }

@@ -5,20 +5,26 @@
     </app-subgoal-list>
   </mat-sidenav-content>
   <mat-sidenav class="left-side-nav" mode="side" opened>
-    <app-item-list
-      [items]="goalsApiData"
-      [activeItem]="activeGoal$"
-      (itemClicked)="setActiveGoal($event)">
-      >
-    </app-item-list>
-    @if (!!contributingToGoalsApiData){
-      <p>Contributions</p>
+    @if (isPending()) {
+      <mat-progress-bar class="progress-bar" mode="indeterminate" color="accent"></mat-progress-bar>
+    } @else {
       <app-item-list
-        [items]="contributingToGoalsApiData"
+        [isExpanded]="true"
+        [listName]="'Goals'"
+        [items]="goalsApiData"
         [activeItem]="activeGoal$"
         (itemClicked)="setActiveGoal($event)">
         >
       </app-item-list>
+      @if (!!contributingToGoalsApiData) {
+        <app-item-list
+          [listName]="'Contributions'"
+          [items]="contributingToGoalsApiData"
+          [activeItem]="activeGoal$"
+          (itemClicked)="setActiveGoal($event)">
+          >
+        </app-item-list>
+      }
     }
   </mat-sidenav>
 </mat-sidenav-container>
