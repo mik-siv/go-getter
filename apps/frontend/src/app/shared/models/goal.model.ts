@@ -4,8 +4,8 @@ export interface GoalsList {
 }
 
 export interface Goal {
-  id: string;
   name: string;
+  id: string;
   private: boolean;
   created_date: Date;
   created_by?: Record<string, any>;

@@ -18,11 +18,11 @@ export interface ListItem {
 export class ItemListComponent {
   @Input() items: ListItem[];
   @Input() activeItem: ListItem;
-  @Output() itemClicked = new EventEmitter<ListItem>();
+  @Output() itemClicked = new EventEmitter();
   listName = input<string>();
   isExpanded = input<boolean>(false);
 
-  onClick(item: ListItem) {
+  onClick(item: ListItem): void {
     this.itemClicked.emit(item);
   }
 }

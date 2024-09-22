@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, effect, inject, OnInit } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnInit, Signal } from '@angular/core';
 import { MaterialModule } from '../shared/material/material.module';
 import { ItemListComponent } from '../shared/components/item-list/item-list.component';
 import { GoalService } from '../shared/services/data-access/goal/goal.service';
@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   router = inject(Router);
 
-  isPending = computed(() => this.goalService.status() === RequestStatus.PENDING);
+  isPending: Signal<boolean> = computed(() => this.goalService.status() === RequestStatus.PENDING);
   goalsApiData: Goal[] = [];
   contributingToGoalsApiData: Goal[] = [];
   activeGoal$: Goal;
@@ -37,15 +37,15 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.fetchGoals();
   }
 
-  setActiveGoal(goal: any) {
+  setActiveGoal(goal: Goal): void {
     this.activeGoal$ = goal;
   }
 
-  fetchGoals() {
+  fetchGoals(): void {
     this.goalService.getGoals().pipe(
       takeUntilDestroyed(this.destroyRef),
     ).subscribe((goals: GoalsList) => {
