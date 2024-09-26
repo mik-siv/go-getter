@@ -4,7 +4,7 @@ import { RegisterComponent } from './register.component';
 import { MockProvider } from 'ng-mocks';
 import { AuthService } from '../../shared/services/data-access/auth/auth.service';
 import { UserService } from '../../shared/services/data-access/user/user.service';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -16,7 +16,7 @@ describe('RegisterComponent', () => {
       providers: [
         MockProvider(AuthService),
         MockProvider(UserService),
-        provideAnimations()
+        provideNoopAnimations()
       ]
     })
     .compileComponents();
