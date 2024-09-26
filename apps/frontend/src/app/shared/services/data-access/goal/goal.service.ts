@@ -4,6 +4,7 @@ import { RestfulService } from '../restful.service';
 import { RequestStatus } from '../models/RequestStatus';
 import { catchError } from 'rxjs/operators';
 import { Goal, GoalsList } from '../../../models/goal.model';
+import { environment } from '../../../../../environments/environment';
 
 export interface GoalState {
   error: string;
@@ -15,7 +16,7 @@ export interface GoalState {
   providedIn: 'root',
 })
 export class GoalService extends RestfulService<Goal> {
-  private baseUrl = 'http://localhost:3000/api/goals';
+  private baseUrl = `${environment.baseUrl}goals`;
 
   emptyState: GoalState = {
     error: undefined,

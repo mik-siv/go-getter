@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { RequestStatus } from '../models/RequestStatus';
 import { User } from '../../../models/user.model';
+import { environment } from '../../../../../environments/environment';
 
 export interface AuthResponse extends User {
   access_token: string;
@@ -20,7 +21,7 @@ export interface AuthState {
   providedIn: 'root',
 })
 export class AuthService extends RestfulService<AuthResponse> {
-  private baseUrl = 'http://localhost:3000/api/auth';
+  private baseUrl = `${environment.baseUrl}auth`;
 
   emptyState: AuthState = {
     user: undefined,

@@ -4,6 +4,7 @@ import { User } from '../../../models/user.model';
 import { RequestStatus } from '../models/RequestStatus';
 import { Observable, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../../../../environments/environment';
 
 export interface UserState {
   error: string;
@@ -15,7 +16,7 @@ export interface UserState {
   providedIn: 'root',
 })
 export class UserService extends RestfulService<User> {
-  private baseUrl = 'http://localhost:3000/api/users';
+  private baseUrl = `${environment.baseUrl}users`;
 
   //state
   private state = signal<UserState>({

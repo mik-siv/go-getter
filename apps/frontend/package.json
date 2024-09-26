@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start:dev": "ng serve",
-    "build": "ng build",
+    "prebuild": "rimraf dist",
+    "build": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
