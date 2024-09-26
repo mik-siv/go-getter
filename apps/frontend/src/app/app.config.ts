@@ -6,7 +6,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { GlobalErrorHandler } from './shared/services/common/error-handler/global-error-handler.service';
 import { MaterialModule } from './shared/material/material.module';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { AuthInterceptor } from './shared/interceptors/auth-interceptor.interceptor';
+import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
