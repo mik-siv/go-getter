@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegisterComponent } from './register.component';
+import { MockProvider } from 'ng-mocks';
+import { AuthService } from '../../shared/services/data-access/auth/auth.service';
+import { UserService } from '../../shared/services/data-access/user/user.service';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -8,10 +12,15 @@ describe('RegisterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RegisterComponent]
+      imports: [RegisterComponent],
+      providers: [
+        MockProvider(AuthService),
+        MockProvider(UserService),
+        provideAnimations()
+      ]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
