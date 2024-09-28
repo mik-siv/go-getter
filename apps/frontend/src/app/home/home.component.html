@@ -13,7 +13,9 @@
         [listName]="'Goals'"
         [items]="goalsApiData"
         [activeItem]="activeGoal$"
-        (itemClicked)="setActiveGoal($event)">
+        (itemClicked)="setActiveGoal($event)"
+        (deleteItemClicked)="deleteGoal($event)"
+      >
         >
       </app-item-list>
       @if (!!contributingToGoalsApiData) {

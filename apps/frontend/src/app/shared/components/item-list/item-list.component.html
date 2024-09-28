@@ -9,7 +9,19 @@
           <mat-list-item
             [class]="{'active': activeItem === item}"
             (click)="onClick(item)"
-            role="listitem">{{ item.name }}
+            role="listitem">
+            <div class="flex-container">
+              {{ item.name }}
+              <button class="delete-item-button"
+                      mat-icon-button
+                      matTooltip="Delete"
+                      matTooltipPosition="right"
+                      aria-label="Delete"
+                      (click)="onDeleteButtonClicked(item)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
           </mat-list-item>
         }
       </mat-list>

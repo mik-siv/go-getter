@@ -19,10 +19,15 @@ export class ItemListComponent {
   @Input() items: ListItem[];
   @Input() activeItem: ListItem;
   @Output() itemClicked = new EventEmitter();
+  @Output() deleteItemClicked = new EventEmitter();
   listName = input<string>();
   isExpanded = input<boolean>(false);
 
   onClick(item: ListItem): void {
     this.itemClicked.emit(item);
+  }
+
+  onDeleteButtonClicked(item: ListItem): void {
+    this.deleteItemClicked.emit(item);
   }
 }

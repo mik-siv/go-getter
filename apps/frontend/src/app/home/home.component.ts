@@ -10,6 +10,10 @@ import { AuthService } from '../shared/services/data-access/auth/auth.service';
 import { Router } from '@angular/router';
 import { RoutePaths } from '../app.routes';
 import { RequestStatus } from '../shared/services/data-access/models/RequestStatus';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  ConfirmationDialogComponent,
+} from '../shared/components/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +27,7 @@ export class HomeComponent implements OnInit {
   goalService = inject(GoalService);
   destroyRef = inject(DestroyRef);
   router = inject(Router);
+  readonly dialog = inject(MatDialog);
 
   isPending: Signal<boolean> = computed(() => this.goalService.status() === RequestStatus.PENDING);
   goalsApiData: Goal[] = [];
@@ -43,6 +48,22 @@ export class HomeComponent implements OnInit {
 
   setActiveGoal(goal: Goal): void {
     this.activeGoal$ = goal;
+  }
+
+  deleteGoal(goal: Goal): void {
+    this.openDialog('100', '100')
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+      });
+  }
+
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): MatDialogRef<ConfirmationDialogComponent> {
+    return this.dialog.open(ConfirmationDialogComponent, {
+      width: '250px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
   }
 
   fetchGoals(): void {
