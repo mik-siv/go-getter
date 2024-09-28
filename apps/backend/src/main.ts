@@ -9,7 +9,13 @@ import { GoalModule } from './goal/goal.module';
 import { setupSwaggerForModule } from './swagger/swagger.utils';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { logger: ['log'] });
+  const app = await NestFactory.create(AppModule, {
+    logger: ['log'],
+    cors: {
+      origin: 'http://localhost:4200',
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    },
+  });
   //Setting route prefix
   app.setGlobalPrefix('api');
   //Swagger setup

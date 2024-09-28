@@ -26,7 +26,7 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../..', 'frontend', 'dist'),
+      rootPath: join(__dirname, '../..', 'frontend', 'dist', 'go-getter', 'browser'),
     }),
     UserModule,
     AuthModule,

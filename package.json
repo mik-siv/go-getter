@@ -36,6 +36,6 @@
     "apps/*"
   ],
   "dependencies": {
-    "react-router-dom": "^6.21.3"
+    "typescript": "^5.5.4"
   }
 }

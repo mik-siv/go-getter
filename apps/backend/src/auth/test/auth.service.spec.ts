@@ -74,7 +74,7 @@ describe('AuthService', () => {
     };
     const payload = {
       username: user.username,
-      sub: user.id,
+      id: user.id,
       roles: user.roles,
       goals: idsFromLazyLoadedArray,
       subgoals: idsFromLazyLoadedArray,
@@ -85,6 +85,7 @@ describe('AuthService', () => {
     const result = await service.login(user as any);
     expect(result).toEqual({
       access_token: 'access_token',
+      ...payload,
     });
     expect(extractIdsSpy).toBeCalledTimes(3);
     expect(extractIdsSpy).toBeCalledWith(lazyLoadedArray());

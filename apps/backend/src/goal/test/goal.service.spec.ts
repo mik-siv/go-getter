@@ -128,4 +128,14 @@ describe('GoalService', () => {
     expect(findByIdSpy).toBeCalledWith(goal.id);
     expect(repoDeleteSpy).toBeCalledWith(goal);
   });
+
+  it('should find available goals', async () => {
+    const mockGoalsData = ['1', '2', '3'];
+    userServiceMock.findById.mockReturnValue({
+      goals: Promise.resolve(mockGoalsData),
+      contributing_to: Promise.resolve(mockGoalsData),
+    });
+    const availableGoals = await service.findAvailableGoals(fakeUser.id);
+    expect(availableGoals).toEqual({ goals: mockGoalsData, contributing_to: mockGoalsData });
+  });
 });

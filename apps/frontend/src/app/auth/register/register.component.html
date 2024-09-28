@@ -1,0 +1,31 @@
+<div>
+  <form [formGroup]="registerForm">
+    <div class="login-form">
+      <h2>Register</h2>
+      <mat-form-field appearance="fill">
+        <mat-label>Your Name</mat-label>
+        <input formControlName="username" matInput placeholder="Your Name">
+        <mat-icon matSuffix>badge</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input formControlName="email" matInput placeholder="example@mail.com">
+        <mat-icon matSuffix>alternate_email</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input type="password" formControlName="password" matInput placeholder="Password">
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Confirm password</mat-label>
+        <input type="password" formControlName="confirmPassword" matInput placeholder="Password">
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+      <div class="auth-buttons">
+        <button mat-raised-button (click)="switchToLogin()">Login</button>
+        <button mat-raised-button (click)="register()" [disabled]="isFormInvalid">Register</button>
+      </div>
+    </div>
+  </form>
+</div>
