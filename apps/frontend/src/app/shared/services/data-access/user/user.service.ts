@@ -15,7 +15,7 @@ export interface UserState {
 @Injectable({
   providedIn: 'root',
 })
-export class UserService extends RestfulService<User> {
+export class UserService extends RestfulService {
   private baseUrl = `${environment.baseUrl}users`;
 
   //state
@@ -32,7 +32,7 @@ export class UserService extends RestfulService<User> {
 
   register(email: string, password: string, username: string): Observable<User> {
     this.state.update(state => ({ ...state, status: RequestStatus.PENDING }));
-    return this.post(this.baseUrl, { email, password, username })
+    return this.post<User>(this.baseUrl, { email, password, username })
       .pipe(
         catchError((error) => {
           this.state.update((state) => ({ ...state, error: error.message, status: RequestStatus.ERROR }));

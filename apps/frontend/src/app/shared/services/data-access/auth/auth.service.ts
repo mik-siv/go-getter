@@ -20,7 +20,7 @@ export interface AuthState {
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService extends RestfulService<AuthResponse> {
+export class AuthService extends RestfulService {
   private baseUrl = `${environment.baseUrl}auth`;
 
   emptyState: AuthState = {
@@ -41,7 +41,7 @@ export class AuthService extends RestfulService<AuthResponse> {
 
   login(email: string, password: string): Observable<AuthResponse> {
     this.state.update(state => ({ ...state, status: RequestStatus.PENDING }));
-    return this.post(`${this.baseUrl}/login`, { email, password })
+    return this.post<AuthResponse>(`${this.baseUrl}/login`, { email, password })
       .pipe(
         catchError((error) => {
           this.state.update((state) => ({ ...state, error: error.message, status: RequestStatus.ERROR }));

@@ -5,22 +5,22 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export abstract class RestfulService<T> {
+export abstract class RestfulService {
   private http: HttpClient = inject(HttpClient)
 
   getAll<T>(endpoint: string): Observable<T> {
     return this.http.get<T>(endpoint);
   }
 
-  getById(endpoint: string, id: number): Observable<T> {
+  getById<T>(endpoint: string, id: number): Observable<T> {
     return this.http.get<T>(`${endpoint}/${id}`);
   }
 
-  post(endpoint: string, data: any): Observable<T> {
+  post<T>(endpoint: string, data: any): Observable<T> {
     return this.http.post<T>(endpoint, data);
   }
 
-  update(endpoint: string, id: number, data: T): Observable<T> {
+  update<T>(endpoint: string, id: number, data: T): Observable<T> {
     return this.http.patch<T>(`${endpoint}/${id}`, data);
   }
 

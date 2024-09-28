@@ -15,7 +15,7 @@ export interface GoalState {
 @Injectable({
   providedIn: 'root',
 })
-export class GoalService extends RestfulService<Goal> {
+export class GoalService extends RestfulService {
   private baseUrl = `${environment.baseUrl}goals`;
 
   emptyState: GoalState = {
