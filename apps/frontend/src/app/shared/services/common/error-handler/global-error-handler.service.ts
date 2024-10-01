@@ -18,11 +18,8 @@ export class GlobalErrorHandler implements ErrorHandler {
    */
   handleError(error: Error): void {
     if (error instanceof HttpErrorResponse) {
-      console.error('HTTP Error:', error.status, error.statusText);
       this.handleHttpError(error);
     } else {
-      // Handle other errors
-      console.error('Other Error:', error);
       this.handleGenericError(error);
     }
   }
