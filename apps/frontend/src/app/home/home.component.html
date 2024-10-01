@@ -11,17 +11,17 @@
       <app-item-list
         [isExpanded]="true"
         [listName]="'Goals'"
-        [items]="goalsApiData"
+        [items]="goals()"
         [activeItem]="activeGoal$"
         (itemClicked)="setActiveGoal($event)"
         (deleteItemClicked)="deleteGoal($event)"
       >
         >
       </app-item-list>
-      @if (!!contributingToGoalsApiData) {
+      @if (!!contributing_to()) {
         <app-item-list
           [listName]="'Contributions'"
-          [items]="contributingToGoalsApiData"
+          [items]="contributing_to()"
           [activeItem]="activeGoal$"
           (itemClicked)="setActiveGoal($event)">
           >

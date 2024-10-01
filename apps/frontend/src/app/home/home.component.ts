@@ -5,7 +5,7 @@ import { GoalService } from '../shared/services/data-access/goal/goal.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SubgoalCardComponent } from './components/subgoal-card/subgoal-card.component';
 import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.component';
-import { Goal, GoalsList } from '../shared/models/goal.model';
+import { Goal } from '../shared/models/goal.model';
 import { AuthService } from '../shared/services/data-access/auth/auth.service';
 import { Router } from '@angular/router';
 import { RoutePaths } from '../app.routes';
@@ -30,14 +30,21 @@ export class HomeComponent implements OnInit {
   readonly dialog = inject(MatDialog);
 
   isPending: Signal<boolean> = computed(() => this.goalService.status() === RequestStatus.PENDING);
-  goalsApiData: Goal[] = [];
-  contributingToGoalsApiData: Goal[] = [];
+  goals: Signal<Goal[]> = computed(() => this.goalService.goals());
+  contributing_to: Signal<Goal[]> = computed(() => this.goalService.contributing_to());
   activeGoal$: Goal;
 
   constructor() {
     effect(() => {
       if (!this.authService.user()) {
         this.router.navigate([RoutePaths.Auth]);
+      }
+    });
+    effect(() => {
+      if (Array.isArray(this.goals()) && this.goals().length > 0) {
+        this.setActiveGoal(this.goals()[0]);
+      } else if (Array.isArray(this.contributing_to()) && this.contributing_to().length > 0) {
+        this.setActiveGoal(this.contributing_to()[0]);
       }
     });
   }
@@ -69,14 +76,6 @@ export class HomeComponent implements OnInit {
   fetchGoals(): void {
     this.goalService.getGoals().pipe(
       takeUntilDestroyed(this.destroyRef),
-    ).subscribe((goals: GoalsList) => {
-      this.goalsApiData = goals.goals;
-      this.contributingToGoalsApiData = goals.contributing_to;
-      if (Array.isArray(this.goalsApiData) && this.goalsApiData.length > 0) {
-        this.setActiveGoal(this.goalsApiData[0]);
-      } else if (Array.isArray(this.contributingToGoalsApiData) && this.contributingToGoalsApiData.length > 0) {
-        this.setActiveGoal(this.contributingToGoalsApiData[0]);
-      }
-    });
+    ).subscribe();
   }
 }
