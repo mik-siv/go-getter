@@ -12,7 +12,7 @@ export abstract class RestfulService {
     return this.http.get<T>(endpoint);
   }
 
-  getById<T>(endpoint: string, id: number): Observable<T> {
+  getById<T>(endpoint: string, id: string): Observable<T> {
     return this.http.get<T>(`${endpoint}/${id}`);
   }
 
@@ -20,11 +20,11 @@ export abstract class RestfulService {
     return this.http.post<T>(endpoint, data);
   }
 
-  update<T>(endpoint: string, id: number, data: T): Observable<T> {
+  update<T>(endpoint: string, id: string, data: T): Observable<T> {
     return this.http.patch<T>(`${endpoint}/${id}`, data);
   }
 
-  delete(endpoint: string, id: number): Observable<void> {
+  delete(endpoint: string, id: string): Observable<void> {
     return this.http.delete<void>(`${endpoint}/${id}`);
   }
 }
