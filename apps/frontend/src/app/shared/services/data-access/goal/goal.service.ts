@@ -5,9 +5,10 @@ import { RequestStatus } from '../models/RequestStatus';
 import { catchError } from 'rxjs/operators';
 import { Goal, GoalsList } from '../../../models/goal.model';
 import { environment } from '../../../../../environments/environment';
+import { StatefulService } from '../models/StatefulService';
 
 export interface GoalState {
-  error: string;
+  error: Error;
   status: RequestStatus;
   goals: GoalsList;
 }
@@ -15,10 +16,10 @@ export interface GoalState {
 @Injectable({
   providedIn: 'root',
 })
-export class GoalService extends RestfulService {
+export class GoalService extends RestfulService implements StatefulService {
   private baseUrl = `${environment.baseUrl}goals`;
 
-  emptyState: GoalState = {
+  private emptyState: GoalState = {
     error: undefined,
     status: undefined,
     goals: undefined,
@@ -27,28 +28,52 @@ export class GoalService extends RestfulService {
   //state
   private state = signal<GoalState>(this.emptyState);
 
+  private updateState(state: Partial<GoalState>): void {
+    this.state.update(currentState => ({ ...currentState, ...state }));
+  };
+
+  private setPendingState(): void {
+    this.updateState({ status: RequestStatus.PENDING });
+  }
+
   //selectors
   goals: Signal<Goal[]> = computed(() => this.state().goals?.goals);
   contributing_to: Signal<Goal[]> = computed(() => this.state().goals?.contributing_to);
   status: Signal<RequestStatus> = computed(() => this.state().status);
-  error: Signal<string> = computed(() => this.state().error);
+  error: Signal<Error> = computed(() => this.state().error);
 
   getGoals(): Observable<GoalsList> {
-    this.state.update(state => ({ ...state, status: RequestStatus.PENDING }));
+    this.setPendingState();
     return this.getAll<GoalsList>(`${this.baseUrl}/my-goals`)
       .pipe(
         catchError((error) => {
-          this.state.update((state) => ({ ...state, error: error.message, status: RequestStatus.ERROR }));
+          this.updateState({ error, status: RequestStatus.ERROR });
           throw error;
         }),
         tap((response) => {
           const { goals, contributing_to } = response;
-          this.state.update(state => ({
-            ...state,
+          this.updateState({
             error: undefined,
             status: RequestStatus.SUCCESS,
             goals: { goals, contributing_to },
-          }));
+          });
+        }),
+      );
+  }
+
+  deleteGoal(id: string): Observable<void> {
+    this.setPendingState();
+    return this.delete(`${this.baseUrl}/goals`, id)
+      .pipe(
+        catchError((error) => {
+          this.updateState({ error, status: RequestStatus.ERROR });
+          throw error;
+        }),
+        tap(() => {
+          this.updateState({
+            error: undefined,
+            status: RequestStatus.SUCCESS,
+          });
         }),
       );
   }
