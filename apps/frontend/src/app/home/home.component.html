@@ -7,26 +7,27 @@
   <mat-sidenav class="left-side-nav" mode="side" opened>
     @if (isPending()) {
       <mat-progress-bar class="progress-bar" mode="indeterminate" color="accent"></mat-progress-bar>
-    } @else {
+    }
+    @defer (when !!goals()) {
       <app-item-list
         [isExpanded]="true"
         [listName]="'Goals'"
         [items]="goals()"
         [activeItem]="activeGoal$"
         (itemClicked)="setActiveGoal($event)"
-        (deleteItemClicked)="deleteGoal($event)"
+        (deleteItemClicked)="handleGoalDeletion($event)"
       >
+      </app-item-list>
+    }
+    @defer (when !!contributing_to()) {
+      <app-item-list
+        [listName]="'Contributions'"
+        [items]="contributing_to()"
+        [activeItem]="activeGoal$"
+        (itemClicked)="setActiveGoal($event)">
         >
       </app-item-list>
-      @if (!!contributing_to()) {
-        <app-item-list
-          [listName]="'Contributions'"
-          [items]="contributing_to()"
-          [activeItem]="activeGoal$"
-          (itemClicked)="setActiveGoal($event)">
-          >
-        </app-item-list>
-      }
     }
+
   </mat-sidenav>
 </mat-sidenav-container>

@@ -14,6 +14,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
   ConfirmationDialogComponent,
 } from '../shared/components/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
+import {
+  ConfirmationDialogData,
+} from '../shared/components/confirmation-dialog/confirmation-dialog/models/ConfirmationDialogData';
 
 @Component({
   selector: 'app-home',
@@ -57,19 +60,37 @@ export class HomeComponent implements OnInit {
     this.activeGoal$ = goal;
   }
 
-  deleteGoal(goal: Goal): void {
-    this.openDialog('100', '100')
+  getDialogPrompt(goal: Goal, isContributingToGoal: boolean): ConfirmationDialogData {
+    const content = isContributingToGoal ? `Do you want to stop contributing to '${goal.name}'?` : `Do you want to delete goal '${goal.name}'?`;
+    return {
+      title: 'Are you sure?',
+      content,
+    };
+  }
+
+  handleGoalDeletion(goal: Goal): void {
+    this.openDialog('100', '100', this.getDialogPrompt(goal, false))
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
+        if (result) {
+          this.deleteGoal(goal);
+        }
       });
   }
 
-  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): MatDialogRef<ConfirmationDialogComponent> {
+  deleteGoal(goal: Goal): void {
+    this.goalService.deleteGoal(goal.id).pipe(
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe();
+  }
+
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string, prompt: ConfirmationDialogData): MatDialogRef<ConfirmationDialogComponent> {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '250px',
       enterAnimationDuration,
       exitAnimationDuration,
+      data: prompt,
     });
   }
 
