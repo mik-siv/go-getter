@@ -1,4 +1,5 @@
-# Go-Getter is a new portal that helps you track and follow your goals.
+# Go-Getter is a web application that streamlines project tracking by providing a centralized platform to monitor progress for various activities, from construction projects to vehicle repairs.
+
 
 <p align="center">
   <a href="https://nestjs.com/" target="blank"><img src="/assets/nestjs-logo-small.svg" width="120" alt="Nest Logo" /></a>
