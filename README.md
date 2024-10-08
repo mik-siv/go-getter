@@ -1,8 +1,11 @@
 # Go-Getter is a new portal that helps you track and follow your goals.
 
-![Nest.js](https://nestjs.com/img/logo_text.svg)
+<p align="center">
+  <a href="https://nestjs.com/" target="blank"><img src="/assets/nestjs-logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <a href="https://nestjs.com/" target="blank"><img src="/assets/angular_gradient.png" width="120" alt="Nest Logo" /></a>
+</p>
 
-This is a personal portfolio project built using the Nest.js framework. It focuses on providing a clean, scalable, and well-structured solution for showcasing professional work and projects. The application features various components that exhibit the best practices and implementation of various aspects related to Nest.js and modern software development.
+This is a personal portfolio project built using the Nest.js and Angular. It focuses on providing a clean, scalable, and well-structured solution for showcasing professional work and projects. The application features various components that exhibit the best practices and implementation of various aspects related to Nest.js and modern software development.
 
 ## Features
 
@@ -23,7 +26,7 @@ This is a personal portfolio project built using the Nest.js framework. It focus
 - **Automated Linting and Formatting:** Pre-commit hooks for automated linting and code formatting using Husky.
 - **Turbo Pipelines for Monorepo:** Optimized CI/CD pipeline setup for monorepo approach.
 - **Automated GitHub Actions pipelines:** Linting, Tests, Deploys and Tagging are fully automated using GH Actions
-- **Multi-environment setup:** Database connections are managed per environment.
+- **Multi-environment setup:** Both FE and BE have prod and development modes.
 
 ## Getting Started
 
