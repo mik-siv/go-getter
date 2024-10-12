@@ -17,6 +17,8 @@ import {
 import {
   ConfirmationDialogData,
 } from '../shared/components/confirmation-dialog/confirmation-dialog/models/ConfirmationDialogData';
+import { UserService } from '../shared/services/data-access/user/user.service';
+import { User } from '../shared/models/user.model';
 
 @Component({
   selector: 'app-home',
@@ -28,6 +30,7 @@ import {
 export class HomeComponent implements OnInit {
   authService = inject(AuthService);
   goalService = inject(GoalService);
+  userService = inject(UserService);
   destroyRef = inject(DestroyRef);
   router = inject(Router);
   readonly dialog = inject(MatDialog);
@@ -35,6 +38,7 @@ export class HomeComponent implements OnInit {
   isPending: Signal<boolean> = computed(() => this.goalService.status() === RequestStatus.PENDING);
   goals: Signal<Goal[]> = computed(() => this.goalService.goals());
   contributing_to: Signal<Goal[]> = computed(() => this.goalService.contributing_to());
+  currentUser: Signal<User> = computed(() => this.authService.user());
   activeGoal$: Goal;
 
   constructor() {
@@ -79,8 +83,25 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  handleRemoveGoalContribution(goal: Goal): void {
+    this.openDialog('100', '100', this.getDialogPrompt(goal, true))
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (result) {
+          this.removeGoalContribution(goal);
+        }
+      });
+  }
+
   deleteGoal(goal: Goal): void {
     this.goalService.deleteGoal(goal.id).pipe(
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe();
+  }
+
+  removeGoalContribution(goal: Goal): void {
+    this.goalService.removeGoalContributor(goal.id, this.currentUser().id).pipe(
       takeUntilDestroyed(this.destroyRef),
     ).subscribe();
   }

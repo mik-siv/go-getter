@@ -39,8 +39,19 @@ export class GoalService extends RestfulService implements StatefulService {
   private removeGoalFromStateById(id: string): void {
     return this.updateState({
       goals: {
-        contributing_to: this.contributing_to(),
+        contributing_to: this.contributing_to().filter(goal => goal.id !== id),
         goals: this.goals().filter(goal => goal.id !== id),
+      },
+      status: RequestStatus.SUCCESS,
+      error: undefined,
+    });
+  }
+
+  private removeContributingGoalFromState(id: string): void {
+    return this.updateState({
+      goals: {
+        contributing_to: this.contributing_to().filter(goal => goal.id !== id),
+        goals: this.goals(),
       },
       status: RequestStatus.SUCCESS,
       error: undefined,
@@ -82,6 +93,20 @@ export class GoalService extends RestfulService implements StatefulService {
         }),
         tap(() => {
           this.removeGoalFromStateById(id);
+        }),
+      );
+  }
+
+  removeGoalContributor(goalId: string, userId: string): Observable<Goal> {
+    this.setPendingState();
+    return this.update<Goal>(`${this.baseUrl}/${goalId}/stop-contributing`, userId, {} as Goal)
+      .pipe(
+        catchError((error) => {
+          this.updateState({ error, status: RequestStatus.ERROR });
+          throw error;
+        }),
+        tap(() => {
+          this.removeContributingGoalFromState(goalId);
         }),
       );
   }

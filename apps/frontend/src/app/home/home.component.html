@@ -24,8 +24,9 @@
         [listName]="'Contributions'"
         [items]="contributing_to()"
         [activeItem]="activeGoal$"
-        (itemClicked)="setActiveGoal($event)">
-        >
+        (itemClicked)="setActiveGoal($event)"
+        (deleteItemClicked)="handleRemoveGoalContribution($event)"
+      >
       </app-item-list>
     }
 
