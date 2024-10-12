@@ -49,8 +49,10 @@ export class ResourceOwnerGuard implements CanActivate {
     const resourceId: string = request.params?.id;
     //allowing access if resource is not requested by id
     if (!resourceId) return true;
-    //allowing access if requested resource id is stored in JWT token
-    if (ownedResources.some(this.checkResourceOwnership(user, resourceId))) return true;
+    //allowing access if requested resource id is stored in JWT token and user is not only a contributor
+    if (!ownedResources.includes(OwnedResource.CONTRIBUTING_TO)) {
+      return ownedResources.some(this.checkResourceOwnership(user, resourceId));
+    }
     //checking if required resource is not cached in JWT but exists in DB
     for (const resource of ownedResources) {
       if (await this.userService.validateUserResourceAllowance(user.id, resourceId, resource)) {

@@ -20,7 +20,7 @@ export class Goal {
   @JoinColumn({ name: 'created_by' })
   created_by: User;
 
-  @ManyToMany(() => User)
+  @ManyToMany(() => User, { nullable: true })
   @JoinTable({
     name: 'goal_contributors',
     joinColumn: {
@@ -32,7 +32,7 @@ export class Goal {
       referencedColumnName: 'id',
     },
   })
-  contributors: User[];
+  contributors: Promise<User[]>;
 
   @ManyToOne(() => Goal, { nullable: true })
   @JoinColumn({ name: 'parentId' })

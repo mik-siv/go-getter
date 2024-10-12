@@ -62,7 +62,7 @@ describe('GoalService', () => {
     expect(result).toEqual({
       id: expect.any(String),
       created_by: fakeUser,
-      contributors: [],
+      contributors: null,
       parent: null,
       subgoals: [],
       ...goalData,
@@ -137,5 +137,57 @@ describe('GoalService', () => {
     });
     const availableGoals = await service.findAvailableGoals(fakeUser.id);
     expect(availableGoals).toEqual({ goals: mockGoalsData, contributing_to: mockGoalsData });
+  });
+
+  it('should remove a contributor from a goal', async () => {
+    const goalId = 'goalId';
+    const userId = 'userId';
+    const user = { id: userId } as any;
+    const goal = {
+      id: goalId,
+      contributors: Promise.resolve([{ id: userId } as any, { id: 'otherUserId' } as any]),
+    } as Goal;
+
+    // Mock the findById calls to simulate finding the user and the goal
+    jest.spyOn(service, 'findById').mockImplementation((id) => {
+      if (id === goalId) {
+        return Promise.resolve(goal);
+      }
+    });
+
+    userServiceMock.findById.mockReturnValue(user);
+
+    // Mock the userRepository save method
+    const repoSaveSpy = jest.spyOn(repository, 'save');
+
+    // Run removeContributor method
+    const result = await service.removeContributor(goalId, userId);
+
+    // Verify the save method was called with the updated goal
+    expect(repoSaveSpy).toBeCalledWith({ ...goal, contributors: [{ id: 'otherUserId' } as any] });
+    // Verify the returned goal doesn't include the removed user
+    expect((await result.contributors).some((contributor) => contributor.id === userId)).toBe(false);
+  });
+
+  it('should add a contributor to a goal', async () => {
+    const goalId = 'goalId';
+    const contributorId = 'contributorId';
+    const contributor = { id: contributorId } as any;
+    const goal = {
+      id: goalId,
+      contributors: Promise.resolve([{ id: 'otherUserId' } as any]),
+    } as Goal;
+
+    jest.spyOn(service, 'findById').mockImplementation((id) => {
+      if (id === goalId) {
+        return Promise.resolve(goal);
+      }
+    });
+    userServiceMock.findById.mockReturnValue(contributor);
+    const repoSaveSpy = jest.spyOn(repository, 'save');
+    const result = await service.addContributor(goalId, contributorId);
+
+    expect(repoSaveSpy).toBeCalledWith({ ...goal, contributors: [{ id: 'otherUserId' } as any, contributor] });
+    expect((await result.contributors).some((user) => user.id === contributorId)).toBe(true);
   });
 });
