@@ -2,7 +2,8 @@ import { Component, inject } from '@angular/core';
 import { MaterialModule } from '../../material/material.module';
 import { RoutePaths } from '../../../app.routes';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../../services/data-access/auth/auth.service';
+import { AuthStateService } from '../../services/data-access/auth/state/auth-state.service';
+import { UserStateService } from '../../services/data-access/user/state/user-state.service';
 
 @Component({
   selector: 'app-header',
@@ -12,15 +13,16 @@ import { AuthService } from '../../services/data-access/auth/auth.service';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  authService = inject(AuthService);
+  authStateService = inject(AuthStateService);
+  userStateService = inject(UserStateService);
 
   RoutePaths = RoutePaths;
 
   get isLoggedIn(): boolean {
-    return !!this.authService.user();
+    return !!this.userStateService.user();
   }
 
   logout(): void {
-    this.authService.logOut();
+    this.authStateService.refreshState();
   }
 }

@@ -9,9 +9,12 @@
           <mat-list-item
             [class]="{'active': activeItem === item}"
             (click)="onClick(item)"
+            [matTooltip]="item.name"
             role="listitem">
             <div class="flex-container">
-              {{ item.name }}
+              <div class="item-name">
+                {{ item.name }}
+              </div>
               <button class="delete-item-button"
                       mat-icon-button
                       matTooltip="Delete"

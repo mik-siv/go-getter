@@ -6,7 +6,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SubgoalCardComponent } from './components/subgoal-card/subgoal-card.component';
 import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.component';
 import { Goal } from '../shared/models/goal.model';
-import { AuthService } from '../shared/services/data-access/auth/auth.service';
 import { Router } from '@angular/router';
 import { RoutePaths } from '../app.routes';
 import { RequestStatus } from '../shared/services/data-access/models/RequestStatus';
@@ -17,8 +16,9 @@ import {
 import {
   ConfirmationDialogData,
 } from '../shared/components/confirmation-dialog/confirmation-dialog/models/ConfirmationDialogData';
-import { UserService } from '../shared/services/data-access/user/user.service';
 import { User } from '../shared/models/user.model';
+import { UserStateService } from '../shared/services/data-access/user/state/user-state.service';
+import { GoalStateService } from '../shared/services/data-access/goal/state/goal-state.service';
 
 @Component({
   selector: 'app-home',
@@ -28,29 +28,29 @@ import { User } from '../shared/models/user.model';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  authService = inject(AuthService);
   goalService = inject(GoalService);
-  userService = inject(UserService);
+  goalStateService = inject(GoalStateService);
+  userStateService = inject(UserStateService);
   destroyRef = inject(DestroyRef);
   router = inject(Router);
   readonly dialog = inject(MatDialog);
 
-  isPending: Signal<boolean> = computed(() => this.goalService.status() === RequestStatus.PENDING);
-  goals: Signal<Goal[]> = computed(() => this.goalService.goals());
-  contributing_to: Signal<Goal[]> = computed(() => this.goalService.contributing_to());
-  currentUser: Signal<User> = computed(() => this.authService.user());
+  isPending: Signal<boolean> = computed(() => this.goalStateService.status() === RequestStatus.PENDING);
+  goals: Signal<Goal[]> = computed(() => this.goalStateService.goals());
+  contributing_to: Signal<Goal[]> = computed(() => this.goalStateService.contributing_to());
+  currentUser: Signal<User> = computed(() => this.userStateService.user());
   activeGoal$: Goal;
 
   constructor() {
     effect(() => {
-      if (!this.authService.user()) {
+      if (!this.userStateService.user()) {
         this.router.navigate([RoutePaths.Auth]);
       }
     });
     effect(() => {
-      if (Array.isArray(this.goals()) && this.goals().length > 0) {
+      if (this.isGoalListEmpty(this.goals())) {
         this.setActiveGoal(this.goals()[0]);
-      } else if (Array.isArray(this.contributing_to()) && this.contributing_to().length > 0) {
+      } else if (this.isGoalListEmpty(this.contributing_to())) {
         this.setActiveGoal(this.contributing_to()[0]);
       }
     });
@@ -62,6 +62,10 @@ export class HomeComponent implements OnInit {
 
   setActiveGoal(goal: Goal): void {
     this.activeGoal$ = goal;
+  }
+
+  isGoalListEmpty(goalsList: Goal[]): boolean {
+    return Array.isArray(goalsList) && goalsList.length > 0;
   }
 
   getDialogPrompt(goal: Goal, isContributingToGoal: boolean): ConfirmationDialogData {

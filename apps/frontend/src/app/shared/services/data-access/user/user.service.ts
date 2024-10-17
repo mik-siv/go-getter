@@ -1,50 +1,28 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { RestfulService } from '../restful.service';
 import { User } from '../../../models/user.model';
-import { RequestStatus } from '../models/RequestStatus';
 import { Observable, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
-
-export interface UserState {
-  error: string;
-  status: RequestStatus;
-  user: User;
-}
+import { UserStateService } from './state/user-state.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService extends RestfulService {
   private baseUrl = `${environment.baseUrl}users`;
-
-  //state
-  private state = signal<UserState>({
-    user: undefined,
-    error: undefined,
-    status: undefined,
-  });
-
-  //selectors
-  user = computed(() => this.state().user);
-  status = computed(() => this.state().status);
-  error = computed(() => this.state().error);
+  userStateService = inject(UserStateService);
 
   register(email: string, password: string, username: string): Observable<User> {
-    this.state.update(state => ({ ...state, status: RequestStatus.PENDING }));
+    this.userStateService.setPendingState()
     return this.post<User>(this.baseUrl, { email, password, username })
       .pipe(
         catchError((error) => {
-          this.state.update((state) => ({ ...state, error: error.message, status: RequestStatus.ERROR }));
+          this.userStateService.setErrorState(error)
           throw error; // Re-throw the error for component handling
         }),
-        tap((response) => {
-          this.state.update(state => ({
-            ...state,
-            user: response,
-            error: undefined,
-            status: RequestStatus.SUCCESS,
-          }));
+        tap((user) => {
+          this.userStateService.setUser(user)
         }),
       );
   }

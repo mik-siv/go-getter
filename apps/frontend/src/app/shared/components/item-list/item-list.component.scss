@@ -9,6 +9,13 @@ mat-list {
   width: 100%;
 }
 
+.item-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 mat-list-item {
   padding-right: 0;
   .delete-item-button {

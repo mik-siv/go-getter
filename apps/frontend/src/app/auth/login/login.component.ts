@@ -5,6 +5,7 @@ import { AsyncPipe } from '@angular/common';
 import { AuthService } from '../../shared/services/data-access/auth/auth.service';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthStateService } from '../../shared/services/data-access/auth/state/auth-state.service';
 
 export interface LoginFormData {
   email: FormControl<string>;
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup<LoginFormData>;
   fb: FormBuilder = inject(FormBuilder);
   authService: AuthService = inject(AuthService);
+  authStateService = inject(AuthStateService);
   router = inject(Router);
   destroyRef = inject(DestroyRef);
   isLogin = output<boolean>();

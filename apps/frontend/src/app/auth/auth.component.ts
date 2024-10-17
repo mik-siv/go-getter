@@ -1,12 +1,12 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { MaterialModule } from '../shared/material/material.module';
 import { LoginComponent } from './login/login.component';
-import { AuthService } from '../shared/services/data-access/auth/auth.service';
 import { RequestStatus } from '../shared/services/data-access/models/RequestStatus';
 import { RoutePaths } from '../app.routes';
 import { Router } from '@angular/router';
 import { RegisterComponent } from './register/register.component';
-import { UserService } from '../shared/services/data-access/user/user.service';
+import { UserStateService } from '../shared/services/data-access/user/state/user-state.service';
+import { AuthStateService } from '../shared/services/data-access/auth/state/auth-state.service';
 
 @Component({
   selector: 'app-auth',
@@ -16,22 +16,23 @@ import { UserService } from '../shared/services/data-access/user/user.service';
   styleUrl: './auth.component.scss',
 })
 export class AuthComponent {
-  authService = inject(AuthService);
-  userService = inject(UserService);
+  userStateService = inject(UserStateService);
+  authStateService = inject(AuthStateService);
   router = inject(Router);
   isLogin = signal(true);
+  user = computed(() => this.userStateService.user());
   authEffect = effect(() => {
-    if (this.authService.user()) {
+    if (this.user()) {
       this.router.navigate([RoutePaths.Home]);
     }
   });
 
   get isAuthPending(): boolean {
-    return this.authService.status() === RequestStatus.PENDING;
+    return this.authStateService.status() === RequestStatus.PENDING;
   }
 
   get isUserPending(): boolean {
-    return this.userService.status() === RequestStatus.PENDING;
+    return this.userStateService.status() === RequestStatus.PENDING;
   }
 
   public get isPending(): boolean {

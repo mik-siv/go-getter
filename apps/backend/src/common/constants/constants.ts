@@ -1,2 +1,2 @@
 export const saltRounds = 10;
-export const authTokenExpiration = '600s';
+export const authTokenExpiration = '3600s';
