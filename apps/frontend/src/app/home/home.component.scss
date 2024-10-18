@@ -1,4 +1,5 @@
 @use '@angular/material' as mat;
+@use '../../styles/variables.styles' as vars;
 
 @include mat.core();
 
@@ -7,6 +8,27 @@
   scrollbar-width: thin;
   scrollbar-color: #aaa transparent;
 }
+
+.side-nav {
+  &--toggle-button {
+    height: 100%;
+    padding: 0;
+    width: 2rem !important;
+    min-width: unset !important;
+  }
+
+  &--content-header {
+    padding-top: .5rem;
+    display: flex;
+    height: 2rem;
+
+    &--title {
+      margin-left: 1rem;
+      margin-bottom: 0;
+    }
+  }
+}
+
 
 .left-side-nav {
   width: 25%;

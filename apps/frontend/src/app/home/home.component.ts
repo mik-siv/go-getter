@@ -39,7 +39,8 @@ export class HomeComponent implements OnInit {
   goals: Signal<Goal[]> = computed(() => this.goalStateService.goals());
   contributing_to: Signal<Goal[]> = computed(() => this.goalStateService.contributing_to());
   currentUser: Signal<User> = computed(() => this.userStateService.user());
-  activeGoal$: Goal;
+  activeGoal: Goal;
+  sideNavOpened = true;
 
   constructor() {
     effect(() => {
@@ -61,7 +62,7 @@ export class HomeComponent implements OnInit {
   }
 
   setActiveGoal(goal: Goal): void {
-    this.activeGoal$ = goal;
+    this.activeGoal = goal;
   }
 
   isGoalListEmpty(goalsList: Goal[]): boolean {
