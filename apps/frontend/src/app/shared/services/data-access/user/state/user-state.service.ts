@@ -1,7 +1,8 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { RequestStatus } from '../../models/RequestStatus';
 import { StatefulService } from '../../models/StatefulService';
-import { User } from '../../../../models/user.model';
+import { User } from '../models/user.model';
+import { LocalStorageService } from '../../../common/local-storage/local-storage.service';
 
 export interface UserState {
   error: Error;
@@ -13,6 +14,7 @@ export interface UserState {
   providedIn: 'root',
 })
 export class UserStateService implements StatefulService<UserState> {
+  private localStorageService = inject(LocalStorageService);
 
   emptyState: UserState = {
     user: undefined,

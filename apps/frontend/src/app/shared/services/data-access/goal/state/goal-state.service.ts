@@ -1,6 +1,6 @@
 import { computed, Injectable, Signal, signal } from '@angular/core';
 import { RequestStatus } from '../../models/RequestStatus';
-import { Goal, GoalsList } from '../../../../models/goal.model';
+import { Goal, GoalsList } from '../models/goal.model';
 import { StatefulService } from '../../models/StatefulService';
 
 export interface GoalState {

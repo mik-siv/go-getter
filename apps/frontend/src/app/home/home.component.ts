@@ -5,9 +5,8 @@ import { GoalService } from '../shared/services/data-access/goal/goal.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SubgoalCardComponent } from './components/subgoal-card/subgoal-card.component';
 import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.component';
-import { Goal } from '../shared/models/goal.model';
+import { Goal } from '../shared/services/data-access/goal/models/goal.model';
 import { Router } from '@angular/router';
-import { RoutePaths } from '../app.routes';
 import { RequestStatus } from '../shared/services/data-access/models/RequestStatus';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
@@ -16,9 +15,11 @@ import {
 import {
   ConfirmationDialogData,
 } from '../shared/components/confirmation-dialog/confirmation-dialog/models/ConfirmationDialogData';
-import { User } from '../shared/models/user.model';
+import { User } from '../shared/services/data-access/user/models/user.model';
 import { UserStateService } from '../shared/services/data-access/user/state/user-state.service';
 import { GoalStateService } from '../shared/services/data-access/goal/state/goal-state.service';
+import { AuthStateService } from '../shared/services/data-access/auth/state/auth-state.service';
+import { RoutePaths } from '../app.routes';
 
 @Component({
   selector: 'app-home',
@@ -31,6 +32,7 @@ export class HomeComponent implements OnInit {
   goalService = inject(GoalService);
   goalStateService = inject(GoalStateService);
   userStateService = inject(UserStateService);
+  authStateService = inject(AuthStateService);
   destroyRef = inject(DestroyRef);
   router = inject(Router);
   readonly dialog = inject(MatDialog);
@@ -44,15 +46,11 @@ export class HomeComponent implements OnInit {
 
   constructor() {
     effect(() => {
-      if (!this.userStateService.user()) {
-        this.router.navigate([RoutePaths.Auth]);
-      }
+      this.populateActiveGoal();
     });
     effect(() => {
-      if (this.isGoalListEmpty(this.goals())) {
-        this.setActiveGoal(this.goals()[0]);
-      } else if (this.isGoalListEmpty(this.contributing_to())) {
-        this.setActiveGoal(this.contributing_to()[0]);
+      if (!this.authStateService.isAuthenticated()) {
+        this.router.navigate([RoutePaths.Auth]);
       }
     });
   }
@@ -67,6 +65,14 @@ export class HomeComponent implements OnInit {
 
   isGoalListEmpty(goalsList: Goal[]): boolean {
     return Array.isArray(goalsList) && goalsList.length > 0;
+  }
+
+  populateActiveGoal() {
+    if (this.isGoalListEmpty(this.goals())) {
+      this.setActiveGoal(this.goals()[0]);
+    } else if (this.isGoalListEmpty(this.contributing_to())) {
+      this.setActiveGoal(this.contributing_to()[0]);
+    }
   }
 
   getDialogPrompt(goal: Goal, isContributingToGoal: boolean): ConfirmationDialogData {

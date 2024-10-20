@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { RestfulService } from '../restful.service';
-import { User } from '../../../models/user.model';
+import { User } from './models/user.model';
 import { Observable, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';

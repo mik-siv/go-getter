@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 import { SubgoalCardComponent } from '../subgoal-card/subgoal-card.component';
-import { Goal } from '../../../shared/models/goal.model';
+import { Goal } from '../../../shared/services/data-access/goal/models/goal.model';
 
 @Component({
   selector: 'app-subgoal-list',

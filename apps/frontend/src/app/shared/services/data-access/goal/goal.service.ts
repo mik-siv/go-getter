@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { RestfulService } from '../restful.service';
 import { catchError } from 'rxjs/operators';
-import { Goal, GoalsList } from '../../../models/goal.model';
+import { Goal, GoalsList } from './models/goal.model';
 import { environment } from '../../../../../environments/environment';
 import { GoalStateService } from './state/goal-state.service';
 

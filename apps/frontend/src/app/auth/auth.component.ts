@@ -20,9 +20,9 @@ export class AuthComponent {
   authStateService = inject(AuthStateService);
   router = inject(Router);
   isLogin = signal(true);
-  user = computed(() => this.userStateService.user());
+  isAuthenticated = computed (()=>this.authStateService.isAuthenticated());
   authEffect = effect(() => {
-    if (this.user()) {
+    if (this.isAuthenticated()) {
       this.router.navigate([RoutePaths.Home]);
     }
   });

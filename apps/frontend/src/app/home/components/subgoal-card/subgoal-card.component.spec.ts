@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SubgoalCardComponent } from './subgoal-card.component';
-import { Subgoal } from '../../../shared/models/goal.model';
+import { Subgoal } from '../../../shared/services/data-access/goal/models/goal.model';
 
 describe('SubgoalCardComponent', () => {
   let component: SubgoalCardComponent;

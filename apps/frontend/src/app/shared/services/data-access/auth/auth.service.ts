@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { RestfulService } from '../restful.service';
 import { Observable, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { User } from '../../../models/user.model';
+import { User } from '../user/models/user.model';
 import { environment } from '../../../../../environments/environment';
 import { UserStateService } from '../user/state/user-state.service';
 import { AuthStateService } from './state/auth-state.service';
@@ -29,7 +29,7 @@ export class AuthService extends RestfulService {
         }),
         tap((response) => {
           const { access_token, ...user } = response;
-          this.authStateService.setAccessTokenSuccess(access_token);
+          this.authStateService.setNewAccessToken(access_token);
           this.userStateService.setUser(user);
         }),
       );
