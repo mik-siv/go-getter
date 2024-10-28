@@ -1,15 +1,14 @@
 import { inject } from '@angular/core';
 import { HttpRequest, HttpEvent, HttpHandlerFn } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LocalStorageService } from '../services/common/local-storage/local-storage.service';
-import { LocalStorageKeys } from '../services/common/local-storage/models/LocalStorageKeys';
+import { AuthStateService } from '../services/data-access/auth/state/auth-state.service';
 
 export function AuthInterceptor(
   req: HttpRequest<any>,
   next: HttpHandlerFn,
 ): Observable<HttpEvent<any>> {
-  const localStorageService = inject(LocalStorageService);
-  const token = localStorageService.getItem(LocalStorageKeys.accessToken);
+  const authStateService = inject(AuthStateService);
+  const token = authStateService.token()
   if (token) {
     const authReq = req.clone({
       setHeaders: { Authorization: `Bearer ${token}` },

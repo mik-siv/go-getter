@@ -8,6 +8,7 @@ export interface AuthState {
   error: Error;
   status: RequestStatus;
   isAuthenticated: boolean;
+  token: string;
 }
 
 @Injectable({
@@ -16,14 +17,11 @@ export interface AuthState {
 export class AuthStateService implements StatefulService<AuthState> {
   private localStorageService = inject(LocalStorageService);
 
-  constructor() {
-    this.setUserAuthStateFromLocalStorage();
-  }
-
   emptyState: AuthState = {
     isAuthenticated: false,
     error: undefined,
     status: undefined,
+    token: undefined,
   };
 
   // state
@@ -33,6 +31,11 @@ export class AuthStateService implements StatefulService<AuthState> {
   status = computed(() => this.state().status);
   error = computed(() => this.state().error);
   isAuthenticated = computed(() => this.state().isAuthenticated);
+  token = computed(() => this.state().token);
+
+  constructor() {
+    this.setUserAuthStateFromLocalStorage();
+  }
 
   updateState(state: Partial<AuthState>): void {
     this.state.update(currentState => ({ ...currentState, ...state }));
@@ -40,21 +43,22 @@ export class AuthStateService implements StatefulService<AuthState> {
 
   setNewAccessToken(accessToken: string): void {
     this.localStorageService.setItem(LocalStorageKeys.accessToken, accessToken);
-    this.setAccessTokenSuccess();
+    this.setAccessTokenSuccess(accessToken);
   }
 
-  setAccessTokenSuccess(): void {
+  setAccessTokenSuccess(accessToken: string): void {
     this.updateState({
       isAuthenticated: true,
       error: undefined,
       status: RequestStatus.SUCCESS,
+      token: accessToken,
     });
   }
 
   setUserAuthStateFromLocalStorage(): void {
-    const tokenExists = !!this.localStorageService.getItem(LocalStorageKeys.accessToken);
-    if (tokenExists) {
-      this.setAccessTokenSuccess();
+    const existingToken = this.localStorageService.getItem(LocalStorageKeys.accessToken);
+    if (existingToken) {
+      this.setAccessTokenSuccess(existingToken);
     }
   }
 
@@ -67,7 +71,7 @@ export class AuthStateService implements StatefulService<AuthState> {
   }
 
   refreshState(): void {
-    this.localStorageService.removeItem(LocalStorageKeys.accessToken);
+    this.localStorageService.clear();
     this.state.set(this.emptyState);
   }
 }
