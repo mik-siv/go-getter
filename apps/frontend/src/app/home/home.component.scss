@@ -12,17 +12,19 @@
 .side-nav {
   &--toggle-button {
     height: 100%;
-    padding: 0;
+    padding: 0 !important;
     width: 2rem !important;
     min-width: unset !important;
   }
 
   &--content-header {
-    padding-top: .5rem;
     display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
     height: 2rem;
 
     &--title {
+      line-height: 1.5rem;
       margin-left: 1rem;
       margin-bottom: 0;
     }
