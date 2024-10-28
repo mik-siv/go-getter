@@ -30,7 +30,7 @@ export class AuthService extends RestfulService {
         tap((response) => {
           const { access_token, ...user } = response;
           this.authStateService.setNewAccessToken(access_token);
-          this.userStateService.setUser(user);
+          this.userStateService.setNewUser(user);
         }),
       );
   }

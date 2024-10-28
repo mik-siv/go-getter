@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { RestfulService } from '../restful.service';
 import { User } from './models/user.model';
 import { Observable, tap } from 'rxjs';
@@ -22,7 +22,7 @@ export class UserService extends RestfulService {
           throw error; // Re-throw the error for component handling
         }),
         tap((user) => {
-          this.userStateService.setUser(user)
+          this.userStateService.setNewUser(user)
         }),
       );
   }
