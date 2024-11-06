@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { goalSwaggerConfig } from './swagger/config/goal.swagger-config';
 import { GoalModule } from './goal/goal.module';
 import { setupSwaggerForModule } from './swagger/swagger.utils';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -29,6 +30,7 @@ async function bootstrap() {
     include: [UserModule],
   });
 
+  app.use(helmet());
   await app.listen(3000);
 }
 
