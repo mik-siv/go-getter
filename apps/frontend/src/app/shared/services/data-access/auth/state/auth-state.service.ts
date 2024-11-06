@@ -1,44 +1,24 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
 import { StatefulService } from '../../models/StatefulService';
 import { RequestStatus } from '../../models/RequestStatus';
 import { LocalStorageService } from '../../../common/local-storage/local-storage.service';
 import { LocalStorageKeys } from '../../../common/local-storage/models/LocalStorageKeys';
-
-export interface AuthState {
-  error: Error;
-  status: RequestStatus;
-  isAuthenticated: boolean;
-  token: string;
-}
+import { StateService } from '../../../common/state/state.service';
+import { AuthState } from './models/AuthState';
+import { emptyAuthState } from './models/EmptyAuthState';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthStateService implements StatefulService<AuthState> {
+export class AuthStateService extends StateService<AuthState> implements StatefulService<AuthState> {
   private localStorageService = inject(LocalStorageService);
 
-  emptyState: AuthState = {
-    isAuthenticated: false,
-    error: undefined,
-    status: undefined,
-    token: undefined,
-  };
-
-  // state
-  readonly state = signal<AuthState>(this.emptyState);
-
-  // selectors
-  status = computed(() => this.state().status);
-  error = computed(() => this.state().error);
   isAuthenticated = computed(() => this.state().isAuthenticated);
   token = computed(() => this.state().token);
 
   constructor() {
+    super({ state: emptyAuthState, emptyState: emptyAuthState });
     this.setUserAuthStateFromLocalStorage();
-  }
-
-  updateState(state: Partial<AuthState>): void {
-    this.state.update(currentState => ({ ...currentState, ...state }));
   }
 
   setNewAccessToken(accessToken: string): void {
@@ -62,16 +42,8 @@ export class AuthStateService implements StatefulService<AuthState> {
     }
   }
 
-  setPendingState(): void {
-    this.updateState({ status: RequestStatus.PENDING });
-  }
-
-  setErrorState(error: Error): void {
-    this.updateState({ isAuthenticated: false, error, status: RequestStatus.ERROR });
-  }
-
-  refreshState(): void {
+  refreshStateAndClearLocalStorage(): void {
     this.localStorageService.clear();
-    this.state.set(this.emptyState);
+    this.refreshState();
   }
 }

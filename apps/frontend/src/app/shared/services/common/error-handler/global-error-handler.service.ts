@@ -33,7 +33,7 @@ export class GlobalErrorHandler implements ErrorHandler {
   private handleHttpError(error: HttpErrorResponse) {
     console.error('Server Error:', error.error);
     if (error.status === 401) {
-      this.authStateService.refreshState();
+      this.authStateService.refreshStateAndClearLocalStorage();
     }
   }
 

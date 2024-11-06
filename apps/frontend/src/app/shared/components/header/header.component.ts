@@ -21,6 +21,6 @@ export class HeaderComponent {
   }
 
   logout(): void {
-    this.authStateService.refreshState();
+    this.authStateService.refreshStateAndClearLocalStorage();
   }
 }

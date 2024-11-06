@@ -1,34 +1,23 @@
-import { computed, Injectable, Signal, signal } from '@angular/core';
+import { computed, Injectable, Signal } from '@angular/core';
 import { RequestStatus } from '../../models/RequestStatus';
 import { Goal, GoalsList } from '../models/goal.model';
 import { StatefulService } from '../../models/StatefulService';
-
-export interface GoalState {
-  error: Error;
-  status: RequestStatus;
-  goals: GoalsList;
-}
+import { StateService } from '../../../common/state/state.service';
+import { GoalState } from './models/GoalState';
+import { emptyGoalState } from './models/EmptyGoalState';
 
 @Injectable({
   providedIn: 'root',
 })
-export class GoalStateService implements StatefulService<GoalState> {
-  private emptyState: GoalState = {
-    error: undefined,
-    status: undefined,
-    goals: undefined,
-  };
+export class GoalStateService extends StateService<GoalState> implements StatefulService<GoalState> {
 
-  //state
-  readonly state = signal<GoalState>(this.emptyState);
-
-  updateState(state: Partial<GoalState>): void {
-    this.state.update(currentState => ({ ...currentState, ...state }));
-  };
-
-  setPendingState(): void {
-    this.updateState({ status: RequestStatus.PENDING });
+  constructor() {
+    super({ state: emptyGoalState, emptyState: emptyGoalState });
   }
+
+  //selectors
+  goals: Signal<Goal[]> = computed(() => this.state().goals?.goals);
+  contributing_to: Signal<Goal[]> = computed(() => this.state().goals?.contributing_to);
 
   removeGoalFromStateById(id: string): void {
     return this.updateState({
@@ -50,20 +39,6 @@ export class GoalStateService implements StatefulService<GoalState> {
       status: RequestStatus.SUCCESS,
       error: undefined,
     });
-  }
-
-  //selectors
-  goals: Signal<Goal[]> = computed(() => this.state().goals?.goals);
-  contributing_to: Signal<Goal[]> = computed(() => this.state().goals?.contributing_to);
-  status: Signal<RequestStatus> = computed(() => this.state().status);
-  error: Signal<Error> = computed(() => this.state().error);
-
-  refreshState(): void {
-    this.state.set(this.emptyState);
-  }
-
-  setErrorState(error: Error): void {
-    this.updateState({ goals: undefined, error, status: RequestStatus.ERROR });
   }
 
   setGoals(goals: GoalsList): void {
