@@ -8,6 +8,8 @@ import { goalSwaggerConfig } from './swagger/config/goal.swagger-config';
 import { GoalModule } from './goal/goal.module';
 import { setupSwaggerForModule } from './swagger/swagger.utils';
 import helmet from 'helmet';
+import { SubgoalModule } from './subgoal/subgoal.module';
+import { subgoalSwaggerConfig } from './swagger/config/subgoal.swagger-config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -28,6 +30,9 @@ async function bootstrap() {
   });
   setupSwaggerForModule('api/users/document', app, userSwaggerConfig, {
     include: [UserModule],
+  });
+  setupSwaggerForModule('api/subgoals/document', app, subgoalSwaggerConfig, {
+    include: [SubgoalModule],
   });
 
   app.use(helmet());
