@@ -1,16 +1,8 @@
 import { computed, Injectable, Signal, signal } from '@angular/core';
 import { StatefulService } from '../../data-access/models/StatefulService';
 import { RequestStatus } from '../../data-access/models/RequestStatus';
-
-export interface GenericState {
-  error: Error;
-  status: RequestStatus;
-}
-
-export interface StateInput<T> {
-  state: T;
-  emptyState: T;
-}
+import { StateInput } from './models/StateInput';
+import { GenericState } from './models/GenericState';
 
 @Injectable({
   providedIn: 'root',

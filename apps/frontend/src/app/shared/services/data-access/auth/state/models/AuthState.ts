@@ -1,8 +1,6 @@
-import { RequestStatus } from '../../../models/RequestStatus';
+import { GenericState } from '../../../../common/state/models/GenericState';
 
-export interface AuthState {
-  error: Error;
-  status: RequestStatus;
+export interface AuthState extends GenericState{
   isAuthenticated: boolean;
   token: string;
 }

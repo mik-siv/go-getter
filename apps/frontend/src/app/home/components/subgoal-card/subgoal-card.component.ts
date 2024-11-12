@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MaterialModule } from '../../../shared/material/material.module';
-import { Subgoal } from '../../../shared/services/data-access/goal/models/goal.model';
+import { Subgoal } from '../../../shared/services/data-access/subgoal/models/subgoal.model';
 
 @Component({
   selector: 'app-subgoal-card',
