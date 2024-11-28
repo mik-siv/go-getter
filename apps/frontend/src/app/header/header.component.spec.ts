@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HeaderComponent } from './header.component';
 import { MockProvider } from 'ng-mocks';
-import { AuthService } from '../../services/data-access/auth/auth.service';
+import { AuthService } from '../shared/services/data-access/auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
 
 describe('HeaderComponent', () => {

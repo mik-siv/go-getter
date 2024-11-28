@@ -15,3 +15,10 @@ body {
 }
 
 @include mat.all-component-themes(styles.$darcula-theme);
+
+:root {
+  --mat-sidenav-container-background-color: rgb(14, 14, 14);
+  --mat-sidenav-content-background-color: rgb(11, 11, 11);
+  --mat-expansion-container-background-color: #1d1d1d;
+  --mdc-elevated-card-container-color: #1d1d1d;
+}

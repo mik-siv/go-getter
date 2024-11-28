@@ -2,7 +2,42 @@
 
 @include mat.core();
 
-$darcula-primary: mat.m2-define-palette(mat.$m2-grey-palette, 800, 900, 100);
+$dark-primary-text: rgba(black, 0.87);
+$light-primary-text: white;
+$black-palette: (
+  50: #000000,
+  100: #000000,
+  200: #000000,
+  300: #000000,
+  400: #000000,
+  500: #000000,
+  600: #000000,
+  700: #000000,
+  800: #000000,
+  900: #000000,
+  A100: #000000,
+  A200: #000000,
+  A400: #000000,
+  A700: #000000,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $dark-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $dark-primary-text,
+    A700: $light-primary-text,
+  )
+);
+
+$darcula-primary: mat.m2-define-palette($black-palette, 800, 900, 700);
 $darcula-accent: mat.m2-define-palette(mat.$m2-light-blue-palette, 50, 100, 200);
 $darcula-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
