@@ -40,6 +40,12 @@ export interface StatefulService<T> {
   setErrorState(error: Error): void;
 
   /**
+   * Sets the success state of the API request.
+   * @return {void}
+   */
+  setSuccessState(): void;
+
+  /**
    * Refreshes the state of the given entity.
    * @return {void} - This method does not return any value.
    */

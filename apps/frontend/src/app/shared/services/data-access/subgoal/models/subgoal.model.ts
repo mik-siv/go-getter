@@ -1,8 +1,12 @@
 export interface Subgoal {
   id: string;
   name: string;
-  private: boolean;
+  private?: boolean;
   created_by?: Record<string, any>;
   parent?: Subgoal;
-  metadata: Record<string, any>;
+  metadata: SubgoalMetadata;
+}
+
+export interface SubgoalMetadata {
+  description: string;
 }

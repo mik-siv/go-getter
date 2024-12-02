@@ -30,6 +30,10 @@ export abstract class StateService<T extends GenericState> implements StatefulSe
     this.updateState({ status: RequestStatus.PENDING } as Partial<T>);
   }
 
+  setSuccessState(): void {
+    this.updateState({ status: RequestStatus.SUCCESS } as Partial<T>);
+  }
+
   updateState(state: Partial<T>): void {
     this.state.update(currentState => ({ ...currentState, ...state }));
   }
