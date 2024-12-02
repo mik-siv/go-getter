@@ -22,3 +22,11 @@ body {
   --mat-expansion-container-background-color: #1d1d1d;
   --mdc-elevated-card-container-color: #1d1d1d;
 }
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: #fff;
+  -webkit-box-shadow: 0 0 0 1000px var(--mdc-filled-text-field-container-color, var(--mat-app-surface-variant)) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
