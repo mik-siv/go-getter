@@ -1,30 +1,29 @@
 import { Component, computed, DestroyRef, effect, inject, OnInit, Signal } from '@angular/core';
-import { MaterialModule } from '../shared/material/material.module';
-import { ItemListComponent } from '../shared/components/item-list/item-list.component';
-import { GoalService } from '../shared/services/data-access/goal/goal.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SubgoalCardComponent } from './components/subgoal-card/subgoal-card.component';
-import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.component';
-import { Goal } from '../shared/services/data-access/goal/models/goal.model';
-import { Router } from '@angular/router';
-import { RequestStatus } from '../shared/services/data-access/models/RequestStatus';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { RoutePaths } from '../app.routes';
 import {
   ConfirmationDialogComponent,
 } from '../shared/components/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
 import {
   ConfirmationDialogData,
 } from '../shared/components/confirmation-dialog/confirmation-dialog/models/ConfirmationDialogData';
+import { ItemListComponent } from '../shared/components/item-list/item-list.component';
+import { MaterialModule } from '../shared/material/material.module';
+import { AuthStateService } from '../shared/services/data-access/auth/state/auth-state.service';
+import { GoalService } from '../shared/services/data-access/goal/goal.service';
+import { Goal } from '../shared/services/data-access/goal/models/goal.model';
+import { GoalStateService } from '../shared/services/data-access/goal/state/goal-state.service';
+import { RequestStatus } from '../shared/services/data-access/models/RequestStatus';
 import { User } from '../shared/services/data-access/user/models/user.model';
 import { UserStateService } from '../shared/services/data-access/user/state/user-state.service';
-import { GoalStateService } from '../shared/services/data-access/goal/state/goal-state.service';
-import { AuthStateService } from '../shared/services/data-access/auth/state/auth-state.service';
-import { RoutePaths } from '../app.routes';
+import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MaterialModule, ItemListComponent, SubgoalCardComponent, SubgoalListComponent],
+  imports: [MaterialModule, ItemListComponent, SubgoalListComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
