@@ -1,12 +1,19 @@
 <div class="subgoal-edit-dialog">
+  <h2 mat-dialog-title>Create a new Subgoal</h2>
   <form [formGroup]="form">
-    <mat-form-field>
+    <mat-form-field class="data-input">
       <mat-label>Name</mat-label>
-      <input matInput formControlName="name">
+      <input matInput formControlName="name" [minlength]="inputMinLength" [maxLength]="inputMaxLength"
+             placeholder="Enter a name" />
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>Name</mat-label>
-      <input matInput formControlName="description">
+    <mat-form-field class="data-input">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" [minlength]="inputMinLength" [maxLength]="inputMaxLength"
+                placeholder="Enter a description"></textarea>
     </mat-form-field>
   </form>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close [disabled]="!form.valid" (click)="onConfirm()">Create</button>
+    <button mat-button mat-dialog-close (click)="onCancel()">Cancel</button>
+  </mat-dialog-actions>
 </div>

@@ -2,6 +2,7 @@ import { Component, computed, DestroyRef, effect, inject, OnInit, Signal } from 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { filter, map, switchMap } from 'rxjs';
 import { RoutePaths } from '../app.routes';
 import {
   ConfirmationDialogComponent,
@@ -16,8 +17,12 @@ import { GoalService } from '../shared/services/data-access/goal/goal.service';
 import { Goal } from '../shared/services/data-access/goal/models/goal.model';
 import { GoalStateService } from '../shared/services/data-access/goal/state/goal-state.service';
 import { RequestStatus } from '../shared/services/data-access/models/RequestStatus';
+import { SubgoalService } from '../shared/services/data-access/subgoal/subgoal.service';
 import { User } from '../shared/services/data-access/user/models/user.model';
 import { UserStateService } from '../shared/services/data-access/user/state/user-state.service';
+import {
+  SubgoalEditDialogComponent,
+} from './components/subgoal-card/components/subgoal-edit-dialog/subgoal-edit-dialog.component';
 import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.component';
 
 @Component({
@@ -29,6 +34,7 @@ import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.com
 })
 export class HomeComponent implements OnInit {
   goalService = inject(GoalService);
+  subgoalService = inject(SubgoalService);
   goalStateService = inject(GoalStateService);
   userStateService = inject(UserStateService);
   authStateService = inject(AuthStateService);
@@ -123,6 +129,24 @@ export class HomeComponent implements OnInit {
       exitAnimationDuration,
       data: prompt,
     });
+  }
+
+  createSubgoal(): void {
+    this.dialog.open(SubgoalEditDialogComponent, {
+      width: '500px',
+    }).afterClosed().pipe(
+      filter(data => !!data),
+      map((result) => ({
+        name: result.name,
+        metadata: {
+          description: result.description,
+        },
+        private: true,
+        goalIds: [this.activeGoal.id],
+      })),
+      switchMap((subgoal) => this.subgoalService.createSubgoal(subgoal)),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe();
   }
 
   fetchGoals(): void {

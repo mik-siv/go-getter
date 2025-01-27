@@ -1,5 +1,6 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MaterialModule } from '../../../../../shared/material/material.module';
 import { Subgoal } from '../../../../../shared/services/data-access/subgoal/models/subgoal.model';
 import { SubgoalEditForm } from './models/SubgoalEditForm';
@@ -13,16 +14,28 @@ import { SubgoalEditForm } from './models/SubgoalEditForm';
 })
 export class SubgoalEditDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
-  subgoal = input<Subgoal>();
+  private dialogRef = inject(MatDialogRef<SubgoalEditDialogComponent>);
+  protected dialogData: Subgoal = inject(MAT_DIALOG_DATA)
   form: FormGroup<SubgoalEditForm>;
   readonly inputMinLength = 1;
-  readonly inputMaxLength = 256;
+  readonly inputMaxLength = 255;
 
   ngOnInit(): void {
     this.form = this.fb.group({
-        name: [this.subgoal().name, { validators: [Validators.required, Validators.minLength(this.inputMinLength), Validators.maxLength(this.inputMaxLength)] }],
-        description: [this.subgoal().metadata.description, { validators: [Validators.required, Validators.minLength(this.inputMinLength), Validators.maxLength(this.inputMaxLength)] }],
+        name: [this.dialogData?.name, { validators: [Validators.required, Validators.minLength(this.inputMinLength), Validators.maxLength(this.inputMaxLength)] }],
+        description: [this.dialogData?.metadata.description, { validators: [Validators.required, Validators.minLength(this.inputMinLength), Validators.maxLength(this.inputMaxLength)] }],
       },
     );
+  }
+
+  onConfirm(): void {
+    this.dialogRef.close({
+      name: this.form.get('name').value,
+      description: this.form.get('description').value,
+    });
+  }
+
+  onCancel(): void {
+    this.dialogRef.close(false);
   }
 }

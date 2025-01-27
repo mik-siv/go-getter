@@ -13,6 +13,9 @@
     <app-subgoal-list
       [activeGoal]="activeGoal">
     </app-subgoal-list>
+    <button mat-fab class="add-subgoal" (click)="createSubgoal()">
+      <mat-icon aria-label="New Subgoal">add</mat-icon>
+    </button>
   </mat-sidenav-content>
   <mat-sidenav #sideNav [(opened)]="sideNavOpened" class="left-side-nav" mode="side" opened>
     @if (isPending()) {

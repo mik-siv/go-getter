@@ -1,5 +1,5 @@
 export interface Subgoal {
-  id: string;
+  id?: string;
   name: string;
   private?: boolean;
   created_by?: Record<string, any>;
