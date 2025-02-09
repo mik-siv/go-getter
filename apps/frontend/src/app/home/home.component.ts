@@ -17,6 +17,7 @@ import { GoalService } from '../shared/services/data-access/goal/goal.service';
 import { Goal } from '../shared/services/data-access/goal/models/goal.model';
 import { GoalStateService } from '../shared/services/data-access/goal/state/goal-state.service';
 import { RequestStatus } from '../shared/services/data-access/models/RequestStatus';
+import { SubgoalStateService } from '../shared/services/data-access/subgoal/state/subgoal-state.service';
 import { SubgoalService } from '../shared/services/data-access/subgoal/subgoal.service';
 import { User } from '../shared/services/data-access/user/models/user.model';
 import { UserStateService } from '../shared/services/data-access/user/state/user-state.service';
@@ -35,6 +36,7 @@ import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.com
 export class HomeComponent implements OnInit {
   goalService = inject(GoalService);
   subgoalService = inject(SubgoalService);
+  subgoalStateService = inject(SubgoalStateService);
   goalStateService = inject(GoalStateService);
   userStateService = inject(UserStateService);
   authStateService = inject(AuthStateService);
@@ -43,20 +45,21 @@ export class HomeComponent implements OnInit {
   readonly dialog = inject(MatDialog);
 
   isPending: Signal<boolean> = computed(() => this.goalStateService.status() === RequestStatus.PENDING);
-  goals: Signal<Goal[]> = computed(() => this.goalStateService.goals());
-  contributing_to: Signal<Goal[]> = computed(() => this.goalStateService.contributing_to());
+  isSubgoalPending = computed(() => this.subgoalStateService.status() === RequestStatus.PENDING);
+  goals: Signal<Goal[]> = computed(() => Object.values(this.goalStateService.goals()));
+  contributing_to: Signal<Goal[]> = computed(() => Object.values(this.goalStateService.contributing_to()));
   currentUser: Signal<User> = computed(() => this.userStateService.user());
   activeGoal: Goal;
   sideNavOpened = true;
 
-  constructor() {
-    effect(() => {
+constructor() {
+  effect(() => {
+    if (!this.authStateService.isAuthenticated()) {
+      this.router.navigate([RoutePaths.Auth]);
+    }
+  });
+  effect(() => {
       this.populateActiveGoal();
-    });
-    effect(() => {
-      if (!this.authStateService.isAuthenticated()) {
-        this.router.navigate([RoutePaths.Auth]);
-      }
     });
   }
 

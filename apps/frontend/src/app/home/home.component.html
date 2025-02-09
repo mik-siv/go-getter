@@ -12,6 +12,9 @@
     </div>
     <app-subgoal-list
       [activeGoal]="activeGoal">
+      @if (isSubgoalPending()) {
+        <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+      }
     </app-subgoal-list>
     <button mat-fab class="add-subgoal" (click)="createSubgoal()">
       <mat-icon aria-label="New Subgoal">add</mat-icon>

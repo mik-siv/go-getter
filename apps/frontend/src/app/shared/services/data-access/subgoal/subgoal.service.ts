@@ -1,10 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { RestfulService } from '../restful.service';
+import { Observable, tap } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
+import { GoalStateService } from '../goal/state/goal-state.service';
+import { RestfulService } from '../restful.service';
 import { Subgoal } from './models/subgoal.model';
 import { SubgoalStateService } from './state/subgoal-state.service';
-import { catchError } from 'rxjs/operators';
-import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,7 @@ import { Observable, tap } from 'rxjs';
 export class SubgoalService extends RestfulService {
   private baseUrl = `${environment.baseUrl}subgoals`;
   private subgoalStateService = inject(SubgoalStateService);
+  private goalStateService = inject(GoalStateService);
 
   createSubgoal(data: Subgoal): Observable<Subgoal> {
     this.subgoalStateService.setPendingState();
@@ -19,6 +21,9 @@ export class SubgoalService extends RestfulService {
       catchError((error) => {
         this.subgoalStateService.setErrorState(error);
         throw error;
+      }),
+      tap((response)=>{
+        this.goalStateService.updateGoal(response.goal_subgoals);
       }),
       tap(() => {
         this.subgoalStateService.setSuccessState();
