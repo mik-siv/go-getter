@@ -8,10 +8,5 @@ export const AUTH_ROUTES: Routes = [
   {
     path: AuthRoutePaths.Auth,
     loadComponent: () => import('./auth.component').then(m => m.AuthComponent),
-  },
-  {
-    path: '',
-    redirectTo: AuthRoutePaths.Auth,
-    pathMatch: 'full',
-  },
+  }
 ];
