@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, output } from '@angular/core';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
-import { SubgoalCardComponent } from '../subgoal-card/subgoal-card.component';
 import { Goal } from '../../../shared/services/data-access/goal/models/goal.model';
+import { Subgoal } from '../../../shared/services/data-access/subgoal/models/subgoal.model';
+import { SubgoalCardComponent } from '../subgoal-card/subgoal-card.component';
 
 @Component({
   selector: 'app-subgoal-list',
@@ -16,4 +17,5 @@ import { Goal } from '../../../shared/services/data-access/goal/models/goal.mode
 })
 export class SubgoalListComponent {
   @Input() activeGoal: Goal;
+  subgoalDelete = output<Subgoal>()
 }

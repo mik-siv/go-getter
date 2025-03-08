@@ -1,16 +1,6 @@
-import { Component, DestroyRef, inject, model, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { filter, switchMap } from 'rxjs';
-import {
-  ConfirmationDialogComponent,
-} from '../../../shared/components/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
-import {
-  ConfirmationDialogData,
-} from '../../../shared/components/confirmation-dialog/confirmation-dialog/models/ConfirmationDialogData';
+import { Component, model, OnInit, output } from '@angular/core';
 import { MaterialModule } from '../../../shared/material/material.module';
 import { Subgoal } from '../../../shared/services/data-access/subgoal/models/subgoal.model';
-import { SubgoalService } from '../../../shared/services/data-access/subgoal/subgoal.service';
 
 @Component({
   selector: 'app-subgoal-card',
@@ -20,13 +10,11 @@ import { SubgoalService } from '../../../shared/services/data-access/subgoal/sub
   styleUrl: './subgoal-card.component.scss',
 })
 export class SubgoalCardComponent implements OnInit {
-  private subgoalService = inject(SubgoalService);
-  private destroyRef = inject(DestroyRef);
-  private dialog = inject(MatDialog);
 
   name: string;
   description: string;
   subgoal = model<Subgoal>();
+  subgoalDeleted = output<Subgoal>();
 
   ngOnInit(): void {
     this.name = this.subgoal().name;
@@ -34,27 +22,8 @@ export class SubgoalCardComponent implements OnInit {
   }
 
   deleteSubgoal(): void {
-    const dialogPrompt = {
-      title: 'Are you sure?',
-      content: `Do you want to delete subgoal '${this.name}'?`,
-    };
-    this.openConfirmationDialog('100', '100', dialogPrompt)
-      .afterClosed()
-      .pipe(
-        filter((result) => !!result),
-        switchMap(() => this.subgoalService.deleteSubgoal(this.subgoal().id)),
-        takeUntilDestroyed(this.destroyRef),
-      ).subscribe();
+    this.subgoalDeleted.emit(this.subgoal());
   }
 
   editSubgoal(): void {}
-
-  openConfirmationDialog(enterAnimationDuration: string, exitAnimationDuration: string, prompt: ConfirmationDialogData): MatDialogRef<ConfirmationDialogComponent> {
-    return this.dialog.open(ConfirmationDialogComponent, {
-      width: '250px',
-      enterAnimationDuration,
-      exitAnimationDuration,
-      data: prompt,
-    });
-  }
 }

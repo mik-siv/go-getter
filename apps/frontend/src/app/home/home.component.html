@@ -8,10 +8,12 @@
         class="side-nav--toggle-button" (click)="sideNav.toggle()">
         <mat-icon>{{ sideNavOpened ? 'chevron_left' : 'chevron_right' }}</mat-icon>
       </button>
-      <h2 class="side-nav--content-header--title">{{ activeGoal?.name }}</h2>
+      <h2 class="side-nav--content-header--title">{{ activeGoal()?.name }}</h2>
     </div>
     <app-subgoal-list
-      [activeGoal]="activeGoal">
+      [activeGoal]="activeGoal()"
+      (subgoalDelete)="deleteSubgoal($event)"
+    >
       @if (isSubgoalPending()) {
         <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
       }
@@ -29,7 +31,7 @@
         [isExpanded]="true"
         [listName]="'Goals'"
         [items]="goals()"
-        [activeItem]="activeGoal"
+        [activeItem]="activeGoal()"
         (itemClicked)="setActiveGoal($event)"
         (deleteItemClicked)="handleGoalDeletion($event)"
       >
@@ -39,7 +41,7 @@
       <app-item-list
         [listName]="'Contributions'"
         [items]="contributing_to()"
-        [activeItem]="activeGoal"
+        [activeItem]="activeGoal()"
         (itemClicked)="setActiveGoal($event)"
         (deleteItemClicked)="handleRemoveGoalContribution($event)"
       >

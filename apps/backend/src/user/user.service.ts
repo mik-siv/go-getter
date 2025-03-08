@@ -1,18 +1,18 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
-import { saltRounds } from '../common/constants/constants';
-import { FindOptionsWhere, Repository } from 'typeorm';
-import { User } from './entities/user.entity';
-import { v4 as uuidv4 } from 'uuid';
-import { IUserService } from './interfaces/user-service.interface';
 import { merge } from 'lodash';
-import { UpdateUserRoleDto } from './dto/update-user-role.dto';
-import { UserSubset } from './types/user.types';
+import { FindOptionsWhere, Repository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
+import { saltRounds } from '../common/constants/constants';
 import { OwnedResource } from '../common/constants/enums/owned-resources.enum';
 import { DataUtils } from '../common/utils/data/data.util';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserRoleDto } from './dto/update-user-role.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+import { IUserService } from './interfaces/user-service.interface';
+import { UserSubset } from './types/user.types';
 
 @Injectable()
 export class UserService implements IUserService {

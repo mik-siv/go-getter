@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, effect, inject, OnInit, Signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnInit, signal, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -17,6 +17,7 @@ import { GoalService } from '../shared/services/data-access/goal/goal.service';
 import { Goal } from '../shared/services/data-access/goal/models/goal.model';
 import { GoalStateService } from '../shared/services/data-access/goal/state/goal-state.service';
 import { RequestStatus } from '../shared/services/data-access/models/RequestStatus';
+import { Subgoal } from '../shared/services/data-access/subgoal/models/subgoal.model';
 import { SubgoalStateService } from '../shared/services/data-access/subgoal/state/subgoal-state.service';
 import { SubgoalService } from '../shared/services/data-access/subgoal/subgoal.service';
 import { User } from '../shared/services/data-access/user/models/user.model';
@@ -49,18 +50,19 @@ export class HomeComponent implements OnInit {
   goals: Signal<Goal[]> = computed(() => Object.values(this.goalStateService.goals()));
   contributing_to: Signal<Goal[]> = computed(() => Object.values(this.goalStateService.contributing_to()));
   currentUser: Signal<User> = computed(() => this.userStateService.user());
-  activeGoal: Goal;
+  activeGoal = signal<Goal>(null);
   sideNavOpened = true;
 
-constructor() {
-  effect(() => {
-    if (!this.authStateService.isAuthenticated()) {
-      this.router.navigate([RoutePaths.Auth]);
-    }
-  });
-  effect(() => {
-      this.populateActiveGoal();
+  constructor() {
+    effect(() => {
+      if (!this.authStateService.isAuthenticated()) {
+        this.router.navigate([RoutePaths.Auth]);
+      }
     });
+    effect(() => {
+      if(this.goals() && !this.activeGoal())
+      this.populateActiveGoal();
+    }, {allowSignalWrites: true});
   }
 
   ngOnInit(): void {
@@ -68,7 +70,7 @@ constructor() {
   }
 
   setActiveGoal(goal: Goal): void {
-    this.activeGoal = goal;
+    this.activeGoal.set(goal);
   }
 
   isGoalListEmpty(goalsList: Goal[]): boolean {
@@ -145,11 +147,29 @@ constructor() {
           description: result.description,
         },
         private: true,
-        goalIds: [this.activeGoal.id],
+        goalIds: [this.activeGoal().id],
       })),
       switchMap((subgoal) => this.subgoalService.createSubgoal(subgoal)),
       takeUntilDestroyed(this.destroyRef),
-    ).subscribe();
+    ).subscribe((result) => {
+      this.activeGoal.update(current => ({ ...current, subgoals: [...current.subgoals, result] }));
+    });
+  }
+
+  deleteSubgoal(subgoal: Subgoal): void {
+    const dialogPrompt = {
+      title: 'Are you sure?',
+      content: `Do you want to delete subgoal '${subgoal.name}'?`,
+    };
+    this.openDialog('100', '100', dialogPrompt)
+      .afterClosed()
+      .pipe(
+        filter((result) => !!result),
+        switchMap(() => this.subgoalService.deleteSubgoal(subgoal.id)),
+        takeUntilDestroyed(this.destroyRef),
+      ).subscribe(() => {
+      this.activeGoal.update(current => ({ ...current, subgoals: current.subgoals.filter(s => s.id !== subgoal.id) }));
+    });
   }
 
   fetchGoals(): void {
