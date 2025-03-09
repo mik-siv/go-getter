@@ -1,9 +1,9 @@
 import { computed, inject, Injectable } from '@angular/core';
-import { StatefulService } from '../../models/StatefulService';
-import { RequestStatus } from '../../models/RequestStatus';
 import { LocalStorageService } from '../../../common/local-storage/local-storage.service';
 import { LocalStorageKeys } from '../../../common/local-storage/models/LocalStorageKeys';
 import { StateService } from '../../../common/state/state.service';
+import { RequestStatus } from '../../models/RequestStatus';
+import { StatefulService } from '../../models/StatefulService';
 import { AuthState } from './models/AuthState';
 import { emptyAuthState } from './models/EmptyAuthState';
 
@@ -45,5 +45,6 @@ export class AuthStateService extends StateService<AuthState> implements Statefu
   refreshStateAndClearLocalStorage(): void {
     this.localStorageService.clear();
     this.refreshState();
+    window.location.reload()
   }
 }
