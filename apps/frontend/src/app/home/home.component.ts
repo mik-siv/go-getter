@@ -60,9 +60,9 @@ export class HomeComponent implements OnInit {
       }
     });
     effect(() => {
-      if(this.goals() && !this.activeGoal())
-      this.populateActiveGoal();
-    }, {allowSignalWrites: true});
+      if (this.goals() && !this.activeGoal())
+        this.populateActiveGoal();
+    }, { allowSignalWrites: true });
   }
 
   ngOnInit(): void {
@@ -169,6 +169,27 @@ export class HomeComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       ).subscribe(() => {
       this.activeGoal.update(current => ({ ...current, subgoals: current.subgoals.filter(s => s.id !== subgoal.id) }));
+    });
+  }
+
+  editSubgoal(subgoal: Subgoal): void {
+    this.dialog.open(SubgoalEditDialogComponent, {
+      data: subgoal,
+      width: '500px',
+    }).afterClosed().pipe(
+      filter(data => !!data),
+      map((result) => ({ ...subgoal, name: result.name, metadata: { description: result.description } })),
+      switchMap((data) => this.subgoalService.updateSubgoal(subgoal.id, data)),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe((result) => {
+      this.activeGoal.update(current => ({
+        ...current,
+        subgoals: [
+          ...current.subgoals.slice(0, current.subgoals.findIndex(s => s.id === subgoal.id)),
+          result,
+          ...current.subgoals.slice(current.subgoals.findIndex(s => s.id === subgoal.id) + 1)
+        ],
+      }));
     });
   }
 

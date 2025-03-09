@@ -17,5 +17,6 @@ import { SubgoalCardComponent } from '../subgoal-card/subgoal-card.component';
 })
 export class SubgoalListComponent {
   @Input() activeGoal: Goal;
-  subgoalDelete = output<Subgoal>()
+  subgoalDelete = output<Subgoal>();
+  subgoalEdit = output<Subgoal>();
 }

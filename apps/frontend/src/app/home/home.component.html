@@ -13,6 +13,7 @@
     <app-subgoal-list
       [activeGoal]="activeGoal()"
       (subgoalDelete)="deleteSubgoal($event)"
+      (subgoalEdit)="editSubgoal($event)"
     >
       @if (isSubgoalPending()) {
         <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>

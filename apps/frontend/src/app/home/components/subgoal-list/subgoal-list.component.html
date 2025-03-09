@@ -6,6 +6,7 @@
         <app-subgoal-card
           [subgoal]="subgoal"
           (subgoalDeleted)="subgoalDelete.emit($event)"
+          (subgoalEdit)="subgoalEdit.emit($event)"
         ></app-subgoal-card>
       </mat-grid-tile>
     }
