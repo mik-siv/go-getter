@@ -10,6 +10,7 @@ import {
 import {
   ConfirmationDialogData,
 } from '../shared/components/confirmation-dialog/confirmation-dialog/models/ConfirmationDialogData';
+import { EditDialogComponent } from '../shared/components/edit-dialog/edit-dialog.component';
 import { ItemListComponent } from '../shared/components/item-list/item-list.component';
 import { MaterialModule } from '../shared/material/material.module';
 import { AuthStateService } from '../shared/services/data-access/auth/state/auth-state.service';
@@ -22,9 +23,6 @@ import { SubgoalStateService } from '../shared/services/data-access/subgoal/stat
 import { SubgoalService } from '../shared/services/data-access/subgoal/subgoal.service';
 import { User } from '../shared/services/data-access/user/models/user.model';
 import { UserStateService } from '../shared/services/data-access/user/state/user-state.service';
-import {
-  SubgoalEditDialogComponent,
-} from './components/subgoal-card/components/subgoal-edit-dialog/subgoal-edit-dialog.component';
 import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.component';
 
 @Component({
@@ -137,7 +135,7 @@ export class HomeComponent implements OnInit {
   }
 
   createSubgoal(): void {
-    this.dialog.open(SubgoalEditDialogComponent, {
+    this.dialog.open(EditDialogComponent, {
       width: '500px',
     }).afterClosed().pipe(
       filter(data => !!data),
@@ -173,7 +171,7 @@ export class HomeComponent implements OnInit {
   }
 
   editSubgoal(subgoal: Subgoal): void {
-    this.dialog.open(SubgoalEditDialogComponent, {
+    this.dialog.open(EditDialogComponent, {
       data: subgoal,
       width: '500px',
     }).afterClosed().pipe(
@@ -191,6 +189,23 @@ export class HomeComponent implements OnInit {
         ],
       }));
     });
+  }
+
+  createGoal(): void {
+    this.dialog.open(EditDialogComponent, {
+      width: '500px',
+    }).afterClosed().pipe(
+      filter(data => !!data),
+      map((result) => ({
+        name: result.name,
+        metadata: {
+          description: result.description,
+        },
+        private: true,
+      })),
+      switchMap((goal) => this.goalService.createGoal(goal)),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe();
   }
 
   fetchGoals(): void {

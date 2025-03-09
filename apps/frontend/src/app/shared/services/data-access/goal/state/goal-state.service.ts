@@ -45,6 +45,17 @@ export class GoalStateService extends StateService<GoalState> implements Statefu
     });
   }
 
+  addGoal(goal: Goal): void {
+    return this.updateState({
+      goals: {
+        contributing_to: this.contributing_to(),
+        goals: { ...this.goals(), goal },
+      },
+      status: RequestStatus.SUCCESS,
+      error: undefined,
+    });
+  }
+
   updateGoal(goal: Goal): void {
     const [existingGoal, existingContribution] = [this.goals()[goal.id], this.contributing_to()[goal.id]];
     const updatedGoals = existingGoal ? { ...this.goals(), [goal.id]: goal } : (() => {
@@ -61,8 +72,8 @@ export class GoalStateService extends StateService<GoalState> implements Statefu
       ...this.state(),
       goals: {
         goals: updatedGoals,
-        contributing_to: updatedContributions
-      }
+        contributing_to: updatedContributions,
+      },
     });
   }
 
@@ -70,7 +81,7 @@ export class GoalStateService extends StateService<GoalState> implements Statefu
     this.updateState({ goals: this.mapGoalsListToObject(goals), status: RequestStatus.SUCCESS, error: undefined });
   }
 
-  mapGoalsListToObject(list: GoalsList): {goals: GoalsRecord, contributing_to: GoalsRecord} {
+  mapGoalsListToObject(list: GoalsList): { goals: GoalsRecord, contributing_to: GoalsRecord } {
     const arrayToObject = (array: Goal[]) => array.reduce((acc: Record<string, Goal>, item) => {
       acc[item.id] = item;
       return acc;

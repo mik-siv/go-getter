@@ -35,6 +35,7 @@
         [activeItem]="activeGoal()"
         (itemClicked)="setActiveGoal($event)"
         (deleteItemClicked)="handleGoalDeletion($event)"
+        (createNew)="createGoal()"
       >
       </app-item-list>
     }

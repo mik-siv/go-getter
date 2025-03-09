@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SubgoalEditDialogComponent } from './subgoal-edit-dialog.component';
+import { EditDialogComponent } from './edit-dialog.component';
 
 describe('SubgoalEditDialogComponent', () => {
-  let component: SubgoalEditDialogComponent;
-  let fixture: ComponentFixture<SubgoalEditDialogComponent>;
+  let component: EditDialogComponent;
+  let fixture: ComponentFixture<EditDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SubgoalEditDialogComponent]
+      imports: [EditDialogComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SubgoalEditDialogComponent);
+    fixture = TestBed.createComponent(EditDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

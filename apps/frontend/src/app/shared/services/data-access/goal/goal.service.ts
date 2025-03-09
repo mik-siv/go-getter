@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { RestfulService } from '../restful.service';
 import { catchError } from 'rxjs/operators';
-import { Goal, GoalsList } from './models/goal.model';
 import { environment } from '../../../../../environments/environment';
+import { RestfulService } from '../restful.service';
+import { Goal, GoalsList } from './models/goal.model';
 import { GoalStateService } from './state/goal-state.service';
 
 @Injectable({
@@ -37,6 +37,20 @@ export class GoalService extends RestfulService {
         }),
         tap(() => {
           this.goalStateService.removeGoalFromStateById(id);
+        }),
+      );
+  }
+
+  createGoal(goal: Partial<Goal>): Observable<Goal> {
+    this.goalStateService.setPendingState();
+    return this.post<Goal>(`${this.baseUrl}`, goal)
+      .pipe(
+        catchError((error) => {
+          this.goalStateService.setErrorState(error);
+          throw error;
+        }),
+        tap((result) => {
+          this.goalStateService.addGoal(result);
         }),
       );
   }

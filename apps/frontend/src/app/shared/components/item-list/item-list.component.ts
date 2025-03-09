@@ -1,4 +1,4 @@
-import { Component, EventEmitter, input, Input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, output, Output } from '@angular/core';
 import { MaterialModule } from '../../material/material.module';
 
 export interface ListItem {
@@ -22,6 +22,7 @@ export class ItemListComponent {
   @Output() deleteItemClicked = new EventEmitter();
   listName = input<string>();
   isExpanded = input<boolean>(false);
+  createNew = output<void>();
 
   onClick(item: ListItem): void {
     this.itemClicked.emit(item);
@@ -29,5 +30,10 @@ export class ItemListComponent {
 
   onDeleteButtonClicked(item: ListItem): void {
     this.deleteItemClicked.emit(item);
+  }
+
+  createNewItem(event: MouseEvent): void {
+    event.stopPropagation();
+    this.createNew.emit();
   }
 }

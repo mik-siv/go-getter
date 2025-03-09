@@ -1,20 +1,20 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MaterialModule } from '../../../../../shared/material/material.module';
-import { Subgoal } from '../../../../../shared/services/data-access/subgoal/models/subgoal.model';
+import { MaterialModule } from '../../material/material.module';
+import { Subgoal } from '../../services/data-access/subgoal/models/subgoal.model';
 import { SubgoalEditForm } from './models/SubgoalEditForm';
 
 @Component({
-  selector: 'app-subgoal-edit-dialog',
+  selector: 'app-edit-dialog',
   standalone: true,
   imports: [ReactiveFormsModule, MaterialModule],
-  templateUrl: './subgoal-edit-dialog.component.html',
-  styleUrl: './subgoal-edit-dialog.component.scss',
+  templateUrl: './edit-dialog.component.html',
+  styleUrl: './edit-dialog.component.scss',
 })
-export class SubgoalEditDialogComponent implements OnInit {
+export class EditDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
-  private dialogRef = inject(MatDialogRef<SubgoalEditDialogComponent>);
+  private dialogRef = inject(MatDialogRef<EditDialogComponent>);
   protected dialogData: Subgoal = inject(MAT_DIALOG_DATA)
   form: FormGroup<SubgoalEditForm>;
   readonly inputMinLength = 1;
