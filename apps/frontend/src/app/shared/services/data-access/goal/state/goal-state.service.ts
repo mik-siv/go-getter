@@ -20,12 +20,17 @@ export class GoalStateService extends StateService<GoalState> implements Statefu
   contributing_to: Signal<GoalsRecord> = computed(() => this.state().goals?.contributing_to);
 
   removeGoalFromStateById(id: string): void {
-    const { [id]: _, ...updatedGoals } = this.goals();
+    const currentGoals = this.goals();
+    if (!currentGoals) {
+      return;
+    }
+
+    const {[id]: goalToDelete, ...restGoals} = currentGoals;
 
     this.updateState({
       goals: {
         contributing_to: this.contributing_to(),
-        goals: updatedGoals,
+        goals: restGoals,
       },
       status: RequestStatus.SUCCESS,
       error: undefined,
@@ -49,7 +54,7 @@ export class GoalStateService extends StateService<GoalState> implements Statefu
     return this.updateState({
       goals: {
         contributing_to: this.contributing_to(),
-        goals: { ...this.goals(), goal },
+        goals: { ...this.goals(), [goal.id]: goal },
       },
       status: RequestStatus.SUCCESS,
       error: undefined,
