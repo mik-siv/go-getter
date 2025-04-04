@@ -35,6 +35,9 @@
 
 .left-side-nav {
   width: 25%;
+  &--mobile {
+    width: 100%;
+  }
 }
 
 .progress-bar {

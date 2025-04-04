@@ -11,7 +11,7 @@
       </div>
     }
   </mat-sidenav-content>
-  <mat-sidenav mode="side" opened class="left-side-nav gradient-background">
+  <mat-sidenav mode="side" [opened]="!isMobile" class="left-side-nav gradient-background">
     <div class="description-text">
       <div class="description-text--huge">
         Track, <br />

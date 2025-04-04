@@ -1,6 +1,8 @@
-import { Component, computed, DestroyRef, effect, inject, OnInit, signal, Signal } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { Component, computed, DestroyRef, effect, inject, OnInit, signal, Signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { filter, map, switchMap } from 'rxjs';
 import { RoutePaths } from '../app.routes';
@@ -13,6 +15,7 @@ import {
 import { EditDialogComponent } from '../shared/components/edit-dialog/edit-dialog.component';
 import { ItemListComponent } from '../shared/components/item-list/item-list.component';
 import { MaterialModule } from '../shared/material/material.module';
+import { BrowserDetectorService } from '../shared/services/common/browser-detector/browser-detector.service';
 import { AuthStateService } from '../shared/services/data-access/auth/state/auth-state.service';
 import { GoalService } from '../shared/services/data-access/goal/goal.service';
 import { Goal } from '../shared/services/data-access/goal/models/goal.model';
@@ -27,7 +30,7 @@ import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.com
 
 @Component({
     selector: 'app-home',
-    imports: [MaterialModule, ItemListComponent, SubgoalListComponent],
+  imports: [MaterialModule, ItemListComponent, SubgoalListComponent, NgClass],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
 })
@@ -41,6 +44,7 @@ export class HomeComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   router = inject(Router);
   readonly dialog = inject(MatDialog);
+  sideNav: Signal<MatSidenav> = viewChild('sideNav');
 
   isPending: Signal<boolean> = computed(() => this.goalStateService.status() === RequestStatus.PENDING);
   isSubgoalPending = computed(() => this.subgoalStateService.status() === RequestStatus.PENDING);
@@ -48,6 +52,8 @@ export class HomeComponent implements OnInit {
   contributing_to: Signal<Goal[]> = computed(() => Object.values(this.goalStateService.contributing_to()));
   currentUser: Signal<User> = computed(() => this.userStateService.user());
   activeGoal = signal<Goal>(null);
+  protected isMobile = inject(BrowserDetectorService).isMobile();
+
   sideNavOpened = true;
 
   constructor() {
@@ -59,7 +65,7 @@ export class HomeComponent implements OnInit {
     effect(() => {
       if (this.goals() && !this.activeGoal())
         this.populateActiveGoal();
-    }, { allowSignalWrites: true });
+    });
   }
 
   ngOnInit(): void {
@@ -68,10 +74,15 @@ export class HomeComponent implements OnInit {
 
   setActiveGoal(goal: Goal): void {
     this.activeGoal.set(goal);
+    this.closeSideNavOnMobile();
   }
 
   isGoalListEmpty(goalsList: Goal[]): boolean {
     return Array.isArray(goalsList) && goalsList.length > 0;
+  }
+
+  closeSideNavOnMobile(): void {
+    if (this.isMobile) this.sideNav().close();
   }
 
   populateActiveGoal() {

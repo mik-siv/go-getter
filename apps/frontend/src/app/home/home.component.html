@@ -23,7 +23,7 @@
       <mat-icon aria-label="New Subgoal">add</mat-icon>
     </button>
   </mat-sidenav-content>
-  <mat-sidenav #sideNav [(opened)]="sideNavOpened" class="left-side-nav" mode="side" opened>
+  <mat-sidenav #sideNav [(opened)]="sideNavOpened" class="left-side-nav" [ngClass]="isMobile ? 'left-side-nav--mobile': ''" mode="side" opened>
     @if (isPending()) {
       <mat-progress-bar class="progress-bar" mode="indeterminate" color="accent"></mat-progress-bar>
     }
