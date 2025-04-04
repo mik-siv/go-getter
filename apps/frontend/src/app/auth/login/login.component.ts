@@ -1,10 +1,9 @@
 import { Component, DestroyRef, inject, OnInit, output } from '@angular/core';
-import { MaterialModule } from '../../shared/material/material.module';
-import { FormGroup, FormsModule, ReactiveFormsModule, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { AsyncPipe } from '@angular/common';
-import { AuthService } from '../../shared/services/data-access/auth/auth.service';
-import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MaterialModule } from '../../shared/material/material.module';
+import { AuthService } from '../../shared/services/data-access/auth/auth.service';
 import { AuthStateService } from '../../shared/services/data-access/auth/state/auth-state.service';
 
 export interface LoginFormData {
@@ -14,7 +13,7 @@ export interface LoginFormData {
 
 @Component({
     selector: 'app-login',
-    imports: [MaterialModule, FormsModule, ReactiveFormsModule, AsyncPipe],
+    imports: [MaterialModule, FormsModule, ReactiveFormsModule],
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss'
 })

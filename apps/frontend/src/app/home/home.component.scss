@@ -1,7 +1,8 @@
 @use '@angular/material' as mat;
 @use '../../styles/variables.styles' as vars;
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 .navigation-container {
   height: 100%;
