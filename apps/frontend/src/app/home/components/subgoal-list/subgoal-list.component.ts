@@ -5,15 +5,14 @@ import { Subgoal } from '../../../shared/services/data-access/subgoal/models/sub
 import { SubgoalCardComponent } from '../subgoal-card/subgoal-card.component';
 
 @Component({
-  selector: 'app-subgoal-list',
-  standalone: true,
-  imports: [
-    MatGridList,
-    MatGridTile,
-    SubgoalCardComponent,
-  ],
-  templateUrl: './subgoal-list.component.html',
-  styleUrl: './subgoal-list.component.scss',
+    selector: 'app-subgoal-list',
+    imports: [
+        MatGridList,
+        MatGridTile,
+        SubgoalCardComponent,
+    ],
+    templateUrl: './subgoal-list.component.html',
+    styleUrl: './subgoal-list.component.scss'
 })
 export class SubgoalListComponent {
   @Input() activeGoal: Goal;

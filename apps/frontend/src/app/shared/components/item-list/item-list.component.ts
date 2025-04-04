@@ -9,11 +9,10 @@ export interface ListItem {
 }
 
 @Component({
-  selector: 'app-item-list',
-  standalone: true,
-  imports: [MaterialModule],
-  templateUrl: './item-list.component.html',
-  styleUrl: './item-list.component.scss',
+    selector: 'app-item-list',
+    imports: [MaterialModule],
+    templateUrl: './item-list.component.html',
+    styleUrl: './item-list.component.scss'
 })
 export class ItemListComponent {
   @Input() items: ListItem[];

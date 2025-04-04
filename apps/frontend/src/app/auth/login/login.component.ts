@@ -13,11 +13,10 @@ export interface LoginFormData {
 }
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [MaterialModule, FormsModule, ReactiveFormsModule, AsyncPipe],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+    selector: 'app-login',
+    imports: [MaterialModule, FormsModule, ReactiveFormsModule, AsyncPipe],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup<LoginFormData>;

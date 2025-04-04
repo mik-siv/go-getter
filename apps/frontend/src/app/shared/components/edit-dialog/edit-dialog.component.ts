@@ -6,11 +6,10 @@ import { Subgoal } from '../../services/data-access/subgoal/models/subgoal.model
 import { SubgoalEditForm } from './models/SubgoalEditForm';
 
 @Component({
-  selector: 'app-edit-dialog',
-  standalone: true,
-  imports: [ReactiveFormsModule, MaterialModule],
-  templateUrl: './edit-dialog.component.html',
-  styleUrl: './edit-dialog.component.scss',
+    selector: 'app-edit-dialog',
+    imports: [ReactiveFormsModule, MaterialModule],
+    templateUrl: './edit-dialog.component.html',
+    styleUrl: './edit-dialog.component.scss'
 })
 export class EditDialogComponent implements OnInit {
   private fb = inject(FormBuilder);

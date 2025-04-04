@@ -5,11 +5,10 @@ import { RouterModule } from '@angular/router';
 import { AuthStateService } from '../shared/services/data-access/auth/state/auth-state.service';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [MaterialModule, RouterModule],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
+    selector: 'app-header',
+    imports: [MaterialModule, RouterModule],
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
   authStateService = inject(AuthStateService);

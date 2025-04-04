@@ -26,11 +26,10 @@ import { UserStateService } from '../shared/services/data-access/user/state/user
 import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.component';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [MaterialModule, ItemListComponent, SubgoalListComponent],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+    selector: 'app-home',
+    imports: [MaterialModule, ItemListComponent, SubgoalListComponent],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
   goalService = inject(GoalService);

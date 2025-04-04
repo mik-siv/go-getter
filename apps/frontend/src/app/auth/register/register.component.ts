@@ -18,20 +18,19 @@ export interface RegisterFormData {
 }
 
 @Component({
-  selector: 'app-register',
-  standalone: true,
-  imports: [
-    FormsModule,
-    MatButton,
-    MatFormField,
-    MatIcon,
-    MatInput,
-    MatLabel,
-    MatSuffix,
-    ReactiveFormsModule,
-  ],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.scss',
+    selector: 'app-register',
+    imports: [
+        FormsModule,
+        MatButton,
+        MatFormField,
+        MatIcon,
+        MatInput,
+        MatLabel,
+        MatSuffix,
+        ReactiveFormsModule,
+    ],
+    templateUrl: './register.component.html',
+    styleUrl: './register.component.scss'
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup<RegisterFormData>;

@@ -4,11 +4,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmationDialogData } from './models/ConfirmationDialogData';
 
 @Component({
-  selector: 'app-confirmation-dialog',
-  standalone: true,
-  imports: [MaterialModule],
-  templateUrl: './confirmation-dialog.component.html',
-  styleUrl: './confirmation-dialog.component.scss',
+    selector: 'app-confirmation-dialog',
+    imports: [MaterialModule],
+    templateUrl: './confirmation-dialog.component.html',
+    styleUrl: './confirmation-dialog.component.scss'
 })
 export class ConfirmationDialogComponent {
   private dialogRef = inject(MatDialogRef<ConfirmationDialogComponent>);

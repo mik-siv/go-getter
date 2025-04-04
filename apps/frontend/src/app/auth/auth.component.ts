@@ -9,11 +9,10 @@ import { UserStateService } from '../shared/services/data-access/user/state/user
 import { AuthStateService } from '../shared/services/data-access/auth/state/auth-state.service';
 
 @Component({
-  selector: 'app-auth',
-  standalone: true,
-  imports: [MaterialModule, LoginComponent, RegisterComponent],
-  templateUrl: './auth.component.html',
-  styleUrl: './auth.component.scss',
+    selector: 'app-auth',
+    imports: [MaterialModule, LoginComponent, RegisterComponent],
+    templateUrl: './auth.component.html',
+    styleUrl: './auth.component.scss'
 })
 export class AuthComponent {
   userStateService = inject(UserStateService);
