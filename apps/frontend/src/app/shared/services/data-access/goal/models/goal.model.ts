@@ -1,4 +1,5 @@
 import { Subgoal } from '../../subgoal/models/subgoal.model';
+import { User } from '../../user/models/user.model';
 
 export interface GoalsList {
   goals: Goal[];
@@ -10,10 +11,12 @@ export interface Goal {
   id: string;
   private: boolean;
   created_date: Date;
-  created_by?: Record<string, any>;
+  created_by?: User;
   parent?: Goal;
   subgoals: Subgoal[];
-  metadata: Record<string, any>;
+  metadata: GoalMetadata
 }
 
-
+export interface GoalMetadata {
+  description: string;
+}

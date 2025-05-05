@@ -18,16 +18,33 @@
     min-width: unset !important;
   }
 
-  &--content-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
-    height: 2rem;
+  &--edit-button {
+    cursor: pointer;
+    height: 80%;
+    padding: 0 !important;
+    margin-left: .5rem;
+    font-size: .5rem !important;
+  }
 
-    &--title {
-      line-height: 1.5rem;
-      margin-left: 1rem;
-      margin-bottom: 0;
+  &--content {
+
+    &--header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      height: 2rem;
+
+      &--title {
+        line-height: 1.5rem;
+        margin-bottom: 0;
+      }
+    }
+
+    &--description {
+      margin: .5rem;
+      overflow: hidden;
+      white-space: nowrap;
+      -webkit-line-clamp: 3;
     }
   }
 }
@@ -35,6 +52,7 @@
 
 .left-side-nav {
   width: 25%;
+
   &--mobile {
     width: 100%;
   }

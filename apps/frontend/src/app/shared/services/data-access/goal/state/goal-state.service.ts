@@ -79,6 +79,7 @@ export class GoalStateService extends StateService<GoalState> implements Statefu
         goals: updatedGoals,
         contributing_to: updatedContributions,
       },
+      status: RequestStatus.SUCCESS,
     });
   }
 

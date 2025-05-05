@@ -1,29 +1,37 @@
 <mat-sidenav-container class="navigation-container">
   <mat-sidenav-content>
-    <div class="side-nav--content-header">
-      <button
-        mat-button
-        matTooltip="{{sideNavOpened ? 'Hide Menu' : 'Open Menu'}}"
-        matTooltipPosition="right"
-        class="side-nav--toggle-button" (click)="sideNav.toggle()">
-        <mat-icon>{{ sideNavOpened ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+    @if (activeGoal()) {
+      <div class="side-nav--content--header">
+        <button
+          mat-button
+          matTooltip="{{sideNavOpened ? 'Hide Menu' : 'Open Menu'}}"
+          matTooltipPosition="right"
+          class="side-nav--toggle-button" (click)="sideNav.toggle()">
+          <mat-icon>{{ sideNavOpened ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+        </button>
+        <h2 class="side-nav--content--header--title">{{ activeGoal()?.name }}</h2>
+        <ng-container *ngTemplateOutlet="goalEditButton"></ng-container>
+      </div>
+      <div class="side-nav--content--description">
+        <h3>{{ activeGoal()?.metadata?.description }}</h3>
+        <ng-container *ngTemplateOutlet="goalEditButton"></ng-container>
+      </div>
+      <app-subgoal-list
+        [activeGoal]="activeGoal()"
+        (subgoalDelete)="deleteSubgoal($event)"
+        (subgoalEdit)="editSubgoal($event)"
+      >
+        @if (isSubgoalPending()) {
+          <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+        }
+      </app-subgoal-list>
+      <button mat-fab class="add-subgoal" (click)="createSubgoal()">
+        <mat-icon aria-label="New Subgoal">add</mat-icon>
       </button>
-      <h2 class="side-nav--content-header--title">{{ activeGoal()?.name }}</h2>
-    </div>
-    <app-subgoal-list
-      [activeGoal]="activeGoal()"
-      (subgoalDelete)="deleteSubgoal($event)"
-      (subgoalEdit)="editSubgoal($event)"
-    >
-      @if (isSubgoalPending()) {
-        <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
-      }
-    </app-subgoal-list>
-    <button mat-fab class="add-subgoal" (click)="createSubgoal()">
-      <mat-icon aria-label="New Subgoal">add</mat-icon>
-    </button>
+    }
   </mat-sidenav-content>
-  <mat-sidenav #sideNav [(opened)]="sideNavOpened" class="left-side-nav" [ngClass]="isMobile ? 'left-side-nav--mobile': ''" mode="side" opened>
+  <mat-sidenav #sideNav [(opened)]="sideNavOpened" class="left-side-nav"
+               [ngClass]="isMobile ? 'left-side-nav--mobile': ''" mode="side" opened>
     @if (isPending()) {
       <mat-progress-bar class="progress-bar" mode="indeterminate" color="accent"></mat-progress-bar>
     }
@@ -52,3 +60,14 @@
 
   </mat-sidenav>
 </mat-sidenav-container>
+
+<ng-template #goalEditButton>
+  <a class="side-nav--edit-button"
+     matTooltip="Edit"
+     matTooltipPosition="below"
+     aria-label="Edit"
+     (click)="updateGoal(activeGoal())"
+  >
+    <mat-icon>edit</mat-icon>
+  </a>
+</ng-template>

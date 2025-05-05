@@ -55,6 +55,20 @@ export class GoalService extends RestfulService {
       );
   }
 
+  updateGoal(goalId: string, goal: Partial<Goal>): Observable<Goal> {
+    this.goalStateService.setPendingState();
+    return this.update<Goal>(`${this.baseUrl}`, goalId, goal as Goal)
+      .pipe(
+        catchError((error) => {
+          this.goalStateService.setErrorState(error);
+          throw error;
+        }),
+        tap((result) => {
+          this.goalStateService.updateGoal(result);
+        }),
+      );
+  }
+
   removeGoalContributor(goalId: string, userId: string): Observable<Goal> {
     this.goalStateService.setPendingState();
     return this.update<Goal>(`${this.baseUrl}/${goalId}/stop-contributing`, userId, {} as Goal)

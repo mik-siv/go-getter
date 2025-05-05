@@ -1,4 +1,4 @@
-import { NgClass } from '@angular/common';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { Component, computed, DestroyRef, effect, inject, OnInit, signal, Signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -29,10 +29,10 @@ import { UserStateService } from '../shared/services/data-access/user/state/user
 import { SubgoalListComponent } from './components/subgoal-list/subgoal-list.component';
 
 @Component({
-    selector: 'app-home',
-  imports: [MaterialModule, ItemListComponent, SubgoalListComponent, NgClass],
-    templateUrl: './home.component.html',
-    styleUrl: './home.component.scss'
+  selector: 'app-home',
+  imports: [MaterialModule, ItemListComponent, SubgoalListComponent, NgClass, NgTemplateOutlet],
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
   goalService = inject(GoalService);
@@ -195,7 +195,7 @@ export class HomeComponent implements OnInit {
         subgoals: [
           ...current.subgoals.slice(0, current.subgoals.findIndex(s => s.id === subgoal.id)),
           result,
-          ...current.subgoals.slice(current.subgoals.findIndex(s => s.id === subgoal.id) + 1)
+          ...current.subgoals.slice(current.subgoals.findIndex(s => s.id === subgoal.id) + 1),
         ],
       }));
     });
@@ -216,6 +216,23 @@ export class HomeComponent implements OnInit {
       switchMap((goal) => this.goalService.createGoal(goal)),
       takeUntilDestroyed(this.destroyRef),
     ).subscribe();
+  }
+
+  updateGoal(goal: Goal): void {
+    this.dialog.open(EditDialogComponent, {
+      width: '500px',
+      data: goal,
+    }).afterClosed().pipe(
+      filter(data => !!data),
+      map((result) => ({
+        name: result.name,
+        metadata: {
+          description: result.description,
+        },
+      })),
+      switchMap((updatedData) => this.goalService.updateGoal(goal.id, updatedData)),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(data => this.activeGoal.set(data));
   }
 
   fetchGoals(): void {
