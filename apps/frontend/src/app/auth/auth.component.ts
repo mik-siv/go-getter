@@ -18,7 +18,7 @@ import { RegisterComponent } from './register/register.component';
 export class AuthComponent {
   userStateService = inject(UserStateService);
   authStateService = inject(AuthStateService);
-  protected isMobile = inject(BrowserDetectorService).isMobile();
+  protected isMobile = inject(BrowserDetectorService).$isMobile;
   router = inject(Router);
   isLogin = signal(true);
   isAuthenticated = computed (()=>this.authStateService.isAuthenticated());

@@ -17,7 +17,7 @@ import { SubgoalCardComponent } from '../subgoal-card/subgoal-card.component';
 })
 export class SubgoalListComponent {
   @Input() activeGoal: Goal;
-  protected isMobile = inject(BrowserDetectorService).isMobile();
+  protected isMobile = inject(BrowserDetectorService).$isMobile;
   subgoalDelete = output<Subgoal>();
   subgoalEdit = output<Subgoal>();
 }

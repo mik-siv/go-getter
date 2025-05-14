@@ -42,9 +42,17 @@
 
     &--description {
       margin: .5rem;
-      overflow: hidden;
-      white-space: nowrap;
-      -webkit-line-clamp: 3;
+
+      h3 {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 100%;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   }
 }

@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit {
   contributing_to: Signal<Goal[]> = computed(() => Object.values(this.goalStateService.contributing_to()));
   currentUser: Signal<User> = computed(() => this.userStateService.user());
   activeGoal = signal<Goal>(null);
-  protected isMobile = inject(BrowserDetectorService).isMobile();
+  protected isMobile = inject(BrowserDetectorService).$isMobile;
 
   sideNavOpened = true;
 
@@ -82,10 +82,10 @@ export class HomeComponent implements OnInit {
   }
 
   closeSideNavOnMobile(): void {
-    if (this.isMobile) this.sideNav().close();
+    if (this.isMobile()) this.sideNav().close();
   }
 
-  populateActiveGoal() {
+  populateActiveGoal(): void {
     if (this.isGoalListEmpty(this.goals())) {
       this.setActiveGoal(this.goals()[0]);
     } else if (this.isGoalListEmpty(this.contributing_to())) {
