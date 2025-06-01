@@ -1,30 +1,31 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Spectator } from '@ngneat/spectator';
+import { createComponentFactory } from '@ngneat/spectator/jest';
+import { MockComponent, MockProvider } from 'ng-mocks';
+import { AuthService } from '../shared/services/data-access/auth/auth.service';
+import { UserService } from '../shared/services/data-access/user/user.service';
 
 import { AuthComponent } from './auth.component';
-import { AuthService } from '../shared/services/data-access/auth/auth.service';
-import { MockProvider } from 'ng-mocks';
-import { UserService } from '../shared/services/data-access/user/user.service';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { RequestStatus } from '../shared/services/data-access/models/RequestStatus';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 describe('AuthComponent', () => {
   let component: AuthComponent;
-  let fixture: ComponentFixture<AuthComponent>;
+  let spectator: Spectator<AuthComponent>;
+
+  const createComponent = createComponentFactory({
+    component: AuthComponent,
+    componentImports: [MockComponent(LoginComponent), MockComponent(RegisterComponent)],
+    imports: [],
+    providers: [MockProvider(AuthService), MockProvider(UserService)],
+  });
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AuthComponent],
-      providers: [
-        MockProvider(AuthService, {status: ()=>RequestStatus.PENDING, user: ()=>{}} as AuthService),
-        MockProvider(UserService),
-        provideNoopAnimations()
-      ]
-    })
-    .compileComponents();
+    spectator = createComponent();
+    component = spectator.component;
+  });
 
-    fixture = TestBed.createComponent(AuthComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should create', () => {

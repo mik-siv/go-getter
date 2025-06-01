@@ -65,7 +65,6 @@ export class SubgoalService implements ISubgoalService {
   }
 
   async update(id: string, updateSubgoalDto: UpdateSubgoalDto): Promise<Subgoal> {
-    console.log('updatedSubgoal', updateSubgoalDto);
     const { goalIds, ...subgoalData } = updateSubgoalDto;
     const foundSubgoal: Subgoal = await this.findById(id);
     const updatedSubgoal = merge(foundSubgoal, subgoalData);
