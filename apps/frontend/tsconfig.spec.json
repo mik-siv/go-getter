@@ -6,8 +6,10 @@
     "types": [
       "jest"
     ],
+    "useDefineForClassFields": false,
     "esModuleInterop": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "include": [
     "src/**/*.spec.ts",
