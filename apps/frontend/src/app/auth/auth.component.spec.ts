@@ -14,8 +14,7 @@ describe('AuthComponent', () => {
 
   const createComponent = createComponentFactory({
     component: AuthComponent,
-    componentImports: [MockComponent(LoginComponent), MockComponent(RegisterComponent)],
-    imports: [],
+    imports: [MockComponent(LoginComponent), MockComponent(RegisterComponent)],
     providers: [MockProvider(AuthService), MockProvider(UserService)],
   });
 
