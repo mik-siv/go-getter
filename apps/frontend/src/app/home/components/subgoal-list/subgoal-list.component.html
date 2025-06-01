@@ -1,9 +1,12 @@
 @if (!!activeGoal && activeGoal.subgoals) {
-  <mat-grid-list class="subgoal-list" cols="4" rowHeight="250px" gutterSize="10px">
+  <ng-content></ng-content>
+  <mat-grid-list class="subgoal-list" [cols]="isMobile() ? 1 : 4" rowHeight="250px" gutterSize="10px">
     @for (subgoal of activeGoal.subgoals; track subgoal) {
       <mat-grid-tile class="subgoal-grid-tile" colspan="1">
         <app-subgoal-card
           [subgoal]="subgoal"
+          (subgoalDeleted)="subgoalDelete.emit($event)"
+          (subgoalEdit)="subgoalEdit.emit($event)"
         ></app-subgoal-card>
       </mat-grid-tile>
     }

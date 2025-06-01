@@ -1,11 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input, output } from '@angular/core';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
+import { BrowserDetectorService } from '../../../shared/services/common/browser-detector/browser-detector.service';
+import { Goal } from '../../../shared/services/data-access/goal/models/goal.model';
+import { Subgoal } from '../../../shared/services/data-access/subgoal/models/subgoal.model';
 import { SubgoalCardComponent } from '../subgoal-card/subgoal-card.component';
-import { Goal } from '../../../shared/models/goal.model';
 
 @Component({
   selector: 'app-subgoal-list',
-  standalone: true,
   imports: [
     MatGridList,
     MatGridTile,
@@ -16,4 +17,7 @@ import { Goal } from '../../../shared/models/goal.model';
 })
 export class SubgoalListComponent {
   @Input() activeGoal: Goal;
+  protected isMobile = inject(BrowserDetectorService).$isMobile;
+  subgoalDelete = output<Subgoal>();
+  subgoalEdit = output<Subgoal>();
 }

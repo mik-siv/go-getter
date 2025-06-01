@@ -19,3 +19,10 @@ export async function login(email: string, password: string, app: INestApplicati
   } = await request(app.getHttpServer()).post(`${endpoint}/login`).send({ email, password });
   return access_token;
 }
+
+export async function whoAmI(accessToken: string, app: INestApplication) {
+  const { body } = await request(app.getHttpServer())
+    .get(`${endpoint}/profile`)
+    .set('Authorization', `Bearer ${accessToken}`);
+  return body;
+}

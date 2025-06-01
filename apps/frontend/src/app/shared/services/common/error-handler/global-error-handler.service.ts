@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ErrorHandler } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthStateService } from '../../data-access/auth/state/auth-state.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GlobalErrorHandler implements ErrorHandler {
 
-  constructor() {
-  }
+  authStateService = inject(AuthStateService);
 
   /**
    * Handles errors.
@@ -18,11 +18,8 @@ export class GlobalErrorHandler implements ErrorHandler {
    */
   handleError(error: Error): void {
     if (error instanceof HttpErrorResponse) {
-      console.error('HTTP Error:', error.status, error.statusText);
       this.handleHttpError(error);
     } else {
-      // Handle other errors
-      console.error('Other Error:', error);
       this.handleGenericError(error);
     }
   }
@@ -35,6 +32,9 @@ export class GlobalErrorHandler implements ErrorHandler {
    */
   private handleHttpError(error: HttpErrorResponse) {
     console.error('Server Error:', error.error);
+    if (error.status === 401) {
+      this.authStateService.refreshStateAndClearLocalStorage();
+    }
   }
 
   /**

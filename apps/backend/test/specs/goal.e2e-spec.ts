@@ -1,4 +1,4 @@
-import { login } from '../helpers/auth.e2e.helper';
+import { login, whoAmI } from '../helpers/auth.e2e.helper';
 import { INestApplication } from '@nestjs/common';
 import { e2eTestData } from '../e2e-test-data';
 import * as request from 'supertest';
@@ -10,6 +10,7 @@ describe('Goals module (e2e)', () => {
   let app: INestApplication;
   let adminAuthToken: string;
   let userAuthToken: string;
+  let userID: string;
   let goalId: string;
   let subgoalId: string;
   const {
@@ -26,6 +27,8 @@ describe('Goals module (e2e)', () => {
     await app.init();
     adminAuthToken = await login(email, password, app);
     userAuthToken = await login(testUser.email, testUser.password, app);
+    const UserData = await whoAmI(userAuthToken, app);
+    userID = UserData.id;
   });
 
   afterAll(async () => {
@@ -33,7 +36,7 @@ describe('Goals module (e2e)', () => {
   });
 
   it('Get Goals list', async () => {
-    return request(app.getHttpServer())
+    await request(app.getHttpServer())
       .get(endpoint)
       .set('Authorization', `Bearer ${adminAuthToken}`)
       .expect(200)
@@ -43,7 +46,7 @@ describe('Goals module (e2e)', () => {
   });
 
   it('Create a new goal', async () => {
-    return request(app.getHttpServer())
+    await request(app.getHttpServer())
       .post(endpoint)
       .set('Authorization', `Bearer ${adminAuthToken}`)
       .send({
@@ -61,7 +64,7 @@ describe('Goals module (e2e)', () => {
   });
 
   it('Read the created goal by id', async () => {
-    return request(app.getHttpServer())
+    await request(app.getHttpServer())
       .get(`${endpoint}/${goalId}`)
       .set('Authorization', `Bearer ${adminAuthToken}`)
       .expect(200)
@@ -80,7 +83,7 @@ describe('Goals module (e2e)', () => {
   });
 
   it('Update the created goal by id', async () => {
-    return request(app.getHttpServer())
+    await request(app.getHttpServer())
       .patch(`${endpoint}/${goalId}`)
       .set('Authorization', `Bearer ${adminAuthToken}`)
       .send({
@@ -104,7 +107,7 @@ describe('Goals module (e2e)', () => {
 
   describe('RBAC asserts', () => {
     it('GET goals list', async () => {
-      return request(app.getHttpServer()).get(endpoint).set('Authorization', `Bearer ${userAuthToken}`).expect(403);
+      await request(app.getHttpServer()).get(endpoint).set('Authorization', `Bearer ${userAuthToken}`).expect(403);
     });
 
     it("GET other owner's goal", async () => {
@@ -115,8 +118,39 @@ describe('Goals module (e2e)', () => {
     });
   });
 
+  it('Add a contributor to a goal by Id', async () => {
+    await request(app.getHttpServer())
+      .patch(`${endpoint}/${goalId}/add-contributor/${userID}`)
+      .set('Authorization', `Bearer ${adminAuthToken}`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.__contributors__.find((contributor: any) => contributor.id === userID).id).toEqual(userID);
+      });
+  });
+
+  it('Goal should be reachable for a contributor after being assigned', async () => {
+    await request(app.getHttpServer())
+      .get(`${endpoint}/${goalId}`)
+      .set('Authorization', `Bearer ${userAuthToken}`)
+      .expect(200);
+  });
+
+  it('Remove a contributor from a goal by Id', async () => {
+    await request(app.getHttpServer())
+      .patch(`${endpoint}/${goalId}/stop-contributing/${userID}`)
+      .set('Authorization', `Bearer ${userAuthToken}`)
+      .expect(204);
+  });
+
+  it('Goal should be unreachable for non-contributor after being unassigned', async () => {
+    await request(app.getHttpServer())
+      .get(`${endpoint}/${goalId}`)
+      .set('Authorization', `Bearer ${userAuthToken}`)
+      .expect(403);
+  });
+
   it('Delete the created goal by id', async () => {
-    return request(app.getHttpServer())
+    await request(app.getHttpServer())
       .delete(`${endpoint}/${goalId}`)
       .set('Authorization', `Bearer ${adminAuthToken}`)
       .expect(204);

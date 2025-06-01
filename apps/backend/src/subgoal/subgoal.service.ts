@@ -1,18 +1,18 @@
 import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { merge } from 'lodash';
+import { FindOptionsWhere, In, Repository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
+import { Goal } from '../goal/entities/goal.entity';
+import { GoalService } from '../goal/goal.service';
+import { IGoalService } from '../goal/interfaces/goal-service.interface';
+import { User } from '../user/entities/user.entity';
+import { IUserService } from '../user/interfaces/user-service.interface';
+import { UserService } from '../user/user.service';
 import { CreateSubgoalDto } from './dto/create-subgoal.dto';
 import { UpdateSubgoalDto } from './dto/update-subgoal.dto';
-import { ISubgoalService } from './interfaces/subgoal-service.interface';
-import { v4 as uuidv4 } from 'uuid';
-import { merge } from 'lodash';
-import { User } from '../user/entities/user.entity';
-import { UserService } from '../user/user.service';
-import { IUserService } from '../user/interfaces/user-service.interface';
-import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, In, Repository } from 'typeorm';
 import { Subgoal } from './entities/subgoal.entity';
-import { IGoalService } from '../goal/interfaces/goal-service.interface';
-import { GoalService } from '../goal/goal.service';
-import { Goal } from '../goal/entities/goal.entity';
+import { ISubgoalService } from './interfaces/subgoal-service.interface';
 
 @Injectable()
 export class SubgoalService implements ISubgoalService {
@@ -69,7 +69,9 @@ export class SubgoalService implements ISubgoalService {
     const foundSubgoal: Subgoal = await this.findById(id);
     const updatedSubgoal = merge(foundSubgoal, subgoalData);
     let goalsList: Goal[];
-    goalIds ? (goalsList = await this.goalService.findBy({ id: In(goalIds) })) : (goalsList = []);
+    Array.isArray(goalIds) && goalIds.length > 0
+      ? (goalsList = await this.goalService.findBy({ id: In(goalIds) }))
+      : (goalsList = foundSubgoal.goal_subgoals);
     updatedSubgoal.goal_subgoals = goalsList;
     return this.subgoalRepository.save(updatedSubgoal);
   }

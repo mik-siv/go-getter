@@ -1,54 +1,84 @@
-import { computed, Injectable, Signal, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { RestfulService } from '../restful.service';
-import { RequestStatus } from '../models/RequestStatus';
 import { catchError } from 'rxjs/operators';
-import { Goal, GoalsList } from '../../../models/goal.model';
 import { environment } from '../../../../../environments/environment';
-
-export interface GoalState {
-  error: string;
-  status: RequestStatus;
-  goals: GoalsList;
-}
+import { RestfulService } from '../restful.service';
+import { Goal, GoalsList } from './models/goal.model';
+import { GoalStateService } from './state/goal-state.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GoalService extends RestfulService {
   private baseUrl = `${environment.baseUrl}goals`;
-
-  emptyState: GoalState = {
-    error: undefined,
-    status: undefined,
-    goals: undefined,
-  };
-
-  //state
-  private state = signal<GoalState>(this.emptyState);
-
-  //selectors
-  goals: Signal<Goal[]> = computed(() => this.state().goals?.goals);
-  contributing_to: Signal<Goal[]> = computed(() => this.state().goals?.contributing_to);
-  status: Signal<RequestStatus> = computed(() => this.state().status);
-  error: Signal<string> = computed(() => this.state().error);
+  private goalStateService = inject(GoalStateService);
 
   getGoals(): Observable<GoalsList> {
-    this.state.update(state => ({ ...state, status: RequestStatus.PENDING }));
+    this.goalStateService.setPendingState();
     return this.getAll<GoalsList>(`${this.baseUrl}/my-goals`)
       .pipe(
         catchError((error) => {
-          this.state.update((state) => ({ ...state, error: error.message, status: RequestStatus.ERROR }));
+          this.goalStateService.setErrorState(error);
           throw error;
         }),
-        tap((response) => {
-          const { goals, contributing_to } = response;
-          this.state.update(state => ({
-            ...state,
-            error: undefined,
-            status: RequestStatus.SUCCESS,
-            goals: { goals, contributing_to },
-          }));
+        tap((goals) => {
+          this.goalStateService.setGoals(goals);
+        }),
+      );
+  }
+
+  deleteGoal(id: string): Observable<void> {
+    this.goalStateService.setPendingState();
+    return this.delete(`${this.baseUrl}`, id)
+      .pipe(
+        catchError((error) => {
+          this.goalStateService.setErrorState(error);
+          throw error;
+        }),
+        tap(() => {
+          this.goalStateService.removeGoalFromStateById(id);
+        }),
+      );
+  }
+
+  createGoal(goal: Partial<Goal>): Observable<Goal> {
+    this.goalStateService.setPendingState();
+    return this.post<Goal>(`${this.baseUrl}`, goal)
+      .pipe(
+        catchError((error) => {
+          this.goalStateService.setErrorState(error);
+          throw error;
+        }),
+        tap((result) => {
+          this.goalStateService.addGoal(result);
+        }),
+      );
+  }
+
+  updateGoal(goalId: string, goal: Partial<Goal>): Observable<Goal> {
+    this.goalStateService.setPendingState();
+    return this.update<Goal>(`${this.baseUrl}`, goalId, goal as Goal)
+      .pipe(
+        catchError((error) => {
+          this.goalStateService.setErrorState(error);
+          throw error;
+        }),
+        tap((result) => {
+          this.goalStateService.updateGoal(result);
+        }),
+      );
+  }
+
+  removeGoalContributor(goalId: string, userId: string): Observable<Goal> {
+    this.goalStateService.setPendingState();
+    return this.update<Goal>(`${this.baseUrl}/${goalId}/stop-contributing`, userId, {} as Goal)
+      .pipe(
+        catchError((error) => {
+          this.goalStateService.setErrorState(error);
+          throw error;
+        }),
+        tap(() => {
+          this.goalStateService.removeContributingGoalFromState(goalId);
         }),
       );
   }

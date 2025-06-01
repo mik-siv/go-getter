@@ -37,10 +37,10 @@ export class GoalService implements IGoalService {
     const user: User = await this.userService.findById(userId);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { subgoals, ...goalData } = createGoalDto;
-    const goal: Omit<Goal, 'created_date'> = merge(goalData, {
+    const goal = merge(goalData, {
       id: this.generateUuid(),
       created_by: user,
-      contributors: [],
+      contributors: null,
       parent: null,
       subgoals: [],
     });
@@ -77,19 +77,49 @@ export class GoalService implements IGoalService {
   }
 
   async update(id: string, updateGoalDto: UpdateGoalDto): Promise<Goal> {
-    const { subgoals, contributors, ...goalData } = updateGoalDto;
+    const { subgoals, ...goalData } = updateGoalDto;
     const foundGoal: Goal = await this.findById(id);
-    const updatedGoal: Goal = merge(foundGoal, goalData);
+    const updatedGoal = merge(foundGoal, goalData);
 
-    if (typeof subgoals !== 'undefined') {
+    if (subgoals) {
       updatedGoal.subgoals = subgoals.length > 0 ? await this.subgoalService.findBy({ id: In(subgoals) }) : [];
     }
 
-    if (typeof contributors !== 'undefined') {
-      updatedGoal.contributors = contributors.length > 0 ? await this.userService.findBy({ id: In(contributors) }) : [];
+    return await this.goalRepository.save(updatedGoal);
+  }
+
+  async removeContributor(goalId: string, userId: string): Promise<Goal> {
+    const foundGoal: Goal = await this.findById(goalId);
+    const user: User = await this.userService.findById(userId);
+
+    if (!foundGoal || !user) {
+      throw new NotFoundException('Goal or User not found');
     }
 
-    return await this.goalRepository.save(updatedGoal);
+    const foundContributors: User[] = await foundGoal.contributors;
+    const contributors: User[] = foundContributors?.filter((contributor) => contributor.id !== user.id) || null;
+
+    foundGoal.contributors = contributors as any;
+    return await this.goalRepository.save(foundGoal);
+  }
+
+  async addContributor(goalId: string, contributorId: string): Promise<Goal> {
+    const foundGoal: Goal = await this.findById(goalId);
+    const contributor: User = await this.userService.findById(contributorId);
+    if (!foundGoal || !contributor) {
+      throw new NotFoundException('Goal or User not found');
+    }
+    const existingContributors = await foundGoal.contributors;
+    if (existingContributors) {
+      if (existingContributors.some((user) => user.id === contributorId)) {
+        return foundGoal;
+      } else {
+        foundGoal.contributors = [...existingContributors, contributor] as any;
+      }
+    } else {
+      foundGoal.contributors = [contributor] as any;
+    }
+    return await this.goalRepository.save(foundGoal);
   }
 
   async remove(id: string): Promise<Goal> {

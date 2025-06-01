@@ -1,6 +1,8 @@
 @use '@angular/material' as mat;
+@use '../../styles/variables.styles' as vars;
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 .navigation-container {
   height: 100%;
@@ -8,11 +10,69 @@
   scrollbar-color: #aaa transparent;
 }
 
+.side-nav {
+  &--toggle-button {
+    height: 100%;
+    padding: 0 !important;
+    width: 2rem !important;
+    min-width: unset !important;
+  }
+
+  &--edit-button {
+    cursor: pointer;
+    height: 80%;
+    padding: 0 !important;
+    margin-left: .5rem;
+    font-size: .5rem !important;
+  }
+
+  &--content {
+
+    &--header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      height: 2rem;
+
+      &--title {
+        line-height: 1.5rem;
+        margin-bottom: 0;
+      }
+    }
+
+    &--description {
+      margin: .5rem;
+
+      h3 {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 100%;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+
+
 .left-side-nav {
-  width: 20%;
+  width: 25%;
+
+  &--mobile {
+    width: 100%;
+  }
 }
 
 .progress-bar {
   height: .5rem;
   margin: .25rem 0;
+}
+
+.add-subgoal {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
 }

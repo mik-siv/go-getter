@@ -1,7 +1,17 @@
 <mat-accordion>
   <mat-expansion-panel class="goals-list" [expanded]="isExpanded()">
     <mat-expansion-panel-header>
-      <mat-panel-title> {{ listName() }}</mat-panel-title>
+      <mat-panel-title>
+        {{ listName() }}
+        <button mat-icon-button
+                (click)="createNewItem($event)"
+                matTooltip="Add"
+                matTooltipPosition="right"
+                aria-label="Add"
+        >
+          <mat-icon aria-label="New Subgoal">add</mat-icon>
+        </button>
+      </mat-panel-title>
     </mat-expansion-panel-header>
     @if (!!items) {
       <mat-list role="list">
@@ -9,7 +19,22 @@
           <mat-list-item
             [class]="{'active': activeItem === item}"
             (click)="onClick(item)"
-            role="listitem">{{ item.name }}
+            [matTooltip]="item.name"
+            role="listitem">
+            <div class="flex-container">
+              <div class="item-name">
+                {{ item.name }}
+              </div>
+              <button class="delete-item-button"
+                      mat-icon-button
+                      matTooltip="Delete"
+                      matTooltipPosition="right"
+                      aria-label="Delete"
+                      (click)="onDeleteButtonClicked(item)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
           </mat-list-item>
         }
       </mat-list>

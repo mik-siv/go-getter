@@ -2,9 +2,33 @@ mat-list {
   padding: 0;
 }
 
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.item-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+mat-list-item {
+  padding-right: 0;
+  .delete-item-button {
+    visibility: hidden;
+  }
+}
+
 mat-list-item:hover {
   background-color: rgba(0, 0, 0, 0.1); /* Add a subtle hover background */
   cursor: pointer;
+  .delete-item-button {
+    visibility: visible;
+  }
 }
 
 mat-list-item.active {

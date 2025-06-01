@@ -7,13 +7,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { UserRole } from '../../../user/entities/user-roles.enum';
+import { IUserService } from '../../../user/interfaces/user-service.interface';
+import { UserService } from '../../../user/user.service';
 import { OwnedResource } from '../../constants/enums/owned-resources.enum';
-import { RESOURCES_KEY } from './resource.decorator';
 import { UserJwtData } from '../../types/general.types';
 import { RolesGuard } from '../roles/roles.guard';
-import { UserRole } from '../../../user/entities/user-roles.enum';
-import { UserService } from '../../../user/user.service';
-import { IUserService } from '../../../user/interfaces/user-service.interface';
+import { RESOURCES_KEY } from './resource.decorator';
 
 /**
  * ResourceOwnerGuard class is a guard that checks if the current user is the owner of the requested resource.
@@ -49,8 +49,12 @@ export class ResourceOwnerGuard implements CanActivate {
     const resourceId: string = request.params?.id;
     //allowing access if resource is not requested by id
     if (!resourceId) return true;
-    //allowing access if requested resource id is stored in JWT token
-    if (ownedResources.some(this.checkResourceOwnership(user, resourceId))) return true;
+    //allowing access if requested resource id is stored in JWT token and user is not only a contributor
+    if (!ownedResources.includes(OwnedResource.CONTRIBUTING_TO)) {
+      if (ownedResources.some(this.checkResourceOwnership(user, resourceId))) {
+        return true;
+      }
+    }
     //checking if required resource is not cached in JWT but exists in DB
     for (const resource of ownedResources) {
       if (await this.userService.validateUserResourceAllowance(user.id, resourceId, resource)) {

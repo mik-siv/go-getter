@@ -1,7 +1,8 @@
 @use '@angular/material' as mat;
 @use 'styles/material.styles' as styles;
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 html, body {
   height: 100%;
@@ -15,3 +16,18 @@ body {
 }
 
 @include mat.all-component-themes(styles.$darcula-theme);
+
+:root {
+  --mat-sidenav-container-background-color: rgb(14, 14, 14);
+  --mat-sidenav-content-background-color: rgb(11, 11, 11);
+  --mat-expansion-container-background-color: #1d1d1d;
+  --mat-card-elevated-container-color: #1d1d1d;
+}
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: #fff;
+  -webkit-box-shadow: 0 0 0 1000px var(--mdc-filled-text-field-container-color, var(--mat-app-surface-variant)) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
