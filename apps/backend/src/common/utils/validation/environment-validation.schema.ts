@@ -7,4 +7,8 @@ export const validationSchema = Joi.object({
   PGPASSWORD: Joi.string().required(),
   PGPORT: Joi.string().required(),
   JWTSECRET: Joi.string().required(),
+  CLOUDINARY_NAME: Joi.string().required(),
+  CLOUDINARY_API_KEY: Joi.string().required(),
+  CLOUDINARY_API_SECRET: Joi.string().required(),
+  CLOUDINARY_API_URL: Joi.string().required(),
 }).required();

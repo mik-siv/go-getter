@@ -1,22 +1,23 @@
 import { Logger, Module, ValidationPipe } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { TypeOrmModule } from '@nestjs/typeorm/dist';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm/dist';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { dataSourceOptions } from './common/db/data-source';
-import { GoalModule } from './goal/goal.module';
-import { validationSchema } from './common/utils/validation/environment-validation.schema';
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
-import { SubgoalModule } from './subgoal/subgoal.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
+import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { ResourceOwnerGuard } from './common/guards/resource-owner/resource-owner.guard';
 import { RolesGuard } from './common/guards/roles/roles.guard';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { validationSchema } from './common/utils/validation/environment-validation.schema';
+import { FileModule } from './file/file.module';
+import { GoalModule } from './goal/goal.module';
+import { SubgoalModule } from './subgoal/subgoal.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
     AuthModule,
     GoalModule,
     SubgoalModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [
