@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import * as toStream from 'buffer-to-stream';
 import { v2 as cloudinary } from 'cloudinary';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
@@ -7,8 +8,6 @@ import { CloudinaryConfig } from './types/cloudinary.types';
 
 @Injectable()
 export class FileService {
-  private readonly cloudinaryInstance: typeof cloudinary;
-
   constructor(private readonly configService: ConfigService) {
     this.setupCloudinary().then();
   }
@@ -22,15 +21,21 @@ export class FileService {
   }
 
   private async setupCloudinary(): Promise<void> {
-    setTimeout(() => this.cloudinaryInstance.config(this.getCloudinaryConfig()), 0);
+    setTimeout(() => cloudinary.config(this.getCloudinaryConfig()), 0);
   }
 
   async deleteFile(publicId: string): Promise<any> {
-    return this.cloudinaryInstance.uploader.destroy(publicId);
+    return await cloudinary.uploader.destroy(publicId);
   }
 
   create(createFileDto: CreateFileDto) {
-    return 'This action adds a new file';
+    return new Promise((resolve, reject) => {
+      const upload = cloudinary.uploader.upload_stream((error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      });
+      toStream(createFileDto.file.buffer).pipe(upload);
+    });
   }
 
   findAll() {
@@ -43,9 +48,5 @@ export class FileService {
 
   update(id: number, updateFileDto: UpdateFileDto) {
     return `This action updates a #${id} file`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} file`;
   }
 }

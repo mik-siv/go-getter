@@ -1,1 +1,4 @@
-export class CreateFileDto {}
+export class CreateFileDto {
+  file: any;
+  options: Record<string, unknown>;
+}
