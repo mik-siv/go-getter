@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as toStream from 'buffer-to-stream';
 import { v2 as cloudinary } from 'cloudinary';
-import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { CloudinaryConfig } from './types/cloudinary.types';
 
@@ -28,13 +27,13 @@ export class FileService {
     return await cloudinary.uploader.destroy(publicId);
   }
 
-  create(createFileDto: CreateFileDto) {
+  create(file: Express.Multer.File): Promise<any> {
     return new Promise((resolve, reject) => {
       const upload = cloudinary.uploader.upload_stream((error, result) => {
         if (error) return reject(error);
         resolve(result);
       });
-      toStream(createFileDto.file.buffer).pipe(upload);
+      toStream(file.buffer).pipe(upload);
     });
   }
 

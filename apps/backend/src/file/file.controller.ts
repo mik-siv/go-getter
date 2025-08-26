@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { CreateFileDto } from './dto/create-file.dto';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { FileService } from './file.service';
 
@@ -8,8 +8,9 @@ export class FileController {
   constructor(private readonly fileService: FileService) {}
 
   @Post()
-  create(@Body() createFileDto: CreateFileDto) {
-    return this.fileService.create(createFileDto);
+  @UseInterceptors(FileInterceptor('file'))
+  create(@UploadedFile() file: Express.Multer.File) {
+    return this.fileService.create(file);
   }
 
   @Get()
