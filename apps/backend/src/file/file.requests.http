@@ -1,0 +1,11 @@
+### Upload a file
+POST {{host}}/file HTTP/1.1
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="test.png"
+Content-Type: image/png
+
+< ./test.png
+--WebAppBoundary--
